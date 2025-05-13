@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios Registrados</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+    <div class="top-info-bar">
+        <p> Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador | uevmg@gmail.com</p>
+    </div>
+    <header>
+        <div class="header-top">
+            
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Victor Manuel Guzman"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="#historia">Historia</a></li>
+                            <li><a href="#sede-ambientes">Sede y Ambientes</a></li>
+                            <li><a href="#simbolos">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="#cronograma">Cronograma de Actividades</a></li>
+                            <li><a href="#ministerio">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#documentos">Documentos Institucionales</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#docente-especial">Docente Especial</a></li>
+                            <li><a href="#inclusion">Apoyo a la Inclusión</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#escuela-futbol">Escuela de Fútbol</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h1 class="centered-title">Usuarios Registrados</h1>
+        <div class="table-container">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Correo Electrónico</th>
+                        <th>Contraseña</th> <!-- Mostrar contraseñas -->
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="usuarios-table">
+                    <!-- Los usuarios se cargarán aquí -->
+                </tbody>
+            </table>
+        </div>
+        <div id="asignar-admin-container" style="display: none; margin-top: 1rem;">
+            <h3>Asignar Administrador</h3>
+            <form id="asignar-admin-form">
+                <label for="email-admin">Correo Electrónico del Usuario:</label>
+                <input type="email" id="email-admin" name="email-admin" required>
+                <button type="submit">Asignar</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+        </div>
+    </footer>
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+        // Configuración de Supabase
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const tableBody = document.getElementById('usuarios-table');
+        const asignarAdminContainer = document.getElementById('asignar-admin-container');
+        const asignarAdminForm = document.getElementById('asignar-admin-form');
+        const usuarioActivo = localStorage.getItem('usuarioActivo');
+        const superAdminEmail = "dominicklopezxd12@gmail.com"; // Usuario especial con permisos para asignar roles
+        let usuarios = [];
+        let usuarioActivoRol = null;
+
+        // Mostrar el formulario para asignar administrador solo al superadministrador
+        if (usuarioActivo === superAdminEmail) {
+            asignarAdminContainer.style.display = 'block';
+        }
+
+        async function cargarUsuarios() {
+            try {
+                usuarioActivoRol = await obtenerRolUsuarioActivo(); // Obtener el rol del usuario activo
+
+                const { data, error } = await supabase
+                    .from('usuarios')
+                    .select('*');
+
+                if (error) {
+                    console.error('Error al cargar usuarios:', error.message);
+                    alert('Error al cargar usuarios: ' + error.message);
+                    return;
+                }
+
+                usuarios = data || [];
+                actualizarTabla();
+            } catch (err) {
+                console.error('Error inesperado al cargar usuarios:', err);
+                alert('Ocurrió un error inesperado al cargar usuarios.');
+            }
+        }
+
+        async function asignarAdministrador(email) {
+            try {
+                const { data, error } = await supabase
+                    .from('usuarios')
+                    .update({ rol: 'administrador' }) // Actualizar el rol del usuario
+                    .eq('email', email);
+
+                if (error) {
+                    console.error('Error al asignar rol de administrador:', error.message);
+                    alert('Error al asignar rol de administrador: ' + error.message);
+                } else if (!data || data.length === 0) { // Verificar si data es null o está vacío
+                    alert('No se encontró un usuario con ese correo electrónico.');
+                } else {
+                    alert('Rol de administrador asignado exitosamente.');
+                    cargarUsuarios(); // Recargar la tabla
+                }
+            } catch (err) {
+                console.error('Error inesperado al asignar rol de administrador:', err);
+                alert('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
+            }
+        }
+
+        async function eliminarUsuario(email, rol) {
+            if (rol !== 'usuario') {
+                alert('Solo puedes eliminar usuarios con el rol "usuario".');
+                return;
+            }
+
+            if (confirm(`¿Estás seguro de que deseas eliminar al usuario con correo "${email}"?`)) {
+                try {
+                    console.log(`Intentando eliminar usuario con email: ${email}`); // Depuración
+
+                    // Eliminar usuario de la tabla "usuarios"
+                    const { error } = await supabase
+                        .from('usuarios')
+                        .delete()
+                        .eq('email', email.trim()); // Asegurar que no haya espacios en blanco
+
+                    if (error) {
+                        console.error('Error al eliminar usuario de Supabase:', error.message);
+                        alert('Error al eliminar usuario: ' + error.message);
+                        return;
+                    }
+
+                    alert('Usuario eliminado exitosamente.');
+                    cargarUsuarios(); // Recargar la tabla
+                } catch (err) {
+                    console.error('Error inesperado al eliminar usuario:', err);
+                    alert('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
+                }
+            }
+        }
+
+        function actualizarTabla() {
+            tableBody.innerHTML = '';
+            if (usuarios.length === 0) {
+                const row = document.createElement('tr');
+                const cell = document.createElement('td');
+                cell.colSpan = 5; // Ajustar el colspan ya que ahora hay 5 columnas
+                cell.textContent = 'No hay usuarios registrados.';
+                row.appendChild(cell);
+                tableBody.appendChild(row);
+            } else {
+                usuarios.forEach(async (usuario) => {
+                    // Asignar rol "usuario" por defecto si el rol es null
+                    if (!usuario.rol) {
+                        await supabase
+                            .from('usuarios')
+                            .update({ rol: 'usuario' })
+                            .eq('email', usuario.email);
+                        usuario.rol = 'usuario'; // Actualizar localmente
+                    }
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${usuario.usuario}</td>
+                        <td>${usuario.email}</td>
+                        <td>${usuario.password}</td> <!-- Mostrar la contraseña -->
+                        <td>
+                            ${
+                                usuarioActivoRol === 'admin'
+                                    ? `<select class="rol-select" data-email="${usuario.email}">
+                                        <option value="usuario" ${usuario.rol === 'usuario' ? 'selected' : ''}>Usuario</option>
+                                        <option value="administrador" ${usuario.rol === 'administrador' ? 'selected' : ''}>Administrador</option>
+                                        <option value="admin" ${usuario.rol === 'admin' ? 'selected' : ''}>Admin</option>
+                                       </select>`
+                                    : usuario.rol
+                            }
+                        </td>
+                        <td>
+                            ${
+                                (usuarioActivoRol === 'admin' || usuarioActivoRol === 'administrador') && usuario.rol === 'usuario'
+                                    ? `<button class="eliminar-btn" data-email="${usuario.email}" data-rol="${usuario.rol}">Eliminar</button>`
+                                    : ''
+                            }
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+        }
+
+        // Delegación de eventos para manejar cambios en el rol
+        tableBody.addEventListener('change', async (event) => {
+            if (event.target.classList.contains('rol-select')) {
+                const email = event.target.dataset.email;
+                const nuevoRol = event.target.value;
+
+                if (confirm(`¿Estás seguro de que deseas cambiar el rol del usuario con correo "${email}" a "${nuevoRol}"?`)) {
+                    try {
+                        const { error } = await supabase
+                            .from('usuarios')
+                            .update({ rol: nuevoRol })
+                            .eq('email', email);
+
+                        if (error) {
+                            console.error('Error al cambiar el rol del usuario:', error.message);
+                            alert('Error al cambiar el rol del usuario: ' + error.message);
+                        } else {
+                            alert('Rol del usuario actualizado exitosamente.');
+                            cargarUsuarios(); // Recargar la tabla
+                        }
+                    } catch (err) {
+                        console.error('Error inesperado al cambiar el rol del usuario:', err);
+                        alert('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
+                    }
+                } else {
+                    cargarUsuarios(); // Recargar la tabla para revertir cambios no confirmados
+                }
+            }
+        });
+
+        // Delegación de eventos para manejar clics en los botones de eliminar usuario
+        tableBody.addEventListener('click', (event) => {
+            if (event.target.classList.contains('eliminar-btn')) {
+                const email = event.target.dataset.email;
+                const rol = event.target.dataset.rol;
+                eliminarUsuario(email, rol);
+            }
+        });
+
+        // Obtener el rol del usuario activo desde la base de datos
+        async function obtenerRolUsuarioActivo() {
+            try {
+                const { data: usuarios, error } = await supabase
+                    .from('usuarios')
+                    .select('rol')
+                    .eq('email', usuarioActivo);
+
+                if (error) {
+                    console.error('Error al obtener el rol del usuario activo:', error.message);
+                    return null;
+                }
+
+                return usuarios && usuarios.length > 0 ? usuarios[0].rol : null;
+            } catch (err) {
+                console.error('Error inesperado al obtener el rol del usuario activo:', err);
+                return null;
+            }
+        }
+
+        // Manejar el formulario para asignar administrador
+        asignarAdminForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const email = document.getElementById('email-admin').value.trim();
+            if (email) {
+                asignarAdministrador(email);
+            }
+        });
+
+        cargarUsuarios();
+
+        const authLinks = document.querySelector('.auth-links');
+
+        // Mostrar "Cerrar Sesión" si el usuario está autenticado
+        if (usuarioActivo) {
+            authLinks.innerHTML = '<a href="#" id="logout">Cerrar Sesión</a>';
+            document.getElementById('logout').addEventListener('click', function () {
+                localStorage.removeItem('usuarioActivo');
+                alert('Sesión cerrada exitosamente.');
+                window.location.href = 'index.html';
+            });
+        }
+    </script>
+    <script src="script.js" defer></script>
+</body>
+</html>

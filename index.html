@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victor Manuel Guzman</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script> <!-- Cargar Supabase -->
+    <script src="script.js" defer></script> <!-- Cargar script.js después de Supabase -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet"> <!-- Fuente Raleway -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet"> <!-- Fuente Roboto Slab -->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet"> <!-- Fuente Lobster -->
+    <link rel="shortcut icon" href="/unidad-educativa-logo.png" />
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;"> <!-- Imagen de referencia encima del encabezado -->
+    <header>
+        <div class="header-top">
+            
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#documentos">Documentos Institucionales</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#docente-especial">Docente Especial</a></li>
+                            <li><a href="#inclusion">Apoyo a la Inclusión</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#escuela-futbol">Escuela de Fútbol</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main style="margin-top: 120px;"> <!-- Ajustar el contenido para evitar que quede detrás del encabezado -->
+        <section id="inicio" class="centered-section">
+            <!-- Título animado -->
+            <div class="animated-title">
+                <h1 style="font-family: 'Lobster', cursive;">
+                    <span>V</span><span>Í</span><span>C</span><span>T</span><span>O</span><span>R</span><span> </span><SPAN></SPAN>
+                    <span>M</span><span>a</span><span>N</span><span>U</span><span>E</span><span>L</span><span></span><span></span>
+                    <span>G</span><span>U</span><span>Z</span><span>M</span><span>Á</span><span>N</span><span></span><span></span>
+                </h1>
+                <p>La excelencia educativa es nuestra pasión</p>
+            </div>
+            
+
+            <div class="carousel">
+                <div class="progress-bar"></div> <!-- Barra de carga -->
+                <button class="carousel-btn prev-btn">&#8249;</button>
+                <div class="carousel-images">
+                    <img src="foto1.jpg" alt="Fotografía Institucional 1" class="active">
+                    <img src="foto2.jpg" alt="Fotografía Institucional 2">
+                    <img src="foto3.jpg" alt="Fotografía Institucional 3">
+                </div>
+                <button class="carousel-btn next-btn">&#8250;</button>
+            </div>
+            <section id="servicios-educativos" class="centered-section">
+                <h2 class="section-title">BIENVENIDA A LA INSTITUCION</h2>
+                <div class="section-divider">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+                <section id="mision-vision" class="centered-section">
+                    <div class="mision-vision-container">
+                        <div id="mision" class="option">
+                            <img src="unidad-educativa-logo.png" alt="Imagen representativa de la misión" style="width: 30%; height: auto; border-radius: 8px; margin-bottom: 1rem;">
+                            <h2 style="text-align: center; color: #000308; font-size: 1.8rem; font-weight: bold;">MISIÓN</h2>
+                            <p style="text-align: justify; font-size: 1rem; color: #333; line-height: 1.6;">
+                                Formar seres humanos íntegros, indagadores de mentalidad abierta, con excelencia académica, competencias científicas y técnicas acordes a las exigencias actuales, capaces de desenvolverse en la cotidianidad bajo sólidos principios éticos y morales, incorporándolos como ciudadanos del mundo.
+                            </p>
+                        </div>
+                        <div id="vision" class="option">
+                            <img src="unidad-educativa-logo.png" alt="Imagen representativa de la visión" style="width: 30%; height: auto; border-radius: 8px; margin-bottom: 1rem;">
+                            <h2 style="text-align: center; color: #000308; font-size: 1.8rem; font-weight: bold;">VISIÓN</h2>
+                            <p style="text-align: justify; font-size: 1rem; color: #333; line-height: 1.6;">
+                                Constituirse en el futuro en una de las mejores Unidades Educativas con oferta del bachillerato internacional y el bachillerato técnico, formando personas integras, vinculando la teoría con la práctica, buscando la excelencia académica y profesional para el servicio de la sociedad ecuatoriana y el mundo.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </section>
+            <section id="servicios-educativos" class="centered-section">
+                <h2 class="section-title">SERVICIOS EDUCATIVOS</h2>
+                <div class="section-divider">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+
+                <div class="options-box">
+                    <a href="https://aulavirtual.uevmg.com/" class="service-button" target="_blank">
+                        <img src="sistema-academico.png" alt="Sistema Académico Institucional">
+                        <h3>Sistema Académico Institucional</h3>
+                        <p>Sistema Académico Institucional para el seguimiento educativo.</p>
+                    </a>
+                    <a href="https://aulavirtual.uevmg.com/" class="service-button">
+                        <img src="aulas-virtuales.png" alt="Aulas Virtuales">
+                        <h3>Aulas Virtuales</h3>
+                        <p>Aulas virtuales Moodle UESFI.</p>
+                    </a>
+                    <a href="correo-institucional.html" class="service-button">
+                        <img src="correo-institucional.png" alt="Correo Institucional">
+                        <h3>Correo Institucional</h3>
+                        <p>Plataforma de acceso al correo institucional</p>
+                    </a>
+                    <a href="https://juntos.educacion.gob.ec/index.php/consulta-sierra/asignacion" class="service-button">
+                        <img src="logo4.png" alt="Actualización de Datos">
+                        <h3>Consulta de Cupo</h3>
+                        <p>Consultar datos para obtener un nuevo cupo.</p>
+                    </a>
+                </div>
+            <section id="redes-sociales" class="centered-section">
+                <h2 class="section-title">REDES SOCIALES</h2>
+                <div class="section-divider">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+
+                <div class="options-box">
+                    <a href="https://www.facebook.com/uevictormanuelguzman" class="service-button" target="_blank">
+                        <img src="facebook.png" alt="Sistema Académico Institucional">
+                        <h3>Facebook</h3>
+                    </a>
+                    <a href="https://www.instagram.com/banda_vmg?igsh=N3hpeGd2azczOTE1" class="service-button">
+                        <img src="instagram.png" alt="Aulas Virtuales">
+                        <h3>Instagram</h3>
+                    </a>
+                    <a href="correo-institucional.html" class="service-button">
+                        <img src="youtube.png" alt="Correo Institucional">
+                        <h3>Youtube</h3>
+                    </a>
+
+                </div>
+            </section>
+            <!-- Nuevo recuadro para otro subtema -->
+            <section id="oferta-bachillerato" class="centered-section">
+                <h2 class="section-title">OFERTA DE BACHILLERATO</h2>
+                <div class="section-divider">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+                <div class="bachillerato-container">
+                    <div class="bachillerato-card">
+                        <h3>Bachillerato Técnico en Informática</h3>
+                        <img src="informatica.jpg" alt="Informática">
+                        <p>Especialización en desarrollo de software, redes y sistemas informáticos.</p>
+                    </div>
+                    <div class="bachillerato-card">
+                        <h3>Bachillerato Técnico en Contabilidad</h3>
+                        <img src="contabilidad.jpg" alt="Contabilidad">
+                        <p>Especialización en gestión contable, tributaria y financiera.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="fifty-years-section centered-section">
+                <h2 class="section-title">50 Años de la Institución</h2>
+                <p class="section-subtitle">Celebramos medio siglo de excelencia educativa</p>
+                <div class="fifty-years-images">
+                    <img src="50years1.jpg" alt="Celebración 50 años - Imagen 1">
+                    <img src="50years2.jpg" alt="Celebración 50 años - Imagen 2">
+                </div>
+            </section>
+        </section>
+
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+        </div>
+    </footer>
+    <script>
+        const authLinks = document.querySelector('.auth-links');
+        const usuarioActivo = localStorage.getItem('usuarioActivo');
+
+        if (authLinks) {
+            if (usuarioActivo) {
+                authLinks.innerHTML = `
+                    <a href="matricularse.html">Matricularse</a>
+                    <a href="#" id="logout">Cerrar Sesión</a>
+                `;
+                document.getElementById('logout').addEventListener('click', () => {
+                    localStorage.removeItem('usuarioActivo');
+                    alert('Sesión cerrada exitosamente.');
+                    window.location.href = 'index.html';
+                });
+            } else {
+                authLinks.innerHTML = `
+                    <a href="registro.html">Registrarse</a>
+                    <a href="login.html">Iniciar Sesión</a>
+                `;
+            }
+        }
+
+        const header = document.querySelector('header');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+    </script>
+     
+</body>
+</html>

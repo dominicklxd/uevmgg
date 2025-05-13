@@ -1,0 +1,1836 @@
+/* Transiciones globales */
+* {
+    transition-behavior: normal;
+    transition-delay: 0s;
+    transition-duration: 0s;
+    transition-property: none;
+    transition-timing-function: ease;
+}
+
+body {
+    font-family: Arial, sans-serif; /* Aplicar Arial como fuente principal */
+    margin: 0;
+    padding: 0; /* Asegurar que no haya padding en el cuerpo */
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+nav ul a, .auth-links a, .footer-section ul li a {
+    font-family: Arial, sans-serif; /* Asegurar que los enlaces usen Arial */
+}
+
+h1, h2, h3, h4, p, label, button {
+    font-family: Arial, sans-serif; /* Aplicar Arial a todos los encabezados, párrafos, etiquetas y botones */
+}
+
+header {
+    background: linear-gradient(to right, #548235, #2f5597); /* Degradado verde a azul */
+    color: white;
+    padding: 35px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: transform 0.8s ease, background 0.7s ease, padding 0.7s ease; /* Transición más lenta y fluida */
+    will-change: transform, background, padding; /* Optimizar transiciones */
+}
+
+header.scrolled {
+    background: rgba(255, 255, 255, 0.8); /* Fondo blanco transparente */
+    color: black;
+    padding: 20px 0; /* Reducir padding al hacer scroll */
+    transform: translateY(-10px); /* Empuje hacia arriba al hacer scroll */
+}
+
+header.scrolled nav {
+    transform: none; /* Eliminar transform para evitar movimientos innecesarios */
+    transition: none; /* Eliminar transición para evitar parpadeos */
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Espaciar elementos a los extremos */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+
+}
+
+header.scrolled .header-top {
+    transform: translateY(+15px); /* Empuje adicional para el contenido interno */
+}
+
+.logo {
+    height: 40px; /* Reducir tamaño del logo */
+    margin-right: 10px; /* Espaciado entre el logo y el texto */
+    transition: height 0.3s ease; /* Transición suave para el tamaño del logo */
+}
+
+header.scrolled .logo {
+    height: 70px; /* Reducir tamaño del logo */
+}
+
+.header-text {
+    text-align: left; /* Alinear el texto a la izquierda */
+    flex: 1; /* Asegurar que ocupe el espacio disponible */
+}
+
+.header-text h1 {
+    font-size: 1rem; /* Reducir tamaño del texto */
+    text-align: left;
+    margin: 0; /* Eliminar márgenes */
+    text-align: left;
+    line-height: 1.2; /* Reducir el interlineado */
+    transition: font-size 0.3s ease; /* Transición suave para el tamaño del texto */
+}
+
+header.scrolled .header-text h1 {
+    font-size: 1.2rem; /* Aumentar tamaño del texto */
+}
+
+.header-text p {
+    font-size: 0.8rem; /* Reducir tamaño del subtítulo */
+    margin: 0; /* Eliminar márgenes */
+    line-height: 1.2; /* Reducir el interlineado */
+    font-style: italic; /* Hacer el texto cursiva */
+}
+
+nav {
+    flex: 1; /* Asegurar que el menú ocupe el espacio restante */
+    display: flex;
+    justify-content: flex-end; /* Alinear el menú a la derecha */
+    margin-top: 20px; /* Mover el menú más abajo */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end; /* Alinear las opciones del menú a la derecha */
+    gap: 10px; /* Espaciado entre las opciones */
+    background: none; /* Eliminar fondo del menú */
+    box-shadow: none; /* Eliminar sombra del menú */
+    position: relative; /* Asegurar que el menú principal sea relativo */
+}
+
+nav ul li {
+    position: relative;
+}
+
+nav ul a {
+    font-family: Arial, sans-serif; /* Asegurar que los enlaces del menú usen Arial */
+    color: white; /* Color inicial */
+    text-decoration: none;
+    padding: 0.3rem 0.8rem; /* Ajustar el padding */
+    display: block;
+    font-size: 14px; /* Reducir tamaño de las opciones del menú */
+    font-weight: bold; /* Aplicar negrilla */
+    text-transform: uppercase; /* Convertir el texto a mayúsculas */
+    transition: color 0.3s ease; /* Transición suave para el color */
+}
+
+header.scrolled nav ul a {
+    color: rgb(0, 0, 0); /* Cambiar a color blanco al hacer scroll */
+}
+
+nav ul a:hover {
+    color: #548235; /* Cambiar el color del texto a verde al resaltar */
+    background-color: transparent; /* Eliminar el cuadro negro de fondo */
+    transition: color 0.3s ease; /* Animación suave para el color */
+}
+
+nav ul .dropdown:hover .submenu {
+    display: block; /* Mostrar submenú al pasar el cursor */
+}
+
+nav ul .dropdown > a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Asegurar que el texto y el span estén separados */
+    position: relative;
+}
+
+nav ul .dropdown > a span {
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-left: 2px solid white; /* Línea izquierda */
+    border-bottom: 2px solid white; /* Línea inferior */
+    transform: rotate(-45deg); /* Rotar para formar una flecha */
+    margin-left: 5px; /* Espaciado entre el texto y el icono */
+    transition: transform 0.3s ease; /* Transición para rotación */
+}
+
+nav ul .dropdown:hover > a span {
+    transform: rotate(135deg); /* Rotar el icono al pasar el cursor */
+}
+
+nav ul .submenu {
+    display: none; /* Ocultar submenú por defecto */
+    position: absolute;
+    top: 100%; /* Posicionar debajo del menú principal */
+    left: 0;
+    background-color: white; /* Fondo blanco */
+    color: #333;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+nav ul .submenu li {
+    width: 200px;
+}
+
+nav ul .submenu a {
+    color: #333;
+    background-color: white; /* Fondo blanco para las opciones */
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+}
+
+nav ul .submenu a:hover {
+    background-color: rgba(84, 130, 53, 0.8); /* Verde con transparencia */
+    color: white; /* Cambiar el texto a blanco */
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
+    padding: -100rem -100rem; /* Este padding genera el espacio interno alrededor del contenido principal */
+}
+
+body.matricularse-page main {
+    padding: 3rem 21rem; /* Ajustar el padding solo para la página de matricularse */
+}
+
+section {
+    margin-bottom: 2rem;
+
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+form label {
+    display: block;
+    margin: 0.5rem 0 0.2rem;
+}
+
+form input, form select, form button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #003d80;
+}
+
+footer {
+    background-color: #1a1a1a; /* Fondo oscuro */
+    color: white;
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.footer-section {
+    flex: 1;
+    margin: 0 1rem;
+    min-width: 250px;
+}
+
+.footer-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.footer-line {
+    width: 50px;
+    height: 3px;
+    background-color: #548235; /* Verde */
+    margin-bottom: 1rem;
+}
+
+.footer-section p {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-section ul li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+    color: #548235; /* Verde */
+}
+
+.social-icons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+social-icons a img {
+    width: 24px;
+    height: 24px;
+}
+
+.footer-bottom {
+    background-color: #548235; /* Verde */
+    text-align: center;
+    padding: 0.2rem;
+    font-size: 0.8rem;
+    color: white;
+    margin: 0; /* Eliminar cualquier espacio adicional */
+    position: fixed; /* Fijar al extremo inferior */
+    bottom: 0;
+    width: 100%;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: flex-end;
+    background-color: #0056b3;
+    padding: 0.5rem;
+}
+
+.auth-links {
+    display: flex;
+    gap: 2.7rem; /* Separación entre los enlaces */
+    position: fixed; /* Fijar posición */
+    top: 20px; /* Mantener en la parte superior */
+    right: 30px; /* Alinear a la derecha */
+    font-size: 0.9rem;
+    z-index: 2000; /* Asegurar que esté encima de otros elementos */
+    pointer-events: auto; /* Permitir interacción con los enlaces */
+    background-color: transparent; /* Evitar superposición visual */
+    transition: color 0.3s ease; /* Transición suave solo para el color */
+}
+
+header.scrolled .auth-links {
+    top: -10px; /* Mantener la misma posición superior */
+    right: -300px; /* Mantener la misma posición derecha */
+    transform: none; /* Evitar transformaciones */
+    z-index: 2000; /* Mantener la prioridad correcta */
+}
+
+.auth-links a {
+    font-family: Arial, sans-serif; /* Asegurar que los enlaces de autenticación usen Arial */
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 0 10px; /* Espaciado entre los enlaces */
+    display: inline-block; /* Asegurar que se alineen horizontalmente */
+    text-align: center; /* Centrar texto */
+}
+
+header.scrolled .auth-links a {
+    color: black; /* Cambiar a color negro al hacer scroll */
+}
+
+.auth-links .dropdown {
+    position: relative;
+}
+
+.auth-links .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.auth-links .dropdown-menu li {
+    padding: 0.5rem 1rem;
+}
+
+.auth-links .dropdown-menu li a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.auth-links .dropdown-menu li a:hover {
+    background-color: #548235; /* Fondo verde */
+    color: black; /* Texto negro */
+}
+
+.auth-links .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f9;
+}
+
+.auth-box {
+    background: white;
+    padding: 2rem 3rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 350px;
+    text-align: center;
+}
+
+.auth-box h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.auth-box form label {
+    display: block;
+    margin: 0.5rem 0 0.2rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.auth-box form input, .auth-box form button {
+    width: 100%;
+    padding: 0.7rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.auth-box form button {
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.auth-box form button:hover {
+    background-color: #003d80;
+}
+
+.centered-section {
+    max-width: 3000px; /* Igual al ancho del cuadro blanco en index.html */
+    margin: 2rem auto; /* Centrar horizontalmente */
+
+    background: white; /* Fondo blanco */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+}
+
+.carousel {
+    width: 100%; /* Asegurar que ocupe todo el ancho disponible */
+   
+    height: 800px; /* Aumentar la altura del carrusel */
+    margin: 2rem auto; /* Centrar el carrusel horizontalmente y agregar margen superior/inferior */
+    margin-bottom: 10rem; /* Espacio entre el carrusel y la siguiente sección */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+    position: relative; /* Posicionar relativo para la barra de carga */
+    z-index: 1; /* Asegurar que el carrusel no interfiera con el título */
+}
+
+.carousel-images {
+    position: relative; /* Asegurar que el contenedor sea relativo */
+    display: flex;
+    transition: transform 1s ease-in-out;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-images img {
+    width: 100%; /* Ajustar la imagen al ancho del carrusel */
+    height: 800px; /* Ajustar la altura de las imágenes al nuevo tamaño del carrusel */
+    object-fit: cover; /* Asegurar que la imagen se ajuste sin deformarse */
+    position: absolute; /* Superponer imágenes */
+    opacity: 0; /* Ocultar imágenes por defecto */
+    transition: opacity 1s ease-in-out, transform 5s ease-in-out; /* Transición suave para desvanecimiento y zoom */
+}
+
+.carousel-images img.active {
+    opacity: 1; /* Mostrar la imagen activa */
+    position: relative; /* Asegurar que la imagen activa esté en el frente */
+    transform: scale(1.1); /* Aplicar un ligero zoom */
+    animation: toggleOpacity 2s ease-in-out; /* Animación para manejar la opacidad */
+}
+
+@keyframes toggleOpacity {
+    0% {
+        opacity: 1; /* Opacidad inicial */
+    }
+    50% {
+        opacity: 0; /* Quitar opacidad por 1 segundo */
+    }
+    100% {
+        opacity: 1; /* Restaurar opacidad */
+    }
+}
+
+.carousel-images::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Capa negra con opacidad */
+    z-index: 1; /* Asegurar que la capa esté encima de las imágenes */
+    pointer-events: none; /* Evitar interferencia con eventos */
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 10;
+    opacity: 0; /* Ocultar las flechas por defecto */
+    transition: opacity 0.3s ease-in-out; /* Transición suave para la opacidad */
+    border-radius: 50%; /* Hacer el borde completamente circular */
+}
+
+    .carousel-btn.prev-btn {
+        left: 10px;
+    }
+
+    .carousel-btn.next-btn {
+        right: 10px;
+    }
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carousel:hover .carousel-btn {
+    opacity: 1; /* Mostrar las flechas al pasar el cursor sobre el carrusel */
+}
+
+.progress-bar {
+    position: absolute;
+    bottom: 0; /* Mover la barra de progreso al fondo del carrusel */
+    left: 0;
+    width: 0;
+    height: 5px; /* Asegurar que la barra sea visible */
+    background-color: #0056b3; /* Azul */
+    transition: width 5s linear; /* Duración de la transición */
+    z-index: 20; /* Asegurar que esté encima de las imágenes */
+}
+
+/* Estilo para el título animado */
+.animated-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 10;
+    background-color: rgba(47, 122, 57, 0.9); /* Fondo verde con transparencia */
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    animation: fadeInScale 1.5s ease-in-out forwards;
+    font-family: 'Roboto Slab', serif; 
+    font-weight: bold;
+}
+
+.animated-title h1 {
+    font-family: 'italic'; /* Cambiar la fuente a Lobster */
+    font-size: 4rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-style: italic; /* Cambiar el estilo a cursiva */
+}
+
+.animated-title h1 span {
+    font-family: 'Roboto Slab', serif; /* Asegurar que las letras usen Lobster */
+    display: inline-block;
+    opacity: 1; /* Asegurar que las letras sean visibles desde el inicio */
+    transform: translateY(0) rotate(0); /* Eliminar transformaciones iniciales que puedan ocultarlas */
+    animation: letterBounce 0.8s ease-in-out forwards;
+    color: #ffffff; /* Asegurar que las letras sean completamente blancas */
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* Incrementar la sombra para mayor contraste */
+    font-style: italic; /* Cambiar el estilo de los span a cursiva */
+}
+
+.animated-title h1 span:nth-of-type(2) { animation-delay: 0.1s; font-family: 'Roboto Slab', serif;  }
+.animated-title h1 span:nth-of-type(3) { animation-delay: 0.2s; font-family: 'Roboto Slab', serif; }
+.animated-title h1 span:nth-of-type(4) { animation-delay: 0.3s; font-family: 'Roboto Slab', serif; }
+.animated-title h1 span:nth-of-type(5) { animation-delay: 0.4s; font-family: 'Roboto Slab', serif; }
+.animated-title h1 span:nth-of-type(6) { animation-delay: 0.5s; }
+.animated-title h1 span:nth-of-type(7) { animation-delay: 0.6s; }
+.animated-title h1 span:nth-of-type(8) { animation-delay: 0.7s; }
+.animated-title h1 span:nth-of-type(9) { animation-delay: 0.8s; }
+.animated-title h1 span:nth-of-type(10) { animation-delay: 0.9s; }
+
+.animated-title p {
+    font-size: 1.8rem;
+    font-style: 'Raleway', sans-serif;
+    margin: 1rem 0 0;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slideUpFade 1s ease-in-out forwards 1.5s;
+    color: #f4f4f9;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.animated-title::after {
+    font-style: 'Raleway', sans-serif;
+    content: '';
+    display: block;
+    width: 80%;
+    height: 5px;
+    background-color: #f4f4f9;
+    margin: 15px auto 0;
+    opacity: 0;
+    transform: scaleX(0);
+    animation: lineExpand 0.8s ease-in-out forwards 1.8s;
+}
+
+/* Animaciones */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes letterBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px) rotate(-15deg);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(10px) rotate(5deg);
+    }
+    100% {
+        transform: translateY(0) rotate(0);
+    }
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes lineExpand {
+    from {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+    to {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+}
+
+/* Animaciones para el menú */
+@keyframes menuFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animaciones para el título animado */
+@keyframes titleFadeOut {
+    from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1); /* Mantener posición inicial */
+    }
+    to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8); /* Reducir tamaño sin cambiar posición */
+    }
+}
+
+.menu {
+    animation: menuFadeIn 0.5s ease-in-out forwards; /* Animación de entrada para el menú */
+}
+
+.animated-title.hidden {
+    animation: titleFadeOut 0.5s ease-in-out forwards; /* Animación de salida para el título animado */
+    pointer-events: none; /* Deshabilitar interacción mientras está oculto */
+}
+
+.top-info-bar {
+    background-color: #548235; /* Color de fondo */
+    color: white; /* Color del texto */
+    display: flex; /* Usar flexbox para alineación */
+    align-items: center; /* Alinear verticalmente con el logo */
+    justify-content: center; /* Centrar horizontalmente */
+    padding: 0.5rem; /* Espaciado interno */
+    font-size: 0.9rem; /* Tamaño de fuente */
+    font-weight: bold; /* Negrita */
+}
+
+.welcome-box {
+    background-color: #548235; /* Fondo verde */
+    color: white; /* Texto blanco */
+    text-align: center; /* Centrar texto */
+    padding: 1.5rem; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    margin-top: 1.5rem; /* Espaciado superior */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+.welcome-box h1 {
+    font-size: 2rem; /* Tamaño del título */
+    margin: 0; /* Sin margen */
+    font-weight: bold; /* Negrita */
+}
+
+.welcome-box h3 {
+    font-size: 1.5rem; /* Tamaño del título */
+    margin-bottom: 0.5rem; /* Espaciado inferior */
+    font-weight: bold; /* Negrita */
+}
+
+.welcome-box p {
+    font-size: 1rem; /* Tamaño del texto */
+    margin: 0; /* Sin margen */
+    font-style: italic; /* Texto en cursiva */
+}
+
+/* Estilo para los recuadros de "Matricularse" */
+.options-box {
+    
+    display: grid; /* Cambiar a diseño de cuadrícula */
+    grid-template-columns: repeat(5, 1fr); /* 5 columnas iguales */
+    gap: 2rem; /* Espaciado uniforme entre las opciones */
+    margin-top: 2rem;
+    padding: 1rem;
+    max-width: 100%; /* Ancho máximo */
+    margin-left: 0; /* Centrar horizontalmente */
+    margin-right: 0; /* Centrar horizontalmente */
+    
+}
+
+.option {
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: 280px; /* Ancho fijo para todos los recuadros */
+    height: 500px; /* Altura fija para todos los recuadros */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Alinear contenido dentro del recuadro */
+}
+
+.option img {
+    width: 100%; /* Ajustar la imagen al ancho del recuadro */
+    height: 300px; /* Altura fija para las imágenes */
+    object-fit: cover; /* Ajustar la imagen sin deformarla */
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+
+.option h3 {
+    font-size: 1.2rem;
+    color: #2f5597;
+    margin-bottom: 0.5rem;
+}
+
+.option p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.option:hover {
+    transform: scale(1.05); /* Aumentar ligeramente el tamaño al pasar el cursor */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+}
+
+.option a {
+    color: #548235; /* Verde */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.option a:hover {
+    text-decoration: underline;
+}
+
+.option button {
+    background-color: #548235; /* Verde */
+    color: white; /* Texto blanco */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición suave */
+}
+
+.option button:hover {
+    background-color: #3a6e1f; /* Verde más oscuro */
+    transform: scale(1.05); /* Aumentar ligeramente el tamaño */
+}
+
+.additional-section {
+    max-width: 1170px; /* Igual al ancho de las secciones anteriores */
+    margin: 2rem auto; /* Centrar horizontalmente con espaciado superior e inferior */
+    padding: 1rem; /* Espaciado interno */
+    width: 100%; /* Agregado para corregir la regla incompleta */
+    background-color: #f9f9f9; /* Fondo claro */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+    text-align: center; /* Centrar el texto */
+}
+
+.section-title {
+    font-size: 1.8rem;
+    color: #2f5597;
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 2rem;
+}
+
+.bachillerato-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.bachillerato-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    padding: 1.5rem;
+    width: 320px; /* Ancho ajustado */
+    height: 650px; /* Largo ajustado */
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bachillerato-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.bachillerato-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.bachillerato-card h3 {
+    font-size: 1.6rem;
+    color: #2f5597;
+    margin-bottom: 0.5rem;
+}
+
+.bachillerato-card p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.fifty-years-section {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.fifty-years-images {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.fifty-years-images img {
+    width: 45%; /* Ajustar el ancho de las imágenes */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.fifty-years-images img:hover {
+    transform: scale(1.05); /* Efecto de zoom al pasar el cursor */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+}
+
+.table-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    overflow-x: auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;  
+    font-size: 1rem;
+    text-align: left;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.styled-table thead tr {
+    background-color: #2f5597;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.styled-table th, .styled-table td {
+    font-size: 0.9rem; /* Ajuste del tamaño de fuente */
+    padding: 10px; /* Ajuste del padding */
+    border: 1px solid #ddd;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #2f5597;
+}
+
+.styled-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.styled-table button {
+    background-color: #548235;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.styled-table button:hover {
+    background-color: #3a6e1f;
+}
+
+.centered-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #2f5597;
+}
+
+.solicitud {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    background-color: #fff; /* Fondo blanco */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: transform 0.2s ease; /* Transición suave */
+}
+
+.solicitud:hover {
+    transform: scale(1.02); /* Aumentar ligeramente el tamaño */
+}
+
+/* Estilo para las flechas de minimizar/maximizar */
+.toggle-category, .toggle-btn {
+    background-color: #548235; /* Verde */
+    color: white;
+    border: none;
+    border-radius: 50%; /* Forma circular */
+    width: 30px;
+    height: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: transform 0.2s ease, background-color 0.3s ease; /* Transición suave */
+}
+
+.toggle-category:hover, .toggle-btn:hover {
+    background-color: #3a6e1f; /* Verde más oscuro */
+    transform: scale(1.1); /* Aumentar ligeramente el tamaño */
+}
+
+/* Estilo para los botones de verificar */
+.verificar-btn {
+    background-color: #0056b3; /* Azul */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px; /* Bordes redondeados */
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición suave */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+.verificar-btn:hover {
+    background-color: #003d80; /* Azul más oscuro */
+    transform: scale(1.05); /* Aumentar ligeramente el tamaño */
+}
+
+/* Estilo para los botones de eliminar */
+.eliminar-btn {
+    background-color: #d9534f; /* Rojo */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px; /* Bordes redondeados */
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transición suave */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+.eliminar-btn:hover {
+    background-color: #c9302c; /* Rojo más oscuro */
+    transform: scale(1.05); /* Aumentar ligeramente el tamaño */
+}
+
+/* Estilo para los contenedores de las categorías */
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f4f4f9; /* Fondo claro */
+    padding: 0.5rem 1rem;
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    margin-bottom: 0.5rem;
+}
+
+.category-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+/* Estilo para los encabezados de las secciones */
+.section-header {
+    font-family: 'Georgia', serif; /* Fuente más notoria */
+    font-size: 1.5rem; /* Tamaño de letra más grande */
+    color: #2f5597; /* Azul oscuro */
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-decoration: underline; /* Subrayado para destacar */
+}
+
+/* Estilo para los campos de datos */
+.solicitud-content p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+/* Estilos responsivos para dispositivos móviles */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        text-align: center;
+    }
+
+    .header-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .header-text h1 {
+        font-size: 1.4rem;
+    }
+
+    .header-text p {
+        font-size: 0.9rem;
+    }
+
+    .logo {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 1rem;
+    }
+
+    nav ul {
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav ul li {
+        width: 100%;
+        text-align: center;
+    }
+
+    nav ul a {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .auth-container {
+        padding: 1rem;
+    }
+
+    .auth-box {
+        width: 90%;
+        padding: 1.5rem;
+    }
+
+    .carousel {
+        height: 180px;
+    }
+
+    .carousel-images img {
+        object-fit: cover;
+    }
+
+    .options-box {
+        flex-direction: column; /* Cambiar a una sola columna */
+        gap: 1rem; /* Reducir el espaciado entre recuadros */
+    }
+
+    .option {
+        width: 100%; /* Ajustar el ancho al 100% */
+    }
+
+    .additional-section {
+        padding: 1rem;
+    }
+
+    .fifty-years-images {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .fifty-years-images img {
+        width: 100%;
+    }
+
+    .table-container {
+        padding: 0.5rem;
+    }
+
+    .styled-table th, .styled-table td {
+        font-size: 0.8rem;
+        padding: 8px;
+    }
+
+    footer {
+        font-size: 0.8rem;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-section {
+        margin: 1rem 0;
+    }
+
+    .welcome-box {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .welcome-box h1 {
+        font-size: 1.5rem;
+    }
+
+    .welcome-box p {
+        font-size: 0.8rem;
+    }
+
+    .progress-bar {
+        height: 3px;
+    }
+
+    .auth-links {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .auth-links a {
+        font-size: 0.9rem;
+    }
+}
+
+/* Corrección de estilos para botones */
+button {
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* Estilo para la sección de "Servicios Educativos" */
+#servicios-educativos {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+#servicios-educativos .section-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+#servicios-educativos .section-subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+#servicios-educativos .section-subtitle::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 2px;
+    background-color: #548235; /* Verde */
+    margin: 0.5rem auto 0;
+}
+
+#servicios-educativos .options-box {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+#servicios-educativos .option {
+    text-align: center;
+    width: 250px;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#servicios-educativos .option img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+}
+
+#servicios-educativos .option h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+#servicios-educativos .option p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+#servicios-educativos .option:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para los botones de servicios educativos sin bordes */
+.service-button {
+    display: block;
+    text-decoration: none;
+    background: none;
+    border: none;
+    text-align: center;
+    cursor: pointer;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-button img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+}
+
+.service-button h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.service-button p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.service-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para el diseño de la imagen proporcionada */
+.section-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0;
+    gap: 10px;
+}
+
+.section-divider .line {
+    flex: none;
+    width: 50px; /* Ancho reducido */
+    height: 2px;
+    background-color: #548235; /* Azul oscuro */
+}
+
+.section-divider .icon img {
+    width: 40px;
+    height: 40px;
+}
+
+#mision .option h2 {
+    margin-bottom: 8px; /* Reducir la distancia entre el título y el párrafo */
+}
+
+#mision .option {
+    text-align: center;
+    background-color: #898989;
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+    margin: 2rem auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* Para posicionar las líneas verdes */
+}
+
+#mision .option::before,
+#mision .option::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 5px; /* Altura de la línea verde */
+    background-color: #548235; /* Color verde */
+    border-radius: 20px 20px 0 0; /* Bordes redondeados */
+}
+
+#mision .option::before {
+    top: 0; /* Línea verde en la parte superior */
+}
+
+#mision .option::after {
+    bottom: 0; /* Línea verde en la parte inferior */
+    border-radius: 0 0 20px 20px; /* Bordes redondeados en la parte inferior */
+}
+
+#mision .option:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#mision .option img {
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+#mision .option button:hover {
+    background-color: #1d3e6e;
+}
+
+.mision-vision-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+#mision, #vision {
+    flex: 1;
+    max-width: 25%; /* Hacer los recuadros más delgados */
+    text-align: center;
+    background-color: #898989;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin: 5rem auto; /* Reducir la separación horizontal y centrar los recuadros */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* Para posicionar las líneas verdes */
+}
+
+#mision::before, #vision::before,
+#mision::after, #vision::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 5px; /* Altura de la línea verde */
+    background-color: #548235; /* Color verde */
+}
+
+#mision::before, #vision::before {
+    top: 0; /* Línea verde en la parte superior */
+    border-radius: 20px 20px 0 0; /* Bordes redondeados en la parte superior */
+}
+
+#mision::after, #vision::after {
+    bottom: 0; /* Línea verde en la parte inferior */
+    border-radius: 0 0 20px 20px; /* Bordes redondeados en la parte inferior */
+}
+
+#mision:hover, #vision:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+#mision img, #vision img {
+    object-fit: cover;
+    border-radius: 8px;
+    display: block; /* Asegurar que sea un bloque */
+    margin: 0 auto; /* Centrar horizontalmente */
+}
+
+#mision h2, #vision h2 {
+    margin-bottom: 0.2rem; /* Reducir la distancia entre el título y el párrafo */
+}
+
+#mision p, #vision p {
+    font-family: 'Montserrat Light', sans-serif; /* Cambiar el tipo de letra a Montserrat Light */
+}
+
+#redes-sociales .options-box {
+    display: flex;
+    justify-content: center;
+    gap: 2rem; /* Espaciado entre las opciones */
+    padding: 1rem; /* Espaciado interno */
+}
+
+#redes_sociales .service-button img {
+    width: 80px; /* Ajustar el ancho de las imágenes */
+    height: 80px; /* Ajustar la altura de las imágenes */
+    object-fit: contain; /* Asegurar que la imagen no se deforme */
+    margin: 0 auto; /* Centrar la imagen horizontalmente */
+}
+#servicios-educativos {
+    margin-top: 10rem;
+}
+#redes-sociales {
+    margin-top: 10rem; /* Separación entre Servicios Educativos y Redes Sociales */
+}
+
+/* Menús desplegables */
+.menu {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    list-style: none;
+    padding: 0;
+    margin: 0 auto; /* Centrar el menú en la página */
+    gap: 1rem;
+}
+
+.menu > li {
+    position: relative;
+}
+
+.menu > li > a {
+    text-decoration: none;
+    color: white;
+    padding: 0.5rem 1rem;
+    display: block;
+    font-weight: bold;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.menu > li > a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%; /* Centrar horizontalmente */
+    transform: translateX(-50%); /* Ajustar para centrar */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    list-style: none;
+    padding: 0.5rem 0;
+    z-index: 1000;
+}
+
+.submenu li {
+    width: 200px;
+}
+
+.submenu li a {
+    text-decoration: none;
+    color: #333;
+    padding: 0.5rem 1rem;
+    display: block;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submenu li a:hover {
+    background-color: #548235;
+    color: white;
+    transform: scale(1.05);
+}
+
+.menu > li:hover .submenu {
+    display: block;
+}
+
+/* Título antes de los menús */
+.menu-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+/* Estilo para los acordeones */
+.accordion {
+    margin-top: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.accordion-item {
+    border-bottom: 1px solid #ddd;
+}
+
+.accordion-header {
+    background-color: #548235;
+    color: white;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.accordion-header:hover {
+    background-color: #3a6e1f;
+    transform: scale(1.02);
+}
+
+.accordion-header::after {
+    content: '\25BC'; /* Flecha hacia abajo */
+    font-size: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.accordion-header.active::after {
+    transform: rotate(180deg); /* Rotar la flecha hacia arriba */
+}
+
+.accordion-content {
+    display: none;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    animation: slideDown 0.3s ease forwards;
+}
+
+.accordion-content iframe {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Animación para el acordeón */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo para los recuadros de las autoridades */
+.autoridades-section {
+    text-align: center;
+    margin-top: 10rem;
+}
+
+.autoridades-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.autoridad-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    width: 400px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    
+}
+
+.autoridad-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.autoridad-header {
+    background-color: #548235; /* Verde */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0.5rem;
+    border-radius: 12px 12px 0 0;
+    margin-bottom: 1rem;
+}
+
+.autoridad-img {
+    width: 300px; /* Aumentar el ancho */
+    height: 300px; /* Aumentar la altura */
+    border-radius: 50%; /* Circular */
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid #548235; /* Borde verde */
+}
+
+.autoridad-card p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+.autoridad-card::after {
+    content: '';
+    display: block;
+    width: 80%;
+    height: 4px;
+    background-color: #548235; /* Línea verde */
+    margin: 1rem auto 0;
+    border-radius: 2px;
+}
+
+/* Centrar los mapas */
+.map-container {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    margin: 2rem auto; /* Espaciado superior e inferior */
+}
+
+/* Estilo para la página de Símbolos Institucionales */
+.simbolos-container {
+    display: grid;
+    grid-template-areas: 
+        "escudo estandarte"
+        "escudo himno";
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.simbolo-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative; /* Para posicionar las líneas verdes */
+}
+
+.simbolo-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.simbolo-card img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+}
+
+.simbolo-card h3 {
+    font-size: 1.5rem;
+    color: #2f5597;
+    margin-bottom: 0.5rem;
+}
+
+.simbolo-card p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.simbolo-card audio {
+    width: 100%;
+    margin-top: 1rem;
+    border-radius: 8px;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .simbolos-container {
+        grid-template-areas:
+            "escudo"
+            "estandarte"
+            "himno";
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Estilo para la sección del banner */
+.banner-section {
+    position: relative;
+    background: url('banner-image.jpg') no-repeat center center/cover; /* Reemplazar 'banner-image.jpg' con la ruta de la imagen */
+    height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.banner-overlay {
+    background: rgba(0, 0, 0, 0.6); /* Fondo negro con transparencia */
+    padding: 1rem 2rem;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.banner-overlay h1 {
+    font-size: 1.8rem;
+    margin: 0;
+    font-weight: bold;
+}
+
+.banner-overlay p {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+}
+
+.banner-overlay a {
+    color: #548235; /* Verde */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.banner-overlay a:hover {
+    text-decoration: underline;
+}

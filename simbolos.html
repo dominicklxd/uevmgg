@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Victor Manuel Guzman</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script> <!-- Cargar Supabase -->
+    <script src="script.js" defer></script> <!-- Cargar script.js después de Supabase -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet"> <!-- Fuente Raleway -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet"> <!-- Fuente Roboto Slab -->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet"> <!-- Fuente Lobster -->
+    <link rel="shortcut icon" href="/unidad-educativa-logo.png" />
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;"> <!-- Imagen de referencia encima del encabezado -->
+    <header>
+        <div class="header-top">
+            
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Victor Manuel Guzman"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="#cronograma">Cronograma de Actividades</a></li>
+                            <li><a href="#ministerio">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#documentos">Documentos Institucionales</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#docente-especial">Docente Especial</a></li>
+                            <li><a href="#inclusion">Apoyo a la Inclusión</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#escuela-futbol">Escuela de Fútbol</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <!-- Diseño de la imagen debajo del encabezado -->
+        <section class="banner-section" style="margin-top: 100px;"> <!-- Reducir el margen superior -->
+            <div class="banner-overlay">
+                <h1>Símbolos Institucionales</h1>
+                <p><a href="index.html">Inicio</a> > Página > Símbolos Institucionales</p>
+            </div>
+        </section>
+        <section class="centered-section">
+
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <div class="simbolos-container">
+                <div class="simbolo-card" style="grid-area: escudo;">
+                    <div class="simbolo-header" style="height: 5px; background-color: #548235; border-radius: 8px 8px 0 0;"></div> <!-- Línea verde superior -->
+                    <h3>Escudo de la Institución</h3>
+                    <img src="unidad-educativa-logo.png" alt="Escudo de la Institución">
+                    <p>El escudo de la Unidad Educativa “Víctor Manuel Guzmán” está compuesto por elementos que reflejan la identidad, los valores y la misión educativa de la institución:
+
+Está enmarcado por una corona circular, en cuya parte superior se encuentra inscrito el nombre de la institución, como símbolo de identidad y pertenencia.
+En su parte interna se destacan tres franjas horizontales de color azul, blanco y verde, que representan los colores del estandarte institucional y simbolizan, respectivamente: la justicia y la sabiduría; la paz y el respeto; y la esperanza y generosidad.
+En la base, se representan tres libros cerrados que sostienen un libro abierto, símbolo del conocimiento y del aprendizaje constante. En este libro se encuentra escrito el lema institucional:
+“Virtud y trabajo es ciencia y honor”, que resume el ideal formativo de la unidad educativa.
+Sobre el libro abierto se encuentra una lira, emblema del arte y la armonía, que contiene en su interior una pluma, representación de la palabra, la escritura y el pensamiento crítico.
+En la parte superior, coronando la lira, se encuentra una antorcha encendida, símbolo de la luz del saber, la guía espiritual y la aspiración al progreso intelectual.
+Este escudo constituye un emblema de la formación integral que promueve nuestra institución, uniendo ciencia, arte, valores y compromiso con la sociedad.</p>
+                    <div class="simbolo-footer" style="height: 5px; background-color: #548235; border-radius: 0 0 8px 8px;"></div> <!-- Línea verde inferior -->
+                </div>
+                <div class="simbolo-card" style="grid-area: estandarte;">
+                    <div class="simbolo-header" style="height: 5px; background-color: #548235; border-radius: 8px 8px 0 0;"></div> <!-- Línea verde superior -->
+                    <h3>Estandarte de la Institución</h3>
+                    <img src="estandarte.png" alt="Estandarte de la Institución">
+                    <p>La bandera de la Unidad Educativa “Víctor Manuel Guzmán” es un emblema de identidad, pertenencia y compromiso con los valores que sustentan la formación integral de sus estudiantes.
+
+Está conformada por tres colores dispuestos de manera simbólica:
+
+Una franja triangular blanca, ubicada en el extremo izquierdo, que abarca aproximadamente el 25% del largo total. Esta figura representa la paz, el respeto mutuo y la búsqueda constante de la unidad dentro de la comunidad educativa.
+Dos franjas horizontales que completan el diseño:
+La franja superior de color azul, símbolo de la verdad, la justicia, la sabiduría y la claridad de pensamiento.
+La franja inferior de color verde, que representa la esperanza, la generosidad, el optimismo y la armonía con la naturaleza.
+Al centro de la bandera se sitúa, con discreción y solemnidad, el escudo institucional, que resume la misión educativa, el legado histórico y la visión de futuro de nuestra institución.
+
+Esta bandera flamea como testimonio del compromiso con una educación de calidad, con valores sólidos y con el crecimiento integral de cada uno de los miembros de nuestra comunidad educativa.</p>
+                    <div class="simbolo-footer" style="height: 5px; background-color: #548235; border-radius: 0 0 8px 8px;"></div> <!-- Línea verde inferior -->
+                </div>
+                <div class="simbolo-card" style="grid-area: himno;">
+                    <div class="simbolo-header" style="height: 5px; background-color: #548235; border-radius: 8px 8px 0 0;"></div> <!-- Línea verde superior -->
+                    <h3>Himno Institucional</h3>
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/O-UeECWTWUc?si=TLy3sdVQrKbbI-Dx" title="Himno Institucional" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <p><summary>Letra: Prof. Ramiro Guzmán Rueda<br>Música: Prof. Carlos Nell Guzmán M.<br><br>CORO<br><br>¡Oh insigne maestro!<br>Víctor Manuel es tu nombre,<br>Atalaya de nobles empeños<br>con la excelsa virtud de los sueños<br>alcanzaste, en la gloria, renombre<br><br>ESTROFAS<br><br>Juventud, que se abre a la vida<br>sombra amiga y cordial eres tú,<br>y la guía por siempre encendida<br>de tu vida la fúlgida luz<br><br>En tu día de gloria cantemos<br>alabanza infinita de amor,<br>y en la insignia que al cielo elevemos<br>suba el alma de nuestra canción.<br><br>Es libro el abierto camino<br>a la noble fruición del saber,<br>a cumplir nuestro ello destino<br>la virtud, la verdad, el saber.<br><br>Que por siempre cantemos tu gloria<br>ella sea bandera y blasón;<br>del Colegio forjemos la historia<br>de grandeza, decoro y honor.</summary></p>
+                    <div class="simbolo-footer" style="height: 5px; background-color: #548235; border-radius: 0 0 8px 8px;"></div> <!-- Línea verde inferior -->
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="autoridades.html">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autoridades</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+<body>
+    <div class="top-info-bar">
+        <p> Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador | uevmg@gmail.com</p>
+    </div>
+    <header>
+        <div class="header-top">
+            
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Victor Manuel Guzman"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="sede-ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="#simbolos">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="#cronograma">Cronograma de Actividades</a></li>
+                            <li><a href="#ministerio">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#documentos">Documentos Institucionales</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#docente-especial">Docente Especial</a></li>
+                            <li><a href="#inclusion">Apoyo a la Inclusión</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#escuela-futbol">Escuela de Fútbol</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+<body>
+ 
+    <main>
+        <section class="centered-section">
+            <h2>Formulario de Matriculación</h2>
+            <h3>Datos del Estudiante</h3>
+            <form id="form-matriculacion">
+                <label for="codigo">Código:</label>
+                <input type="text" id="codigo" name="codigo" required>
+
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" id="apellidos" name="apellidos" required>
+
+                <label for="nombres">Nombres:</label>
+                <input type="text" id="nombres" name="nombres" required>
+
+                
+                <label for="cedula_estudiante">Cédula:</label>
+                <input type="text" id="cedula_estudiante" name="cedula_estudiante" required>
+
+                <label for="provincia_nacimiento">Provincia de Nacimiento:</label>
+                <select id="provincia_nacimiento" name="provincia_nacimiento" required>
+                    <option value="">Seleccione una provincia</option>
+                    <option value="Azuay">Azuay</option>
+                    <option value="Bolivar">Bolívar</option>
+                    <option value="Cañar">Cañar</option>
+                    <option value="Carchi">Carchi</option>
+                    <option value="Chimborazo">Chimborazo</option>
+                    <option value="Cotopaxi">Cotopaxi</option>
+                    <option value="El Oro">El Oro</option>
+                    <option value="Esmeraldas">Esmeraldas</option>
+                    <option value="Galápagos">Galápagos</option>
+                    <option value="Guayanas">Guayanas</option>
+                    <option value="Imbabura">Imbabura</option>
+                    <option value="Loja">Loja</option>
+                    <option value="Los Ríos">Los Ríos</option>
+                    <option value="Manabí">Manabí</option>
+                    <option value="Morona Santiago">Morona Santiago</option>
+                    <option value="Napo">Napo</option>
+                    <option value="Sucumbíos">Sucumbíos</option>
+                    <option value="Pastaza">Pastaza</option>
+                    <option value="Pinchincha">Pinchincha</option>
+                    <option value="Santa Elena">Santa Elena</option>
+                    <option value="Santo Domingo">Santo Domingo</option>
+                    <option value="Francisco De Orellana">Francisco De Orellana</option>
+                    <option value="Tungurahua">Tungurahua</option>
+                    <option value="Zamora Chinchipe">Zamora Chinchipe</option>
+                </select>
+
+                <label for="canton">Cantón:</label>
+                <input type="text" id="canton" name="canton">
+
+                <label for="genero">Género:</label>
+                <select id="genero" name="genero">
+                    <option value="Masculino">Masculino</option>
+                    <option value="Femenino">Femenino</option>
+                </select>
+
+                <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento">
+
+                <label for="nacionalidad">Nacionalidad:</label>
+                <input type="text" id="nacionalidad" name="nacionalidad">
+
+                <label for="institucion_procede">Institución de Procedencia:</label>
+                <input type="text" id="institucion_procede" name="institucion_procede">
+
+                
+
+                <h3>Datos de la Vivienda</h3>
+                <label for="provincia_vivienda">Provincia:</label>
+                <input type="text" id="provincia_vivienda" name="provincia_vivienda">
+
+                <label for="ciudad">Ciudad:</label>
+                <input type="text" id="ciudad" name="ciudad">
+
+                <label for="parroquia">Parroquia:</label>
+                <input type="text" id="parroquia" name="parroquia">
+
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" name="direccion">
+
+                <label for="telefono_convencional">Teléfono Convencional:</label>
+                <input type="text" id="telefono_convencional" name="telefono_convencional">
+
+                <label for="sector">Sector:</label>
+                <input type="text" id="sector" name="sector" required>
+
+                <h3>¿A quién acudir en caso de emergencia?</h3>
+                <label for="emergencia_nombres">Nombres y Apellidos:</label>
+                <input type="text" id="emergencia_nombres" name="emergencia_nombres">
+
+                <label for="emergencia_parentesco">Parentesco:</label>
+                <input type="text" id="emergencia_parentesco" name="emergencia_parentesco">
+
+                <h3>Contacto de Emergencia</h3>
+                <label for="telefono_emergencia">Teléfono:</label>
+                <input type="text" id="telefono_emergencia" name="telefono_emergencia" required>
+
+                <h3>Datos de los Familiares</h3>
+                <h4>Padre</h4>
+                <div class="form-group">
+                    <label for="padre_nombres">Apellidos y Nombres:</label>
+                    <input type="text" id="padre_nombres" name="padre_nombres">
+
+                    <label for="padre_cedula">Cédula:</label>
+                    <input type="text" id="padre_cedula" name="padre_cedula">
+
+                    <label for="padre_telefono">Teléfono Convencional:</label>
+                    <input type="text" id="padre_telefono" name="padre_telefono">
+
+                    <label for="padre_celular">Número Celular:</label>
+                    <input type="text" id="padre_celular" name="padre_celular">
+
+                    <label for="padre_profesion">Profesión:</label>
+                    <input type="text" id="padre_profesion" name="padre_profesion">
+
+                    <label for="padre_email">Email:</label>
+                    <input type="email" id="padre_email" name="padre_email">
+
+                    <label for="direccion_trabajo_padre">Dirección del Trabajo:</label>
+                    <input type="text" id="direccion_trabajo_padre" name="direccion_trabajo_padre">
+
+                    <div class="checkbox-group">
+                        <label for="vive-con-estudiante-padre">
+                            <input type="checkbox" id="vive-con-estudiante-padre" name="vive-con-estudiante-padre">
+                            Vive con el estudiante
+                        </label>
+
+                        <label for="es-representante-padre">
+                            <input type="checkbox" id="es-representante-padre" name="es-representante-padre">
+                            Es representante del estudiante
+                        </label>
+                    </div>
+
+                    <label for="nacionalidad_padre">Nacionalidad:</label>
+                    <select id="nacionalidad_padre" name="nacionalidad_padre" required>
+                        <option value="">Seleccione una nacionalidad</option>
+                        <option value="Ecuatoriana">Ecuatoriana</option>
+                        <option value="Peruana">Peruana</option>
+                        <option value="Venezolana">Venezolana</option>
+                        <option value="Colombiana">Colombiana</option>
+                        <option value="Otros paises de america">Otros países de América</option>
+                        <option value="Otros continentes">Otros continentes</option>
+                    </select>
+                </div>
+
+                <h4>Madre</h4>
+                <div class="form-group">
+                    <label for="madre_nombres">Apellidos y Nombres:</label>
+                    <input type="text" id="madre_nombres" name="madre_nombres">
+
+                    <label for="madre_cedula">Cédula:</label>
+                    <input type="text" id="madre_cedula" name="madre_cedula">
+
+                    <label for="madre_telefono">Teléfono Convencional:</label>
+                    <input type="text" id="madre_telefono" name="madre_telefono">
+
+                    <label for="madre_celular">Número Celular:</label>
+                    <input type="text" id="madre_celular" name="madre_celular">
+
+                    <label for="madre_profesion">Profesión:</label>
+                    <input type="text" id="madre_profesion" name="madre_profesion">
+
+                    <label for="madre_email">Email:</label>
+                    <input type="email" id="madre_email" name="madre_email">
+
+                    <label for="direccion_trabajo_madre">Dirección del Trabajo:</label>
+                    <input type="text" id="direccion_trabajo_madre" name="direccion_trabajo_madre">
+
+                    <div class="checkbox-group">
+                        <label for="vive_con_estudiante_madre">
+                            <input type="checkbox" id="vive-con_estudiante_madre" name="vive_con_estudiante_madre">
+                            Vive con el estudiante
+                        </label>
+
+                        <label for="es_representante-madre">
+                            <input type="checkbox" id="es_representante-madre" name="es-representant_madre">
+                            Es representante del estudiante
+                        </label>
+                    </div>
+
+                    <label for="nacionalidad_madre">Nacionalidad:</label>
+                    <select id="nacionalidad_madre" name="nacionalidad_madre" required>
+                        <option value="">Seleccione una nacionalidad</option>
+                        <option value="Ecuatoriana">Ecuatoriana</option>
+                        <option value="Peruana">Peruana</option>
+                        <option value="Venezolana">Venezolana</option>
+                        <option value="Colombiana">Colombiana</option>
+                        <option value="Otros paises de america">Otros países de América</option>
+                        <option value="Otros continentes">Otros continentes</option>
+                    </select>
+                </div>
+
+                <h4>Representante Legal</h4>
+                <div class="form-group">
+                    <label for="representante_nombres">Apellidos y Nombres:</label>
+                    <input type="text" id="representante_nombres" name="representante_nombres">
+
+                    <label for="representante_cedula">Cédula:</label>
+                    <input type="text" id="representante_cedula" name="representante_cedula">
+
+                    <label for="representante_telefono">Teléfono Convencional:</label>
+                    <input type="text" id="representante_telefono" name="representante_telefono">
+
+                    <label for="representante_celular">Número Celular:</label>
+                    <input type="text" id="representante_celular" name="representante_celular">
+
+                    <label for="representante_profesion">Profesión:</label>
+                    <input type="text" id="representante_profesion" name="representante_profesion">
+
+                    <label for="representante_email">Email:</label>
+                    <input type="email" id="representante_email" name="representante_email">
+
+                    <label for="direccion_trabajo_representante">Dirección del Trabajo:</label>
+                    <input type="text" id="direccion_trabajo_representante" name="direccion_trabajo_representante">
+
+                    <div class="checkbox-group">
+                        <label for="vive_con_estudiante_representante">
+                            <input type="checkbox" id="vive_con_estudiante_representante" name="vive_con_estudiante_representante">
+                            Vive con el estudiante
+                        </label>
+
+                        <label for="es_representante_representante">
+                            <input type="checkbox" id="es_representante-representante" name="es_representante_representante">
+                            Es representante del estudiante
+                        </label>
+                    </div>
+
+                    <label for="nacionalidad_representante">Nacionalidad:</label>
+                    <select id="nacionalidad_representante" name="nacionalidad_representante" required>
+                        <option value="">Seleccione una nacionalidad</option>
+                        <option value="Ecuatoriana">Ecuatoriana</option>
+                        <option value="Peruana">Peruana</option>
+                        <option value="Venezolana">Venezolana</option>
+                        <option value="Colombiana">Colombiana</option>
+                        <option value="Otros paises de america">Otros países de América</option>
+                        <option value="Otros continentes">Otros continentes</option>
+                    </select>
+                </div>
+
+                <h3>Ubicación</h3>
+                <label for="latitud">Latitud:</label>
+                <input type="text" id="latitud" name="latitud" readonly>
+
+                <label for="longitud">Longitud:</label>
+                <input type="text" id="longitud" name="longitud" readonly>
+
+                <div id="map" style="width: 100%; height: 400px; margin-top: 1rem; border: 1px solid #ccc;"></div>
+
+                <button type="submit">Enviar</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+        </div>
+    </footer>
+    <script type="module">
+        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+        // Configuración de Supabase
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // Manejar el estado de autenticación y roles
+        document.addEventListener("DOMContentLoaded", async () => {
+            const authLinks = document.querySelector('.auth-links');
+            const menu = document.querySelector('.menu');
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            const adminEmail = localStorage.getItem('adminEmail') || 'admin@ejemplo.com';
+
+            if (authLinks) {
+                if (usuarioActivo) {
+                    authLinks.innerHTML = `
+                        <a href="matricularse.html">Matricularse</a>
+                        <a href="#" id="logout">Cerrar Sesión</a>
+                    `;
+                    document.getElementById('logout').addEventListener('click', () => {
+                        localStorage.removeItem('usuarioActivo');
+                        alert('Sesión cerrada exitosamente.');
+                        window.location.href = 'index.html';
+                    });
+                } else {
+                    authLinks.innerHTML = `
+                        <a href="registro.html">Registrarse</a>
+                        <a href="login.html">Iniciar Sesión</a>
+                    `;
+                }
+            }
+
+            // Generar automáticamente el código de la ficha
+            const codigoInput = document.getElementById('codigo');
+            try {
+                const { data: solicitudes, error } = await supabase
+                    .from('solicitudesMatriculacion')
+                    .select('codigo')
+                    .order('codigo', { ascending: false })
+                    .limit(1);
+
+                if (error) {
+                    console.error('Error al obtener el último código:', error.message);
+                    alert('Error al generar el código automáticamente.');
+                } else {
+                    const ultimoCodigo = solicitudes.length > 0 ? parseInt(solicitudes[0].codigo, 10) : 0;
+                    codigoInput.value = String(ultimoCodigo + 1).padStart(6, '0'); // Generar un nuevo código con 6 dígitos
+                }
+            } catch (err) {
+                console.error('Error inesperado al generar el código:', err);
+                alert('Ocurrió un error inesperado al generar el código.');
+            }
+
+            // Inicializar Google Maps
+            let map, marker;
+            const latitudInput = document.getElementById('latitud');
+            const longitudInput = document.getElementById('longitud');
+
+            function initMap() {
+                const defaultLocation = { lat: 0.336164, lng: -78.116049 }; // Ubicación predeterminada
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: defaultLocation,
+                    zoom: 15,
+                });
+
+                marker = new google.maps.Marker({
+                    position: defaultLocation,
+                    map: map,
+                    draggable: true,
+                });
+
+                // Actualizar latitud y longitud al mover el marcador
+                marker.addListener('dragend', () => {
+                    const position = marker.getPosition();
+                    latitudInput.value = position.lat().toFixed(6);
+                    longitudInput.value = position.lng().toFixed(6);
+                });
+
+                // Establecer latitud y longitud iniciales
+                latitudInput.value = defaultLocation.lat.toFixed(6);
+                longitudInput.value = defaultLocation.lng.toFixed(6);
+            }
+
+            window.initMap = initMap;
+
+            // Cargar el script de Google Maps
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE&callback=initMap`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        });
+
+        // Manejar el envío del formulario de matriculación
+        document.getElementById('form-matriculacion').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            // Validar que la fecha de nacimiento no esté vacía
+            if (!data.fecha_nacimiento) {
+                alert('Por favor llena la fecha de nacimiento antes de continuar');
+                return;
+            }
+
+            try {
+                const { error } = await supabase
+                    .from('solicitudesMatriculacion')
+                    .insert([{
+                        codigo: data.codigo,
+                        apellidos: data.apellidos,
+                        nombres: data.nombres,
+                        cedula_estudiante: data.cedula_estudiante,
+                        provincia_nacimiento: data.provincia_nacimiento,
+                        canton: data.canton,
+                        genero: data.genero,
+                        fecha_nacimiento: data.fecha_nacimiento,
+                        nacionalidad: data.nacionalidad,
+                        institucion_procede: data.institucion_procede,
+                        provincia_vivienda: data.provincia_vivienda,
+                        ciudad: data.ciudad,
+                        parroquia: data.parroquia,
+                        direccion: data.direccion,
+                        telefono_convencional: data.telefono_convencional,
+                        sector: data.sector,
+                        emergencia_nombres: data.emergencia_nombres,
+                        emergencia_parentesco: data.emergencia_parentesco,
+                        telefono_emergencia: data.telefono_emergencia,
+                        padre_nombres: data.padre_nombres,
+                        padre_cedula: data.padre_cedula,
+                        padre_telefono: data.padre_telefono,
+                        padre_celular: data.padre_celular,
+                        padre_profesion: data.padre_profesion,
+                        padre_email: data.padre_email,
+                        direccion_trabajo_padre: data.direccion_trabajo_padre,
+                        madre_nombres: data.madre_nombres,
+                        madre_cedula: data.madre_cedula,
+                        madre_telefono: data.madre_telefono,
+                        madre_celular: data.madre_celular,
+                        madre_profesion: data.madre_profesion,
+                        madre_email: data.madre_email,
+                        direccion_trabajo_madre: data.direccion_trabajo_madre,
+                        representante_nombres: data.representante_nombres,
+                        representante_cedula: data.representante_cedula,
+                        representante_telefono: data.representante_telefono,
+                        representante_celular: data.representante_celular,
+                        representante_profesion: data.representante_profesion,
+                        representante_email: data.representante_email,
+                        direccion_trabajo_representante: data.direccion_trabajo_representante,
+                        latitud: data.latitud,
+                        longitud: data.longitud
+                    }]);
+
+                if (error) {
+                    console.error('Error al guardar la solicitud:', error.message);
+                    alert('Error al guardar la solicitud: ' + error.message);
+                } else {
+                    alert('Solicitud registrada exitosamente.');
+                    window.location.href = 'index.html'; // Redirigir a la página de inicio
+                }
+            } catch (err) {
+                console.error('Error inesperado al guardar la solicitud:', err);
+                alert('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
+            }
+        });
+    </script>
+    <script src="script.js" defer></script> 
+</body>
+</html>

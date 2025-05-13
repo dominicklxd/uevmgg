@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriculación</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script> <!-- Cargar Supabase -->
+    <script src="script.js" defer></script> <!-- Cargar script.js después de Supabase -->
+</head>
+<body>
+    <div class="top-info-bar">
+        <p> Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador | uevmg@gmail.com</p>
+    </div>
+    <header>
+        <div class="header-top">
+            
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Victor Manuel Guzman"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="sede-ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="#simbolos">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="#cronograma">Cronograma de Actividades</a></li>
+                            <li><a href="#ministerio">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#documentos">Documentos Institucionales</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#docente-especial">Docente Especial</a></li>
+                            <li><a href="#inclusion">Apoyo a la Inclusión</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#escuela-futbol">Escuela de Fútbol</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="centered-section">
+            <h2>Proceso de Matriculación</h2>
+            <p>Para realizar el proceso de matriculación, sigue los pasos a continuación:</p>
+            <h3>Pasos para la Matriculación:</h3>
+            <ol>
+                <li>Accede al portal oficial del Ministerio de Educación.</li>
+                <li>Haz clic en el siguiente enlace para iniciar el proceso: 
+                    <a href="https://juntos.educacion.gob.ec/index.php/sierra-matricula/inscripcion" target="_blank">Ir al portal de Matriculación</a>.
+                </li>
+                <li>Llena los datos requeridos en el formulario en línea.</li>
+                <li>Confirma la información y envía el formulario.</li>
+            </ol>
+            <h3>Información Adicional:</h3>
+            <p>Si tienes dudas o necesitas asistencia, puedes acercarte a la Dirección Distrital más cercana o comunicarte a través de los canales de atención del Ministerio de Educación.</p>
+            <form id="matriculacion-form">
+            </form>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+        </div>
+    </footer>
+    <script>
+        const usuarioActivo = localStorage.getItem('usuarioActivo');
+        const menu = document.querySelector('.menu');
+
+        if (usuarioActivo) {
+            const authLinks = document.querySelector('.auth-links');
+            authLinks.innerHTML = `
+                <a href="matricularse.html">Matricularse</a>
+                <a href="#" id="logout">Cerrar Sesión</a>
+            `;
+            document.getElementById('logout').addEventListener('click', () => {
+                localStorage.removeItem('usuarioActivo');
+                alert('Sesión cerrada exitosamente.');
+                window.location.href = 'index.html';
+            });
+
+            // Verificar si el usuario tiene rol de administrador
+            const adminEmail = localStorage.getItem('adminEmail') || 'admin@ejemplo.com';
+            if (usuarioActivo === adminEmail) {
+                if (!menu.querySelector('a[href="verUsuarios.html"]')) {
+                    const adminMenuItem = document.createElement('li');
+                    adminMenuItem.classList.add('dropdown');
+                    adminMenuItem.innerHTML = `
+                        <a href="#">Administración</a>
+                        <ul class="submenu">
+                            <li><a href="verUsuarios.html">Ver Usuarios</a></li>
+                            <li><a href="solicitudMatriculacion.html">Solicitudes de Matriculación</a></li>
+                        </ul>
+                    `;
+                    menu.appendChild(adminMenuItem);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
