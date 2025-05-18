@@ -676,6 +676,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE"></script>
     <script>
+    window.addEventListener('DOMContentLoaded', function() {
         // Configuración de Supabase
         const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
         const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
@@ -1555,7 +1556,7 @@
                 lngInput.value = e.latLng.lng();
             });
         }
+    });
     </script>
-    <script src="script.js" defer></script>
 </body>
 </html>
