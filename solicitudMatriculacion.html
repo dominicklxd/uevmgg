@@ -131,6 +131,32 @@
             font-weight: bold;
             color: #548235;
         }
+        .detalle-btn {
+            background: #2f5597;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .detalle-btn:hover {
+            background: #548235;
+        }
+        .detalle-row {
+            transition: all 0.3s;
+        }
+        .detalle-content {
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(44,130,201,0.08);
+            margin: 0.5rem 0;
+        }
         @media (max-width: 900px) {
             .solicitudes-table-container { padding: 1rem 0.2rem; }
             .solicitudes-table th, .solicitudes-table td { font-size: 0.85rem; padding: 8px 4px; }
@@ -140,6 +166,26 @@
             .solicitudes-table-container { padding: 0.5rem 0; }
             .solicitudes-table th, .solicitudes-table td { font-size: 0.75rem; padding: 6px 2px; }
             .solicitudes-filtros { flex-direction: column; gap: 0.5rem; }
+        }
+        .detalle-nav-btn {
+            background: #2f5597;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.4rem 1.2rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 0.5rem;
+            transition: background 0.2s;
+        }
+        .detalle-nav-btn:disabled {
+            background: #ccc;
+            color: #888;
+            cursor: not-allowed;
+        }
+        .detalle-nav-btn:hover:not(:disabled) {
+            background: #548235;
         }
     </style>
 </head>
@@ -348,6 +394,267 @@
             cargarSolicitudes();
         };
 
+        let detalleAbierto = null;
+
+        async function mostrarDetalle(id, s) {
+            const cont = document.getElementById('detalle-content-' + id);
+            cont.innerHTML = '<span style="color:#888;">Cargando detalles...</span>';
+            let est = s.estudiante;
+            const insc = s.inscripcion;
+            const curso = s.curso;
+            let direccion = null;
+            let padre = null;
+            let madre = null;
+            let representante = null;
+            let contactos = [];
+            let mapaHtml = '';
+
+            // NUEVO: Obtener datos completos del estudiante por id_cedula
+            let datosExtraEstudiante = {};
+            let institucionProcedencia = "";
+            try {
+                // Buscar id_cedula
+                let idCedula = est.id_cedula;
+                if (!idCedula && s.cedula) {
+                    const { data: cedulaRow } = await supabase
+                        .from('cedulas')
+                        .select('id_cedula')
+                        .eq('cedula', s.cedula)
+                        .single();
+                    if (cedulaRow) idCedula = cedulaRow.id_cedula;
+                }
+                if (idCedula) {
+                    // Buscar estudiante por id_cedula
+                    const { data: estRow } = await supabase
+                        .from('estudiante')
+                        .select('etnia, nacionalidad, tipo_sangre, fecha_nacimiento, sexo, telefono, telefono_convencional')
+                        .eq('id_cedula', idCedula)
+                        .order('id_estudiante', { ascending: false })
+                        .limit(1)
+                        .maybeSingle();
+                    if (estRow) datosExtraEstudiante = estRow;
+                }
+                // Buscar institucion_procedencia desde solicitud_inscripcion
+                if (est.id_inscripcion) {
+                    const { data: inscRow } = await supabase
+                        .from('solicitud_inscripcion')
+                        .select('institucion_procedencia')
+                        .eq('id', est.id_inscripcion)
+                        .maybeSingle();
+                    if (inscRow && inscRow.institucion_procedencia) {
+                        institucionProcedencia = inscRow.institucion_procedencia;
+                    }
+                } else if (insc && insc.institucion_procedencia) {
+                    institucionProcedencia = insc.institucion_procedencia;
+                }
+            } catch {}
+
+            est = {
+                ...est,
+                ...datosExtraEstudiante
+            };
+
+            try {
+                // Dirección
+                const { data: dirs } = await supabase
+                    .from('direccion_estudiante')
+                    .select('*')
+                    .eq('id_estudiante', est.id_estudiante);
+                if (dirs && dirs.length > 0) {
+                    direccion = dirs[0];
+                    if (direccion.latitud && direccion.longitud) {
+                        const lat = direccion.latitud, lng = direccion.longitud;
+                        const mapaUrl = `https://maps.google.com/maps?q=${lat},${lng}&z=17&output=embed`;
+                        mapaHtml = `<iframe width="350" height="180" style="border-radius:8px;border:1px solid #ccc;" src="${mapaUrl}" allowfullscreen="" loading="lazy"></iframe>`;
+                    }
+                }
+                // Padre
+                const { data: padres } = await supabase
+                    .from('padre_estudiante')
+                    .select('*')
+                    .eq('id_estudiante', est.id_estudiante);
+                if (padres && padres.length > 0) padre = padres[0];
+                // Madre
+                const { data: madres } = await supabase
+                    .from('madre_estudiante')
+                    .select('*')
+                    .eq('id_estudiante', est.id_estudiante);
+                if (madres && madres.length > 0) madre = madres[0];
+                // Representante
+                const { data: reps } = await supabase
+                    .from('representante_estudiante')
+                    .select('*')
+                    .eq('id_estudiante', est.id_estudiante);
+                if (reps && reps.length > 0) representante = reps[0];
+                // Contactos de emergencia
+                const { data: conts } = await supabase
+                    .from('contacto_emergencia_estudiante')
+                    .select('*')
+                    .eq('id_estudiante', est.id_estudiante);
+                if (conts && conts.length > 0) contactos = conts;
+            } catch {}
+
+            let pdfHtml = s.pdf_url ? `<a class="pdf-link" href="${s.pdf_url}" target="_blank" download>Descargar PDF</a>` : '<span style="color:#888;">PDF no disponible</span>';
+
+            // Panel de pasos
+            const pasos = [
+                {
+                    titulo: "Datos Académicos",
+                    html: `
+                        <table style="width:100%;font-size:1rem;">
+                            <tr><td><b>Periodo:</b></td><td>${insc.periodo || ''}</td></tr>
+                            <tr><td><b>Curso:</b></td><td>${curso.nombre_curso || ''} - ${insc.paralelo || ''}</td></tr>
+                            <tr><td><b>Especialidad:</b></td><td>${insc.especialidad || ''}</td></tr>
+                            <tr><td><b>Institución Procedencia:</b></td><td>${institucionProcedencia || ''}</td></tr>
+                        </table>
+                    `
+                },
+                {
+                    titulo: "Datos del Estudiante",
+                    html: `
+                        <table style="width:100%;font-size:1rem;">
+                            <tr><td><b>Apellidos:</b></td><td>${est.apellidos||''}</td></tr>
+                            <tr><td><b>Nombres:</b></td><td>${est.nombres||''}</td></tr>
+                            <tr><td><b>Cédula:</b></td><td>${s.cedula||''}</td></tr>
+                            <tr><td><b>Correo:</b></td><td>${est.correo||''}</td></tr>
+                            <tr><td><b>Etnia:</b></td><td>${est.etnia||''}</td></tr>
+                            <tr><td><b>Nacionalidad:</b></td><td>${est.nacionalidad||''}</td></tr>
+                            <tr><td><b>Tipo de Sangre:</b></td><td>${est.tipo_sangre||''}</td></tr>
+                            <tr><td><b>Fecha de Nacimiento:</b></td><td>${est.fecha_nacimiento||''}</td></tr>
+                            <tr><td><b>Sexo:</b></td><td>${est.sexo||''}</td></tr>
+                            <tr><td><b>Teléfono:</b></td><td>${est.telefono||''}</td></tr>
+                            <tr><td><b>Teléfono Convencional:</b></td><td>${est.telefono_convencional||''}</td></tr>
+                        </table>
+                    `
+                },
+                {
+                    titulo: "Dirección de Vivienda",
+                    html: direccion ? `
+                        <table style="width:100%;font-size:1rem;">
+                            <tr><td><b>Calle Principal:</b></td><td>${direccion.calle_principal||''}</td></tr>
+                            <tr><td><b>Calle Secundaria:</b></td><td>${direccion.calle_secundaria||''}</td></tr>
+                            <tr><td><b>Provincia:</b></td><td>${direccion.provincia||''}</td></tr>
+                            <tr><td><b>Cantón:</b></td><td>${direccion.canton||''}</td></tr>
+                            <tr><td><b>Parroquia:</b></td><td>${direccion.parroquia||''}</td></tr>
+                            <tr><td><b>Barrio:</b></td><td>${direccion.barrio||''}</td></tr>
+                            <tr><td><b>Número de Casa:</b></td><td>${direccion.numero_casa||''}</td></tr>
+                            <tr><td><b>Referencia:</b></td><td>${direccion.referencia||''}</td></tr>
+                        </table>
+                        <div style="margin-top:0.7rem;">
+                            <b>Ubicación:</b><br>
+                            ${mapaHtml || '<span style="color:#888;">No disponible</span>'}
+                        </div>
+                    ` : '<span style="color:#888;">No disponible</span>'
+                },
+                {
+                    titulo: "Datos del Padre",
+                    html: padre ? `
+                        <table style="width:100%;font-size:1rem;">
+                            <tr><td><b>Nombre:</b></td><td>${padre.nombres||''}</td></tr>
+                            <tr><td><b>Cédula:</b></td><td>${padre.cedula||''}</td></tr>
+                            <tr><td><b>Ocupación:</b></td><td>${padre.ocupacion||''}</td></tr>
+                            <tr><td><b>Email:</b></td><td>${padre.email||''}</td></tr>
+                            <tr><td><b>Teléfono:</b></td><td>${padre.telefono_celular||''}</td></tr>
+                        </table>
+                    ` : '<span style="color:#888;">No disponible</span>'
+                },
+                {
+                    titulo: "Datos de la Madre",
+                    html: madre ? `
+                        <table style="width:100%;font-size:1rem;">
+                            <tr><td><b>Nombre:</b></td><td>${madre.nombres||''}</td></tr>
+                            <tr><td><b>Cédula:</b></td><td>${madre.cedula||''}</td></tr>
+                            <tr><td><b>Ocupación:</b></td><td>${madre.ocupacion||''}</td></tr>
+                            <tr><td><b>Email:</b></td><td>${madre.email||''}</td></tr>
+                            <tr><td><b>Teléfono:</b></td><td>${madre.telefono_celular||''}</td></tr>
+                        </table>
+                    ` : '<span style="color:#888;">No disponible</span>'
+                },
+                {
+                    titulo: "Datos del Representante",
+                    html: representante ? `
+                        <table style="width:100%;font-size:1rem;">
+                            <tr><td><b>Nombre:</b></td><td>${representante.nombres||''}</td></tr>
+                            <tr><td><b>Cédula:</b></td><td>${representante.cedula||''}</td></tr>
+                            <tr><td><b>Ocupación:</b></td><td>${representante.ocupacion||''}</td></tr>
+                            <tr><td><b>Email:</b></td><td>${representante.email||''}</td></tr>
+                            <tr><td><b>Teléfono:</b></td><td>${representante.telefono_celular||''}</td></tr>
+                        </table>
+                    ` : '<span style="color:#888;">No disponible</span>'
+                },
+                {
+                    titulo: "Datos Educativos y Emergencia",
+                    html: `
+                        <div style="margin-bottom:1rem;">${pdfHtml}</div>
+                        <div>
+                            <b>Contactos de Emergencia:</b>
+                            <ul>
+                                ${contactos.length > 0 ? contactos.map(c => `<li>${c.nombre} (${c.parentesco}) - ${c.telefono}</li>`).join('') : '<li>No disponible</li>'}
+                            </ul>
+                        </div>
+                    `
+                }
+            ];
+
+            if (!window._detallePaso) window._detallePaso = {};
+            if (typeof window._detallePaso[id] !== "number") window._detallePaso[id] = 0;
+            function renderPaso() {
+                let paso = pasos[window._detallePaso[id]];
+                cont.innerHTML = `
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                        <button type="button" class="detalle-nav-btn" id="detalle-prev-${id}" ${window._detallePaso[id] === 0 ? 'disabled' : ''}>&#8592; Volver</button>
+                        <h3 style="color:#2f5597;text-align:center;flex:1;">${paso.titulo}</h3>
+                        <button type="button" class="detalle-nav-btn" id="detalle-next-${id}" ${window._detallePaso[id] === pasos.length-1 ? 'disabled' : ''}>Siguiente &#8594;</button>
+                    </div>
+                    <div style="margin-top:1.2rem;">${paso.html}</div>
+                `;
+                setTimeout(() => {
+                    const prevBtn = document.getElementById(`detalle-prev-${id}`);
+                    const nextBtn = document.getElementById(`detalle-next-${id}`);
+                    if (prevBtn) {
+                        prevBtn.addEventListener('click', function() {
+                            if (window._detallePaso[id] > 0) {
+                                window._detallePaso[id] = window._detallePaso[id] - 1;
+                                renderPaso();
+                            }
+                        });
+                    }
+                    if (nextBtn) {
+                        nextBtn.addEventListener('click', function() {
+                            if (window._detallePaso[id] < pasos.length - 1) {
+                                window._detallePaso[id] = window._detallePaso[id] + 1;
+                                renderPaso();
+                            }
+                        });
+                    }
+                }, 0);
+            }
+            renderPaso();
+        }
+
+        window.toggleDetalle = async function(id) {
+            if (detalleAbierto && detalleAbierto !== id) {
+                document.getElementById('detalle-row-' + detalleAbierto).style.display = 'none';
+            }
+            const row = document.getElementById('detalle-row-' + id);
+            if (row.style.display === 'none') {
+                row.style.display = '';
+                detalleAbierto = id;
+                let s = null;
+                if (window._ultimasSolicitudes) {
+                    s = window._ultimasSolicitudes.find(x => x.id === id);
+                }
+                if (!s) {
+                    await cargarSolicitudes();
+                    s = window._ultimasSolicitudes.find(x => x.id === id);
+                }
+                if (s) await mostrarDetalle(id, s);
+            } else {
+                row.style.display = 'none';
+                detalleAbierto = null;
+            }
+        };
+
         async function cargarSolicitudes() {
             const cedula = document.getElementById('filtro-cedula').value.trim();
             const nombres = document.getElementById('filtro-nombres').value.trim();
@@ -445,6 +752,8 @@
                 return ok;
             });
 
+            window._ultimasSolicitudes = filtradas;
+
             if (filtradas.length === 0) {
                 document.getElementById('tabla-solicitudes').innerHTML = `<p style="text-align:center;">No hay solicitudes que coincidan con los filtros.</p>`;
                 return;
@@ -463,6 +772,7 @@
                         <th>PDF</th>
                         <th>Acción</th>
                         <th>Eliminar solicitud</th>
+                        <th>Detalles</th>
                     </tr>
                 </thead>
                 <tbody>`;
@@ -484,6 +794,16 @@
                     <td>
                         <button class="eliminar-btn" onclick="eliminarSolicitud(${s.id})">Eliminar</button>
                     </td>
+                    <td>
+                        <button class="detalle-btn" onclick="toggleDetalle(${s.id})" title="Ver detalles">&#9654;</button>
+                    </td>
+                </tr>
+                <tr id="detalle-row-${s.id}" class="detalle-row" style="display:none;">
+                    <td colspan="12" style="background:#f8fafc;">
+                        <div id="detalle-content-${s.id}" class="detalle-content" style="padding:1.5rem 1rem;">
+                            <span style="color:#888;">Cargando detalles...</span>
+                        </div>
+                    </td>
                 </tr>`;
             }
             html += `</tbody></table>`;
@@ -493,6 +813,67 @@
         window.verificarSolicitud = async function(id) {
             const confirmar = confirm('¿Está seguro de verificar esta solicitud?');
             if (!confirmar) return;
+
+            // 1. Obtener datos del estudiante para crear usuario
+            let estudiante = null;
+            let cedula = null;
+            let fechaNacimiento = null;
+            try {
+                // Buscar la solicitud
+                const { data: solicitud } = await supabase
+                    .from('solicitud_matriculacion')
+                    .select('id_estudiante')
+                    .eq('id', id)
+                    .maybeSingle();
+                if (solicitud && solicitud.id_estudiante) {
+                    // Buscar estudiante
+                    const { data: est } = await supabase
+                        .from('estudiante')
+                        .select('id_estudiante, id_cedula, fecha_nacimiento, apellidos, nombres')
+                        .eq('id_estudiante', solicitud.id_estudiante)
+                        .maybeSingle();
+                    if (est) {
+                        estudiante = est;
+                        // Buscar cédula
+                        if (est.id_cedula) {
+                            const { data: ced } = await supabase
+                                .from('cedulas')
+                                .select('cedula')
+                                .eq('id_cedula', est.id_cedula)
+                                .maybeSingle();
+                            if (ced) cedula = ced.cedula;
+                        }
+                        fechaNacimiento = est.fecha_nacimiento;
+                    }
+                }
+            } catch (e) {}
+
+            // 2. Crear usuario si no existe y si hay cédula y fecha de nacimiento
+            let usuarioCreado = false;
+            if (cedula && fechaNacimiento) {
+                // Formato de contraseña: fechaNacimiento sin guiones ni slash
+                const pass = fechaNacimiento.replace(/[-\/]/g, '');
+                // Verificar si ya existe el usuario
+                const { data: existe } = await supabase
+                    .from('usuarios')
+                    .select('id')
+                    .eq('email', cedula)
+                    .maybeSingle();
+                if (!existe) {
+                    // Insertar usuario con rol "estudiante"
+                    await supabase
+                        .from('usuarios')
+                        .insert([{
+                            usuario: estudiante ? (estudiante.nombres + ' ' + estudiante.apellidos) : cedula,
+                            email: cedula,
+                            password: pass,
+                            rol: 'estudiante'
+                        }]);
+                    usuarioCreado = true;
+                }
+            }
+
+            // 3. Actualizar estado de la solicitud
             const { error } = await supabase
                 .from('solicitud_matriculacion')
                 .update({
@@ -504,7 +885,11 @@
             if (error) {
                 alert('Error al verificar: ' + error.message);
             } else {
-                alert('Solicitud verificada correctamente.');
+                let msg = 'Solicitud verificada correctamente.';
+                if (usuarioCreado) {
+                    msg += `\nUsuario creado:\nUsuario: ${cedula}\nContraseña: ${fechaNacimiento ? fechaNacimiento.replace(/[-\/]/g, '') : ''}`;
+                }
+                alert(msg);
                 cargarSolicitudes();
             }
         };
