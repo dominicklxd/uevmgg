@@ -982,14 +982,14 @@
                     filePath = `estudiantes/${paso2.cedula}_${Date.now()}.png`;
                     const { data: uploadData, error: uploadError } = await supabase.storage
                         .from('archivos')
-                        .upload(filePath, blobPng, { contentType: 'image/png' });
+                        .upload(filePath, blobPng, { contentType: 'image/png', upsert: true });
                     if (!uploadError) {
                         archivo_url = supabase.storage.from('archivos').getPublicUrl(filePath).publicUrl;
                     }
                 } else {
                     const { data: uploadData, error: uploadError } = await supabase.storage
                         .from('archivos')
-                        .upload(filePath, archivoData);
+                        .upload(filePath, archivoData, { upsert: true });
                     if (!uploadError) {
                         archivo_url = supabase.storage.from('archivos').getPublicUrl(filePath).publicUrl;
                     }
