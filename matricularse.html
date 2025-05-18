@@ -413,6 +413,8 @@
                 <div class="matricula-form-group">
                     <label for="archivo">Adjuntar archivo</label>
                     <input type="file" id="archivo" name="archivo">
+                    <button type="button" id="btn-guardar-archivo" class="matricula-btn" style="background:#2f5597;margin-top:0.5rem;">Guardar Archivo</button>
+                    <span id="archivo-guardado-msg" style="display:none;color:green;font-weight:bold;margin-left:10px;">Archivo guardado correctamente</span>
                 </div>
                 <button type="button" id="btn-siguiente-paso2" class="matricula-btn">Siguiente</button>
             </form>
@@ -682,6 +684,52 @@
         const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+        let archivoGuardadoUrl = null;
+
+        document.getElementById('btn-guardar-archivo').onclick = async function() {
+            const archivoInput = document.getElementById('archivo');
+            const msg = document.getElementById('archivo-guardado-msg');
+            msg.style.display = 'none';
+            if (!archivoInput.files.length) {
+                alert('Seleccione un archivo antes de guardar.');
+                return;
+            }
+            const archivoData = archivoInput.files[0];
+                // Solo imágenes JPG/PNG soportadas por imgbb
+            if (!archivoData.type.startsWith('image/')) {
+                alert('Solo se permiten imágenes JPG o PNG.');
+                return;
+            }
+            // Leer archivo como base64
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const base64 = e.target.result.split(',')[1];
+                // Reemplaza TU_API_KEY_IMGBB por tu API key de imgbb
+                const apiKey = '64089dc19a53f406a3e99785d33b9465';
+                const formData = new FormData();
+                formData.append('key', apiKey);
+                formData.append('image', base64);
+                try {
+                    const res = await fetch('https://api.imgbb.com/1/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (data && data.data && data.data.url) {
+                        const url = data.data.url;
+                        localStorage.setItem('archivo_guardado_url', url);
+                        window.archivoEstudianteUrl = url;
+                        msg.style.display = 'inline';
+                    } else {
+                        alert('No se pudo obtener la URL de la imagen.');
+                    }
+                } catch (err) {
+                    alert('Error al subir la imagen: ' + err.message);
+                }
+            };
+            reader.readAsDataURL(archivoData);
+        };
+
         // Mostrar especialidad solo si es Bachillerato
         document.getElementById('curso').addEventListener('change', function() {
             const value = this.value;
@@ -732,8 +780,9 @@
                 const el = document.getElementById(id);
                 return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
             }
-            const archivoInput = document.getElementById('archivo');
             let archivoData = null;
+            let archivoUrl = localStorage.getItem('archivo_guardado_url') || null;
+            const archivoInput = document.getElementById('archivo');
             if (archivoInput.files.length > 0) {
                 archivoData = archivoInput.files[0];
             }
@@ -749,12 +798,14 @@
                 telefono: valorNA('telefono'),
                 telefono_convencional: valorNA('telefono_convencional'),
                 correo: valorNA('correo'),
-                archivo: archivoData // Guardar el archivo temporalmente (solo referencia, no en localStorage)
+                archivo: archivoData,
+                archivo_url: archivoUrl
             };
             // Guardar sin archivo en localStorage (no se puede guardar archivos binarios en localStorage)
             const paso2SinArchivo = { ...paso2, archivo: undefined };
             localStorage.setItem('matricula_paso2', JSON.stringify(paso2SinArchivo));
-            window.archivoEstudiante = archivoData; // Guardar el archivo en una variable global temporal
+            window.archivoEstudiante = archivoData;
+            window.archivoEstudianteUrl = archivoUrl;
             document.getElementById('paso2-form').style.display = 'none';
             document.getElementById('paso3-form').style.display = 'block';
             activarPasoWizard(3);
@@ -1111,10 +1162,11 @@
 
             // Imagen adjunta (si existe)
             let fotoHtml = '';
-            if (archivo_url) {
-                fotoHtml = `<tr><td><b>Foto Adjunta:</b></td><td><img id="foto-adjunta-preview" src="${archivo_url}" style="max-width:120px;max-height:120px;border-radius:8px;border:1px solid #ccc;" alt="Foto adjunta"></td></tr>`;
+            let urlFoto = archivo_url || window.archivoEstudianteUrl || '';
+            // Solo mostrar la imagen si la URL es válida y no es undefined/null/cadena vacía
+            if (urlFoto && urlFoto !== 'undefined' && urlFoto !== 'null') {
+                fotoHtml = `<tr><td><b>Foto Adjunta:</b></td><td><img id="foto-adjunta-preview" src="${urlFoto}" style="max-width:120px;max-height:120px;border-radius:8px;border:1px solid #ccc;" alt="Foto adjunta"></td></tr>`;
             } else if (window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
-                // fallback local
                 fotoHtml = `<tr><td><b>Foto Adjunta:</b></td><td><img id="foto-adjunta-preview" style="max-width:120px;max-height:120px;border-radius:8px;border:1px solid #ccc;" alt="Foto adjunta"></td></tr>`;
             }
 
@@ -1220,7 +1272,6 @@
                 if (fotoImg.src.startsWith('data:')) {
                     fotoDataUrl = fotoImg.src;
                 } else {
-                    // Si es una URL pública, conviértela a dataURL para jsPDF
                     try {
                         const img = new Image();
                         img.crossOrigin = "anonymous";
@@ -1284,14 +1335,45 @@
                 }
             }
 
-            // --- DISEÑO TIPO TABLA DE EXCEL --- (más compacto)
-            // Cabecera con logo, título y foto tipo carnet en la parte superior derecha
+            // --- DISEÑO CABECERA CON RECTÁNGULO VERTICAL PARA FOTO ---
+            // Dimensiones del rectángulo vertical para la foto
+            const rectX = 170; // a la derecha
+            const rectY = 10;  // igual que encabezado
+            const rectW = 28;  // ancho del rectángulo
+            const rectH = 40;  // altura, más grande que el encabezado (22)
+
+            // Cabecera con logo y título
             doc.setLineWidth(0.8);
             doc.setDrawColor(44, 130, 201);
             doc.setFillColor(230, 240, 255);
             doc.roundedRect(10, 10, 190, 22, 2, 2, 'FD');
             if (logoDataUrl) doc.addImage(logoDataUrl, 'PNG', 13, 12, 15, 15);
-            if (fotoDataUrl) doc.addImage(fotoDataUrl, 'JPEG', 180, 12, 17, 17); // Foto carnet más pequeña
+
+            // Dibuja el rectángulo vertical para la foto (sin nada más dentro)
+            doc.setDrawColor(44, 130, 201);
+            doc.setFillColor(255,255,255);
+            doc.roundedRect(rectX, rectY, rectW, rectH, 3, 3, 'FD');
+
+            // Coloca la foto centrada dentro del rectángulo, lo más grande posible sin salirse
+            if (fotoDataUrl) {
+                // Calcula tamaño máximo para la foto dentro del rectángulo (dejando un pequeño margen)
+                const maxW = rectW - 4;
+                const maxH = rectH - 4;
+                let imgW = maxW, imgH = maxH;
+                // Carga la imagen para obtener su relación de aspecto
+                let img = new window.Image();
+                img.src = fotoDataUrl;
+                await new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+                if (img.width && img.height) {
+                    const ratio = Math.min(maxW / img.width, maxH / img.height);
+                    imgW = img.width * ratio;
+                    imgH = img.height * ratio;
+                }
+                // Centra la imagen dentro del rectángulo
+                const imgX = rectX + (rectW - imgW) / 2;
+                const imgY = rectY + (rectH - imgH) / 2;
+                doc.addImage(fotoDataUrl, 'JPEG', imgX, imgY, imgW, imgH);
+            }
 
             doc.setFontSize(10);
             doc.setTextColor(44, 130, 201);
@@ -1337,6 +1419,9 @@
             function safeText(idx) {
                 return tds[idx] ? tds[idx].innerText : '';
             }
+
+            // Padding top antes de datos académicos
+            y += 20;
 
             // Datos académicos
             cell(col1, y, 180, cellH, 'DATOS ACADÉMICOS', {header:true});
