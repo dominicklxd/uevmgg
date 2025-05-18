@@ -157,11 +157,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 ` : ''}
                 <a href="#" id="logout">Cerrar Sesión</a>
             `;
-            document.getElementById('logout').addEventListener('click', () => {
-                localStorage.removeItem('usuarioActivo');
-                alert('Sesión cerrada exitosamente.');
-                window.location.href = 'index.html';
-            });
+            const logoutBtn = document.getElementById('logout');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('usuarioActivo');
+                    alert('Sesión cerrada exitosamente.');
+                    window.location.href = 'index.html';
+                });
+            }
         } else {
             authLinks.innerHTML = `
                 <a href="registro.html">Registrarse</a>
@@ -208,11 +211,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 <a href="matricularse.html">Matricularse</a>
                 <a href="#" id="logout">Cerrar Sesión</a>
             `;
-            document.getElementById('logout').addEventListener('click', () => {
-                localStorage.removeItem('usuarioActivo');
-                alert('Sesión cerrada exitosamente.');
-                window.location.href = 'index.html';
-            });
+            const logoutBtn = document.getElementById('logout');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    localStorage.removeItem('usuarioActivo');
+                    alert('Sesión cerrada exitosamente.');
+                    window.location.href = 'index.html';
+                });
+            }
         } else {
             authLinks.innerHTML = `
                 <a href="registro.html">Registrarse</a>

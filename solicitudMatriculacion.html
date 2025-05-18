@@ -292,6 +292,16 @@
                 if (!errEst && ests) estudiantes = ests;
             }
 
+            const idsCedulas = estudiantes.map(e => e.id_cedula).filter(Boolean);
+            let cedulas = [];
+            if (idsCedulas.length > 0) {
+                const { data: cedulasData, error: errCed } = await supabase
+                    .from('cedulas')
+                    .select('id_cedula, cedula')
+                    .in('id_cedula', idsCedulas);
+                if (!errCed && cedulasData) cedulas = cedulasData;
+            }
+
             const idsInscripciones = estudiantes.map(e => e.id_inscripcion).filter(Boolean);
             let inscripciones = [];
             if (idsInscripciones.length > 0) {
@@ -315,6 +325,9 @@
             function getEstudiante(id) {
                 return estudiantes.find(e => e.id_estudiante === id) || {};
             }
+            function getCedula(id_cedula) {
+                return cedulas.find(c => c.id_cedula === id_cedula)?.cedula || '';
+            }
             function getInscripcion(id) {
                 return inscripciones.find(i => i.id === id) || {};
             }
@@ -324,17 +337,19 @@
 
             let filtradas = solicitudes.map(s => {
                 const est = getEstudiante(s.id_estudiante);
+                const cedulaEst = getCedula(est.id_cedula);
                 const insc = getInscripcion(est.id_inscripcion);
                 const cursoObj = getCurso(insc.id_curso);
                 return {
                     ...s,
                     estudiante: est,
+                    cedula: cedulaEst,
                     inscripcion: insc,
                     curso: cursoObj
                 };
             }).filter(s => {
                 let ok = true;
-                if (cedula && !(s.estudiante.id_cedula || '').toString().toLowerCase().includes(cedula.toLowerCase())) ok = false;
+                if (cedula && !(s.cedula || '').toString().toLowerCase().includes(cedula.toLowerCase())) ok = false;
                 if (nombres && !(s.estudiante.nombres || '').toLowerCase().includes(nombres.toLowerCase())) ok = false;
                 if (curso && !(s.curso.nombre_curso || '').toLowerCase().includes(curso.toLowerCase())) ok = false;
                 if (especialidad && !(s.inscripcion.especialidad || '').toLowerCase().includes(especialidad.toLowerCase())) ok = false;
@@ -366,7 +381,7 @@
                     <td>${(s.fecha_creacion || '').substring(0, 10)}</td>
                     <td>${s.estudiante.apellidos || ''}</td>
                     <td>${s.estudiante.nombres || ''}</td>
-                    <td>${s.estudiante.id_cedula || ''}</td>
+                    <td>${s.cedula || ''}</td>
                     <td>${s.curso.nombre_curso || ''}</td>
                     <td>${s.inscripcion.especialidad || ''}</td>
                     <td>${s.estudiante.correo || ''}</td>

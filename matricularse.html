@@ -996,6 +996,7 @@
                 return;
             }
             id_inscripcion = inscData.id;
+            window.id_inscripcion = id_inscripcion; // <-- Guarda el id_inscripcion globalmente
 
             // 4. Insertar cédula si no existe
             let id_cedula = null;
@@ -1136,6 +1137,15 @@
                     .from('contacto_emergencia_estudiante')
                     .insert([{ id_estudiante, ...contacto }]);
             }
+
+            // 12. Insertar solicitud_matriculacion
+            await supabase
+                .from('solicitud_matriculacion')
+                .insert([{
+                    id_estudiante: id_estudiante,
+                    estado: 'entrante',
+                    fecha_creacion: new Date().toISOString()
+                }]);
 
             // Limpiar localStorage y mostrar mensaje final
             localStorage.removeItem('matricula_paso1');
@@ -1561,8 +1571,65 @@
                 }
             }
 
-            doc.save('ficha-inscripcion.pdf');
+            const pdfBlob = doc.output('blob');
+            const idSolicitud = window.id_inscripcion;
+            if (!idSolicitud) {
+                alert('No se pudo obtener el ID de la inscripción. Descarga el PDF después de finalizar la inscripción.');
+                return;
+            }
+
+            // 1. Descargar el PDF localmente
+            const pdfUrlLocal = URL.createObjectURL(pdfBlob);
+            const a = document.createElement('a');
+            a.href = pdfUrlLocal;
+            a.download = 'ficha_inscripcion.pdf';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                URL.revokeObjectURL(pdfUrlLocal);
+                a.remove();
+            }, 100);
+
+            // 2. Subir el PDF a Supabase Storage
+            const filePath = `pdfs/ficha_inscripcion_${idSolicitud}_${Date.now()}.pdf`;
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('archivos')
+                .upload(filePath, pdfBlob, { contentType: 'application/pdf', upsert: true });
+            if (uploadError) {
+                mostrarMensajeArriba('No se pudo subir el PDF a la nube: ' + uploadError.message, true);
+                return;
+            }
+            // Obtener la URL pública
+            const { publicUrl } = supabase.storage.from('archivos').getPublicUrl(filePath);
+            // Guardar la URL en Supabase
+            await supabase
+                .from('solicitud_matriculacion')
+                .update({ pdf_url: publicUrl })
+                .eq('id', idSolicitud);
+
+            mostrarMensajeArriba('PDF guardado en la nube con éxito.', false);
         };
+
+        // Función para mostrar mensaje arriba del resumen
+        function mostrarMensajeArriba(mensaje, esError) {
+            let msgDiv = document.getElementById('mensaje-pdf');
+            if (!msgDiv) {
+                msgDiv = document.createElement('div');
+                msgDiv.id = 'mensaje-pdf';
+                msgDiv.style.textAlign = 'center';
+                msgDiv.style.fontWeight = 'bold';
+                msgDiv.style.marginBottom = '1rem';
+                msgDiv.style.fontSize = '1.1rem';
+                document.getElementById('paso8-form').insertBefore(msgDiv, document.getElementById('resumen-matricula'));
+            }
+            msgDiv.textContent = mensaje;
+            msgDiv.style.color = esError ? 'red' : '#2f5597';
+            msgDiv.style.background = esError ? '#ffeaea' : '#eaf6ea';
+            msgDiv.style.borderRadius = '8px';
+            msgDiv.style.padding = '0.5rem';
+            msgDiv.style.display = 'block';
+            setTimeout(() => { msgDiv.style.display = 'none'; }, 6000);
+        }
 
         // Botón finalizar (redirige a inicio)
         document.getElementById('btn-finalizar').onclick = function() {
