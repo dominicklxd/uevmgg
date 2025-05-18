@@ -50,4 +50,30 @@ ADD COLUMN IF NOT EXISTS es_representante_representante BOOLEAN DEFAULT FALSE,
 ADD COLUMN IF NOT EXISTS nacionalidad_padre VARCHAR(50),
 ADD COLUMN IF NOT EXISTS nacionalidad_madre VARCHAR(50),
 ADD COLUMN IF NOT EXISTS nacionalidad_representante VARCHAR(50),
-ADD COLUMN IF NOT EXISTS verificado BOOLEAN DEFAULT FALSE;
+ADD COLUMN IF NOT EXISTS verificado BOOLEAN DEFAULT FALSE,
+ADD COLUMN IF NOT EXISTS especialidad VARCHAR(50);
+
+CREATE TABLE IF NOT EXISTS "Estudiante" (
+    id_estudiante SERIAL PRIMARY KEY,
+    apellidos VARCHAR(255) NOT NULL,
+    nombres VARCHAR(255) NOT NULL,
+    etnia VARCHAR(100),
+    fecha_nacimiento DATE,
+    calle_principal VARCHAR(255),
+    calle_secundaria VARCHAR(255),
+    referencia VARCHAR(255),
+    cedula VARCHAR(20) UNIQUE,
+    nacionalidad VARCHAR(100),
+    genero VARCHAR(20),
+    celular VARCHAR(30),
+    foto_estudiantil TEXT,
+    id_representante INTEGER,
+    id_curso INTEGER,
+    id_paralelo INTEGER,
+    id_especialidad INTEGER,
+    -- Claves foráneas (ajusta los nombres de las tablas referenciadas según tu modelo)
+    FOREIGN KEY (id_representante) REFERENCES Representante(id_representante),
+    FOREIGN KEY (id_curso) REFERENCES Curso(id_curso),
+    FOREIGN KEY (id_paralelo) REFERENCES Paralelo(id_paralelo),
+    FOREIGN KEY (id_especialidad) REFERENCES Especialidad(id_especialidad)
+);

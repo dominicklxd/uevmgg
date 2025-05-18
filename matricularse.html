@@ -2,21 +2,195 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autoridades</title>
+    <title>Ficha de Inscripción</title>
     <link rel="stylesheet" href="css.css">
+    <style>
+        body {
+            background: url('fondo-matricula.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .matricula-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            max-width: 700px; /* Aumentar el ancho máximo */
+            margin: 40px auto 0 auto;
+            padding: 3.5rem 3.5rem 2.5rem 3.5rem; /* Más padding */
+            position: relative;
+            z-index: 2;
+            min-height: 50vh; /* Opcional: hacer el recuadro más alto */
+        }
+        .matricula-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+            color: #222;
+        }
+        .matricula-subtitle {
+            text-align: center;
+            font-size: 1.15rem;
+            color: #000000;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+        .matricula-periodo {
+            text-align: center;
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 1.2rem;
+        }
+        .matricula-wizard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 0.5rem;
+        }
+        .matricula-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+        .matricula-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -50%;
+            top: 50%;
+            width: 100%;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+        .matricula-step-icon {
+            background: #f3c14b;
+            color: #fff;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 0.2rem;
+            z-index: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            border: 3px solid #fff;
+        }
+        .matricula-step.active .matricula-step-icon {
+            background: #000000;
+            color: #fff;
+            border: 3px solid #f3c14b;
+        }
+        .matricula-step-title {
+            font-size: 1rem;
+            color: #888;
+            font-weight: bold;
+            margin-top: 0.1rem;
+            text-align: center;
+        }
+        .matricula-step.active .matricula-step-title {
+            color: #97baf7;
+        }
+        .matricula-section-title {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 0.7rem;
+            margin-top: 0.7rem;
+        }
+        .matricula-section-desc {
+            text-align: center;
+            font-size: 0.98rem;
+            color: #444;
+            margin-bottom: 1.2rem;
+        }
+        .matricula-form-group {
+            margin-bottom: 1.2rem;
+        }
+        .matricula-form-group label {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+            display: block;
+            color: #333;
+        }
+        .matricula-form-group input,
+        .matricula-form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .matricula-btn {
+            background: #f3c14b;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.7rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: block;
+            margin-left: auto;
+            margin-right: 0;
+        }
+        .matricula-btn:hover {
+            background: #e0a800;
+        }
+        @media (max-width: 1000px) {
+            .matricula-card {
+                max-width: 98vw;
+                padding: 1rem 0.5rem;
+            }
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #paso8-form, #paso8-form * {
+                visibility: visible;
+            }
+            #paso8-form {
+                position: absolute;
+                left: 0; top: 0; width: 100%;
+                background: white !important;
+                box-shadow: none !important;
+            }
+            .matricula-btn, .matricula-wizard, .matricula-section-title:not(:first-child) {
+                display: none !important;
+            }
+            #resumen-matricula {
+                font-size: 1.1rem;
+                color: #222;
+                background: white !important;
+                border: none !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="top-info-bar">
-        <p> Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador | uevmg@gmail.com</p>
+    <!-- Encabezado igual que en index.html -->
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
     </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
     <header>
         <div class="header-top">
-            
             <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
             <div class="header-text">
                 <h1>Unidad Educativa </h1>
-                <h1>"Victor Manuel Guzman"</h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
                 <p>50 años de Educación Estudiantil</p>
             </div>
             <div class="auth-links">
@@ -31,16 +205,16 @@
                             <li><a href="#quienes-somos">Quiénes Somos</a></li>
                             <li><a href="autoridades.html">Autoridades</a></li>
                             <li><a href="historia.html">Historia</a></li>
-                            <li><a href="sede-ambientes.html">Sede y Ambientes</a></li>
-                            <li><a href="#simbolos">Símbolos Institucionales</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
                             <li><a href="#oferta-educativa">Oferta Educativa</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#">Docentes</a>
                         <ul class="submenu">
-                            <li><a href="#cronograma">Cronograma de Actividades</a></li>
-                            <li><a href="#ministerio">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
                             <li><a href="#documentos">Documentos Institucionales</a></li>
                             <li><a href="#recursos">Recursos Didácticos</a></li>
                         </ul>
@@ -80,260 +254,396 @@
             </nav>
         </div>
     </header>
-<body>
- 
-    <main>
-        <section class="centered-section">
-            <h2>Formulario de Matriculación</h2>
-            <h3>Datos del Estudiante</h3>
-            <form id="form-matriculacion">
-                <label for="codigo">Código:</label>
-                <input type="text" id="codigo" name="codigo" required>
-
-                <label for="apellidos">Apellidos:</label>
-                <input type="text" id="apellidos" name="apellidos" required>
-
-                <label for="nombres">Nombres:</label>
-                <input type="text" id="nombres" name="nombres" required>
-
-                
-                <label for="cedula_estudiante">Cédula:</label>
-                <input type="text" id="cedula_estudiante" name="cedula_estudiante" required>
-
-                <label for="provincia_nacimiento">Provincia de Nacimiento:</label>
-                <select id="provincia_nacimiento" name="provincia_nacimiento" required>
-                    <option value="">Seleccione una provincia</option>
-                    <option value="Azuay">Azuay</option>
-                    <option value="Bolivar">Bolívar</option>
-                    <option value="Cañar">Cañar</option>
-                    <option value="Carchi">Carchi</option>
-                    <option value="Chimborazo">Chimborazo</option>
-                    <option value="Cotopaxi">Cotopaxi</option>
-                    <option value="El Oro">El Oro</option>
-                    <option value="Esmeraldas">Esmeraldas</option>
-                    <option value="Galápagos">Galápagos</option>
-                    <option value="Guayanas">Guayanas</option>
-                    <option value="Imbabura">Imbabura</option>
-                    <option value="Loja">Loja</option>
-                    <option value="Los Ríos">Los Ríos</option>
-                    <option value="Manabí">Manabí</option>
-                    <option value="Morona Santiago">Morona Santiago</option>
-                    <option value="Napo">Napo</option>
-                    <option value="Sucumbíos">Sucumbíos</option>
-                    <option value="Pastaza">Pastaza</option>
-                    <option value="Pinchincha">Pinchincha</option>
-                    <option value="Santa Elena">Santa Elena</option>
-                    <option value="Santo Domingo">Santo Domingo</option>
-                    <option value="Francisco De Orellana">Francisco De Orellana</option>
-                    <option value="Tungurahua">Tungurahua</option>
-                    <option value="Zamora Chinchipe">Zamora Chinchipe</option>
-                </select>
-
-                <label for="canton">Cantón:</label>
-                <input type="text" id="canton" name="canton">
-
-                <label for="genero">Género:</label>
-                <select id="genero" name="genero">
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                </select>
-
-                <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
-                <input type="date" id="fecha_nacimiento" name="fecha_nacimiento">
-
-                <label for="nacionalidad">Nacionalidad:</label>
-                <input type="text" id="nacionalidad" name="nacionalidad">
-
-                <label for="institucion_procede">Institución de Procedencia:</label>
-                <input type="text" id="institucion_procede" name="institucion_procede">
-
-                
-
-                <h3>Datos de la Vivienda</h3>
-                <label for="provincia_vivienda">Provincia:</label>
-                <input type="text" id="provincia_vivienda" name="provincia_vivienda">
-
-                <label for="ciudad">Ciudad:</label>
-                <input type="text" id="ciudad" name="ciudad">
-
-                <label for="parroquia">Parroquia:</label>
-                <input type="text" id="parroquia" name="parroquia">
-
-                <label for="direccion">Dirección:</label>
-                <input type="text" id="direccion" name="direccion">
-
-                <label for="telefono_convencional">Teléfono Convencional:</label>
-                <input type="text" id="telefono_convencional" name="telefono_convencional">
-
-                <label for="sector">Sector:</label>
-                <input type="text" id="sector" name="sector" required>
-
-                <h3>¿A quién acudir en caso de emergencia?</h3>
-                <label for="emergencia_nombres">Nombres y Apellidos:</label>
-                <input type="text" id="emergencia_nombres" name="emergencia_nombres">
-
-                <label for="emergencia_parentesco">Parentesco:</label>
-                <input type="text" id="emergencia_parentesco" name="emergencia_parentesco">
-
-                <h3>Contacto de Emergencia</h3>
-                <label for="telefono_emergencia">Teléfono:</label>
-                <input type="text" id="telefono_emergencia" name="telefono_emergencia" required>
-
-                <h3>Datos de los Familiares</h3>
-                <h4>Padre</h4>
-                <div class="form-group">
-                    <label for="padre_nombres">Apellidos y Nombres:</label>
-                    <input type="text" id="padre_nombres" name="padre_nombres">
-
-                    <label for="padre_cedula">Cédula:</label>
-                    <input type="text" id="padre_cedula" name="padre_cedula">
-
-                    <label for="padre_telefono">Teléfono Convencional:</label>
-                    <input type="text" id="padre_telefono" name="padre_telefono">
-
-                    <label for="padre_celular">Número Celular:</label>
-                    <input type="text" id="padre_celular" name="padre_celular">
-
-                    <label for="padre_profesion">Profesión:</label>
-                    <input type="text" id="padre_profesion" name="padre_profesion">
-
-                    <label for="padre_email">Email:</label>
-                    <input type="email" id="padre_email" name="padre_email">
-
-                    <label for="direccion_trabajo_padre">Dirección del Trabajo:</label>
-                    <input type="text" id="direccion_trabajo_padre" name="direccion_trabajo_padre">
-
-                    <div class="checkbox-group">
-                        <label for="vive-con-estudiante-padre">
-                            <input type="checkbox" id="vive-con-estudiante-padre" name="vive-con-estudiante-padre">
-                            Vive con el estudiante
-                        </label>
-
-                        <label for="es-representante-padre">
-                            <input type="checkbox" id="es-representante-padre" name="es-representante-padre">
-                            Es representante del estudiante
-                        </label>
-                    </div>
-
-                    <label for="nacionalidad_padre">Nacionalidad:</label>
-                    <select id="nacionalidad_padre" name="nacionalidad_padre" required>
-                        <option value="">Seleccione una nacionalidad</option>
-                        <option value="Ecuatoriana">Ecuatoriana</option>
-                        <option value="Peruana">Peruana</option>
-                        <option value="Venezolana">Venezolana</option>
-                        <option value="Colombiana">Colombiana</option>
-                        <option value="Otros paises de america">Otros países de América</option>
-                        <option value="Otros continentes">Otros continentes</option>
+    <main style="margin-top: 120px;">
+        <div class="matricula-card">
+            <div class="matricula-title">Ficha de Inscripción</div>
+            <div class="matricula-subtitle">UNIDAD EDUCATIVA VICTOR MANUEL GUZMÁN</div>
+            <div class="matricula-periodo">2025-2026</div>
+            <div class="matricula-wizard" id="wizard-bar">
+                <div class="matricula-step active" id="wizard-academicos">
+                    <div class="matricula-step-icon">👤</div>
+                    <div class="matricula-step-title">Académicos</div>
+                </div>
+                <div class="matricula-step" id="wizard-estudiantes">
+                    <div class="matricula-step-icon">🧑‍🎓</div>
+                    <div class="matricula-step-title">Estudiantes</div>
+                </div>
+                <div class="matricula-step" id="wizard-direccion">
+                    <div class="matricula-step-icon">🏠</div>
+                    <div class="matricula-step-title">Dirección</div>
+                </div>
+                <div class="matricula-step" id="wizard-padre">
+                    <div class="matricula-step-icon">👨‍👩‍👧</div>
+                    <div class="matricula-step-title">Padre</div>
+                </div>
+                <div class="matricula-step" id="wizard-madre">
+                    <div class="matricula-step-icon">👩‍👧</div>
+                    <div class="matricula-step-title">Madre</div>
+                </div>
+                <div class="matricula-step" id="wizard-representante">
+                    <div class="matricula-step-icon">🧑‍💼</div>
+                    <div class="matricula-step-title">Representante</div>
+                </div>
+                <div class="matricula-step" id="wizard-emergencia">
+                    <div class="matricula-step-icon">📚</div>
+                    <div class="matricula-step-title">Educativos</div>
+                </div>
+                <div class="matricula-step" id="wizard-resumen">
+                    <div class="matricula-step-icon">📄</div>
+                    <div class="matricula-step-title">Resumen</div>
+                </div>
+            </div>
+            <form id="paso1-form" style="display:block;">
+                <div class="matricula-section-title">DATOS ACADEMICOS</div>
+                <div class="matricula-section-desc">
+                    Antes de indicar los datos necesarios de la inscripción, verifique que existan cupos disponibles para el grado a inscribir.
+                </div>
+                <div class="matricula-form-group">
+                    <label for="periodo">Periodo</label>
+                    <select id="periodo" name="periodo" required>
+                        <option value="">-SELECCIONA-</option>
+                        <option value="2025-2026">2025-2026</option>
                     </select>
                 </div>
-
-                <h4>Madre</h4>
-                <div class="form-group">
-                    <label for="madre_nombres">Apellidos y Nombres:</label>
-                    <input type="text" id="madre_nombres" name="madre_nombres">
-
-                    <label for="madre_cedula">Cédula:</label>
-                    <input type="text" id="madre_cedula" name="madre_cedula">
-
-                    <label for="madre_telefono">Teléfono Convencional:</label>
-                    <input type="text" id="madre_telefono" name="madre_telefono">
-
-                    <label for="madre_celular">Número Celular:</label>
-                    <input type="text" id="madre_celular" name="madre_celular">
-
-                    <label for="madre_profesion">Profesión:</label>
-                    <input type="text" id="madre_profesion" name="madre_profesion">
-
-                    <label for="madre_email">Email:</label>
-                    <input type="email" id="madre_email" name="madre_email">
-
-                    <label for="direccion_trabajo_madre">Dirección del Trabajo:</label>
-                    <input type="text" id="direccion_trabajo_madre" name="direccion_trabajo_madre">
-
-                    <div class="checkbox-group">
-                        <label for="vive_con_estudiante_madre">
-                            <input type="checkbox" id="vive-con_estudiante_madre" name="vive_con_estudiante_madre">
-                            Vive con el estudiante
-                        </label>
-
-                        <label for="es_representante-madre">
-                            <input type="checkbox" id="es_representante-madre" name="es-representant_madre">
-                            Es representante del estudiante
-                        </label>
-                    </div>
-
-                    <label for="nacionalidad_madre">Nacionalidad:</label>
-                    <select id="nacionalidad_madre" name="nacionalidad_madre" required>
-                        <option value="">Seleccione una nacionalidad</option>
-                        <option value="Ecuatoriana">Ecuatoriana</option>
-                        <option value="Peruana">Peruana</option>
-                        <option value="Venezolana">Venezolana</option>
-                        <option value="Colombiana">Colombiana</option>
-                        <option value="Otros paises de america">Otros países de América</option>
-                        <option value="Otros continentes">Otros continentes</option>
+                <div class="matricula-form-group">
+                    <label for="curso">Indicar en que Curso desea inscribir</label>
+                    <select id="curso" name="curso" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="Inicial">Inicial</option>
+                        <option value="1ro EGB">1ro EGB</option>
+                        <option value="2do EGB">2do EGB</option>
+                        <option value="3ro EGB">3ro EGB</option>
+                        <option value="4to EGB">4to EGB</option>
+                        <option value="5to EGB">5to EGB</option>
+                        <option value="6to EGB">6to EGB</option>
+                        <option value="7mo EGB">7mo EGB</option>
+                        <option value="8vo EGB">8vo EGB</option>
+                        <option value="9no EGB">9no EGB</option>
+                        <option value="10mo EGB">10mo EGB</option>
+                        <option value="1ro Bachillerato">1ro Bachillerato</option>
+                        <option value="2do Bachillerato">2do Bachillerato</option>
+                        <option value="3ro Bachillerato">3ro Bachillerato</option>
                     </select>
                 </div>
-
-                <h4>Representante Legal</h4>
-                <div class="form-group">
-                    <label for="representante_nombres">Apellidos y Nombres:</label>
-                    <input type="text" id="representante_nombres" name="representante_nombres">
-
-                    <label for="representante_cedula">Cédula:</label>
-                    <input type="text" id="representante_cedula" name="representante_cedula">
-
-                    <label for="representante_telefono">Teléfono Convencional:</label>
-                    <input type="text" id="representante_telefono" name="representante_telefono">
-
-                    <label for="representante_celular">Número Celular:</label>
-                    <input type="text" id="representante_celular" name="representante_celular">
-
-                    <label for="representante_profesion">Profesión:</label>
-                    <input type="text" id="representante_profesion" name="representante_profesion">
-
-                    <label for="representante_email">Email:</label>
-                    <input type="email" id="representante_email" name="representante_email">
-
-                    <label for="direccion_trabajo_representante">Dirección del Trabajo:</label>
-                    <input type="text" id="direccion_trabajo_representante" name="direccion_trabajo_representante">
-
-                    <div class="checkbox-group">
-                        <label for="vive_con_estudiante_representante">
-                            <input type="checkbox" id="vive_con_estudiante_representante" name="vive_con_estudiante_representante">
-                            Vive con el estudiante
-                        </label>
-
-                        <label for="es_representante_representante">
-                            <input type="checkbox" id="es_representante-representante" name="es_representante_representante">
-                            Es representante del estudiante
-                        </label>
-                    </div>
-
-                    <label for="nacionalidad_representante">Nacionalidad:</label>
-                    <select id="nacionalidad_representante" name="nacionalidad_representante" required>
-                        <option value="">Seleccione una nacionalidad</option>
-                        <option value="Ecuatoriana">Ecuatoriana</option>
-                        <option value="Peruana">Peruana</option>
-                        <option value="Venezolana">Venezolana</option>
-                        <option value="Colombiana">Colombiana</option>
-                        <option value="Otros paises de america">Otros países de América</option>
-                        <option value="Otros continentes">Otros continentes</option>
+                <div class="matricula-form-group">
+                    <label for="paralelo">Paralelo</label>
+                    <select id="paralelo" name="paralelo" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
                     </select>
                 </div>
-
-                <h3>Ubicación</h3>
-                <label for="latitud">Latitud:</label>
-                <input type="text" id="latitud" name="latitud" readonly>
-
-                <label for="longitud">Longitud:</label>
-                <input type="text" id="longitud" name="longitud" readonly>
-
-                <div id="map" style="width: 100%; height: 400px; margin-top: 1rem; border: 1px solid #ccc;"></div>
-
-                <button type="submit">Enviar</button>
+                <div class="matricula-form-group" id="especialidad-group" style="display:none;">
+                    <label for="especialidad">Especialidad (solo Bachillerato)</label>
+                    <select id="especialidad" name="especialidad">
+                        <option value="">-Seleccione-</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Contabilidad">Contabilidad</option>
+                        <option value="Gestión Administrativa">Gestión Administrativa</option>
+                        <option value="Ciencias">Ciencias</option>
+                    </select>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="institucion_procedencia">Institución de Procedencia</label>
+                    <input type="text" id="institucion_procedencia" name="institucion_procedencia" required>
+                </div>
+                <button type="button" id="btn-siguiente-paso1" class="matricula-btn">Siguiente</button>
             </form>
-        </section>
+            <form id="paso2-form" style="display:none;">
+                <div class="matricula-section-title">DATOS DEL ESTUDIANTE</div>
+                <div class="matricula-form-group">
+                    <label for="apellidos">Apellidos</label>
+                    <input type="text" id="apellidos" name="apellidos" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="nombres">Nombres</label>
+                    <input type="text" id="nombres" name="nombres" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="cedula">Cédula</label>
+                    <input type="text" id="cedula" name="cedula" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="etnia">Etnia</label>
+                    <select id="etnia" name="etnia" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="Mestizo">Mestizo</option>
+                        <option value="Afro">Afro</option>
+                        <option value="Montuvio">Montuvio</option>
+                        <option value="Indigena">Indígena</option>
+                        <option value="Blanco">Blanco</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="nacionalidad">Nacionalidad</label>
+                    <input type="text" id="nacionalidad" name="nacionalidad" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="tipo_sangre">Tipo de Sangre</label>
+                    <input type="text" id="tipo_sangre" name="tipo_sangre">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="sexo">Sexo</label>
+                    <select id="sexo" name="sexo" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                    </select>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" id="telefono" name="telefono">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="telefono_convencional">Teléfono Convencional</label>
+                    <input type="text" id="telefono_convencional" name="telefono_convencional">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="correo">Correo</label>
+                    <input type="email" id="correo" name="correo">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="archivo">Adjuntar archivo</label>
+                    <input type="file" id="archivo" name="archivo">
+                </div>
+                <button type="button" id="btn-siguiente-paso2" class="matricula-btn">Siguiente</button>
+            </form>
+            <form id="paso3-form" style="display:none;">
+                <div class="matricula-section-title">DIRECCIÓN DEL ESTUDIANTE</div>
+                <div class="matricula-form-group">
+                    <label for="calle_principal">Calle Principal</label>
+                    <input type="text" id="calle_principal" name="calle_principal" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="calle_secundaria">Calle Secundaria</label>
+                    <input type="text" id="calle_secundaria" name="calle_secundaria">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="provincia">Provincia</label>
+                    <input type="text" id="provincia" name="provincia" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="canton">Cantón</label>
+                    <input type="text" id="canton" name="canton" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="parroquia">Parroquia</label>
+                    <input type="text" id="parroquia" name="parroquia">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="barrio">Barrio</label>
+                    <input type="text" id="barrio" name="barrio">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="numero_casa">Número de Casa</label>
+                    <input type="text" id="numero_casa" name="numero_casa">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="referencia">Referencia</label>
+                    <input type="text" id="referencia" name="referencia">
+                </div>
+                <div class="matricula-form-group">
+                    <label>Ubicación en el mapa</label>
+                    <div id="mapa-direccion" style="width:100%;height:220px;border-radius:8px;border:1px solid #ccc;"></div>
+                    <input type="hidden" id="latitud" name="latitud">
+                    <input type="hidden" id="longitud" name="longitud">
+                </div>
+                <button type="submit" class="matricula-btn">Guardar dirección</button>
+            </form>
+            <form id="paso4-form" style="display:none;">
+                <div class="matricula-section-title">DATOS DEL PADRE</div>
+                <div class="matricula-form-group">
+                    <label for="padre_nombres">Nombre del Padre</label>
+                    <input type="text" id="padre_nombres" name="padre_nombres" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_cedula">Cédula del Padre</label>
+                    <input type="text" id="padre_cedula" name="padre_cedula">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_ocupacion">Ocupación del Padre</label>
+                    <input type="text" id="padre_ocupacion" name="padre_ocupacion">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_telefono_trabajo">Teléfono de Trabajo</label>
+                    <input type="text" id="padre_telefono_trabajo" name="padre_telefono_trabajo">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_email">Email del Padre</label>
+                    <input type="email" id="padre_email" name="padre_email">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_nivel_educacion">Nivel de Educación</label>
+                    <input type="text" id="padre_nivel_educacion" name="padre_nivel_educacion">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_estado_civil">Estado Civil</label>
+                    <input type="text" id="padre_estado_civil" name="padre_estado_civil">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_vive_con_estudiante">¿Vive con el estudiante?</label>
+                    <select id="padre_vive_con_estudiante" name="padre_vive_con_estudiante">
+                        <option value="">-Seleccione-</option>
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_horario_trabajo">Horario de Trabajo</label>
+                    <input type="text" id="padre_horario_trabajo" name="padre_horario_trabajo">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="padre_telefono_celular">Teléfono Celular</label>
+                    <input type="text" id="padre_telefono_celular" name="padre_telefono_celular">
+                </div>
+                <button type="button" id="btn-siguiente-paso4" class="matricula-btn">Siguiente</button>
+            </form>
+            <form id="paso5-form" style="display:none;">
+                <div class="matricula-section-title">DATOS DE LA MADRE</div>
+                <div class="matricula-form-group">
+                    <label for="madre_nombres">Nombre de la Madre</label>
+                    <input type="text" id="madre_nombres" name="madre_nombres" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_cedula">Cédula de la Madre</label>
+                    <input type="text" id="madre_cedula" name="madre_cedula">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_ocupacion">Ocupación de la Madre</label>
+                    <input type="text" id="madre_ocupacion" name="madre_ocupacion">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_telefono_trabajo">Teléfono de Trabajo</label>
+                    <input type="text" id="madre_telefono_trabajo" name="madre_telefono_trabajo">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_email">Email de la Madre</label>
+                    <input type="email" id="madre_email" name="madre_email">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_nivel_educacion">Nivel de Educación</label>
+                    <input type="text" id="madre_nivel_educacion" name="madre_nivel_educacion">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_estado_civil">Estado Civil</label>
+                    <input type="text" id="madre_estado_civil" name="madre_estado_civil">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_vive_con_estudiante">¿Vive con el estudiante?</label>
+                    <select id="madre_vive_con_estudiante" name="madre_vive_con_estudiante">
+                        <option value="">-Seleccione-</option>
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_horario_trabajo">Horario de Trabajo</label>
+                    <input type="text" id="madre_horario_trabajo" name="madre_horario_trabajo">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="madre_telefono_celular">Teléfono Celular</label>
+                    <input type="text" id="madre_telefono_celular" name="madre_telefono_celular">
+                </div>
+                <button type="button" id="btn-siguiente-paso5" class="matricula-btn">Siguiente</button>
+            </form>
+            <form id="paso6-form" style="display:none;">
+                <div class="matricula-section-title">DATOS DEL REPRESENTANTE</div>
+                <div class="matricula-form-group">
+                    <label for="representante_nombres">Nombre del Representante</label>
+                    <input type="text" id="representante_nombres" name="representante_nombres" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_cedula">Cédula del Representante</label>
+                    <input type="text" id="representante_cedula" name="representante_cedula">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_ocupacion">Ocupación del Representante</label>
+                    <input type="text" id="representante_ocupacion" name="representante_ocupacion">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_telefono_trabajo">Teléfono de Trabajo</label>
+                    <input type="text" id="representante_telefono_trabajo" name="representante_telefono_trabajo">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_email">Email del Representante</label>
+                    <input type="email" id="representante_email" name="representante_email">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_nivel_educacion">Nivel de Educación</label>
+                    <input type="text" id="representante_nivel_educacion" name="representante_nivel_educacion">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_estado_civil">Estado Civil</label>
+                    <input type="text" id="representante_estado_civil" name="representante_estado_civil">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_vive_con_estudiante">¿Vive con el estudiante?</label>
+                    <select id="representante_vive_con_estudiante" name="representante_vive_con_estudiante">
+                        <option value="">-Seleccione-</option>
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_horario_trabajo">Horario de Trabajo</label>
+                    <input type="text" id="representante_horario_trabajo" name="representante_horario_trabajo">
+                </div>
+                <div class="matricula-form-group">
+                    <label for="representante_telefono_celular">Teléfono Celular</label>
+                    <input type="text" id="representante_telefono_celular" name="representante_telefono_celular">
+                </div>
+                <button type="button" id="btn-siguiente-paso6" class="matricula-btn">Siguiente</button>
+            </form>
+            <form id="paso7-form" style="display:none;">
+                <div class="matricula-section-title">CONTACTOS DE EMERGENCIA</div>
+                <div class="matricula-form-group">
+                    <label for="emergencia1_nombre">Nombre del Contacto 1</label>
+                    <input type="text" id="emergencia1_nombre" name="emergencia1_nombre" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="emergencia1_telefono">Teléfono del Contacto 1</label>
+                    <input type="text" id="emergencia1_telefono" name="emergencia1_telefono" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="emergencia1_parentesco">Parentesco del Contacto 1</label>
+                    <input type="text" id="emergencia1_parentesco" name="emergencia1_parentesco" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="emergencia2_nombre">Nombre del Contacto 2</label>
+                    <input type="text" id="emergencia2_nombre" name="emergencia2_nombre" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="emergencia2_telefono">Teléfono del Contacto 2</label>
+                    <input type="text" id="emergencia2_telefono" name="emergencia2_telefono" required>
+                </div>
+                <div class="matricula-form-group">
+                    <label for="emergencia2_parentesco">Parentesco del Contacto 2</label>
+                    <input type="text" id="emergencia2_parentesco" name="emergencia2_parentesco" required>
+                </div>
+                <button type="button" id="btn-finalizar-matricula" class="matricula-btn">Finalizar y Guardar</button>
+            </form>
+            <form id="paso8-form" style="display:none;">
+                <div class="matricula-section-title">RESUMEN DE INSCRIPCIÓN</div>
+                <div id="resumen-matricula" style="background:#f9f9f9;padding:1.5rem;border-radius:12px;margin-bottom:1rem;">
+                    <!-- Aquí se llenará el resumen con JS -->
+                </div>
+                <div style="display:flex;gap:1rem;justify-content:flex-end;">
+                    <button type="button" id="btn-imprimir" class="matricula-btn" style="background:#2f5597;">Imprimir</button>
+                    <button type="button" id="btn-descargar-pdf" class="matricula-btn" style="background:#f3c14b;">Descargar PDF</button>
+                    <button type="button" id="btn-finalizar" class="matricula-btn" style="background:#888;">Finalizar</button>
+                </div>
+            </form>
+        </div>
     </main>
+    <!-- Pie de página igual que en index.html -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -357,178 +667,895 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo
+                +-
+            </p>
         </div>
     </footer>
-    <script type="module">
-        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE"></script>
+    <script>
         // Configuración de Supabase
         const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
         const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
-        const supabase = createClient(supabaseUrl, supabaseKey);
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Manejar el estado de autenticación y roles
-        document.addEventListener("DOMContentLoaded", async () => {
-            const authLinks = document.querySelector('.auth-links');
-            const menu = document.querySelector('.menu');
-            const usuarioActivo = localStorage.getItem('usuarioActivo');
-            const adminEmail = localStorage.getItem('adminEmail') || 'admin@ejemplo.com';
-
-            if (authLinks) {
-                if (usuarioActivo) {
-                    authLinks.innerHTML = `
-                        <a href="matricularse.html">Matricularse</a>
-                        <a href="#" id="logout">Cerrar Sesión</a>
-                    `;
-                    document.getElementById('logout').addEventListener('click', () => {
-                        localStorage.removeItem('usuarioActivo');
-                        alert('Sesión cerrada exitosamente.');
-                        window.location.href = 'index.html';
-                    });
-                } else {
-                    authLinks.innerHTML = `
-                        <a href="registro.html">Registrarse</a>
-                        <a href="login.html">Iniciar Sesión</a>
-                    `;
-                }
+        // Mostrar especialidad solo si es Bachillerato
+        document.getElementById('curso').addEventListener('change', function() {
+            const value = this.value;
+            const especialidadGroup = document.getElementById('especialidad-group');
+            if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
+                especialidadGroup.style.display = 'block';
+                document.getElementById('especialidad').required = true;
+            } else {
+                especialidadGroup.style.display = 'none';
+                document.getElementById('especialidad').required = false;
+                document.getElementById('especialidad').value = '';
             }
-
-            // Generar automáticamente el código de la ficha
-            const codigoInput = document.getElementById('codigo');
-            try {
-                const { data: solicitudes, error } = await supabase
-                    .from('solicitudesMatriculacion')
-                    .select('codigo')
-                    .order('codigo', { ascending: false })
-                    .limit(1);
-
-                if (error) {
-                    console.error('Error al obtener el último código:', error.message);
-                    alert('Error al generar el código automáticamente.');
-                } else {
-                    const ultimoCodigo = solicitudes.length > 0 ? parseInt(solicitudes[0].codigo, 10) : 0;
-                    codigoInput.value = String(ultimoCodigo + 1).padStart(6, '0'); // Generar un nuevo código con 6 dígitos
-                }
-            } catch (err) {
-                console.error('Error inesperado al generar el código:', err);
-                alert('Ocurrió un error inesperado al generar el código.');
-            }
-
-            // Inicializar Google Maps
-            let map, marker;
-            const latitudInput = document.getElementById('latitud');
-            const longitudInput = document.getElementById('longitud');
-
-            function initMap() {
-                const defaultLocation = { lat: 0.336164, lng: -78.116049 }; // Ubicación predeterminada
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: defaultLocation,
-                    zoom: 15,
-                });
-
-                marker = new google.maps.Marker({
-                    position: defaultLocation,
-                    map: map,
-                    draggable: true,
-                });
-
-                // Actualizar latitud y longitud al mover el marcador
-                marker.addListener('dragend', () => {
-                    const position = marker.getPosition();
-                    latitudInput.value = position.lat().toFixed(6);
-                    longitudInput.value = position.lng().toFixed(6);
-                });
-
-                // Establecer latitud y longitud iniciales
-                latitudInput.value = defaultLocation.lat.toFixed(6);
-                longitudInput.value = defaultLocation.lng.toFixed(6);
-            }
-
-            window.initMap = initMap;
-
-            // Cargar el script de Google Maps
-            const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE&callback=initMap`;
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
         });
 
-        // Manejar el envío del formulario de matriculación
-        document.getElementById('form-matriculacion').addEventListener('submit', async function (e) {
+        // Mapeo de curso a nivel
+        function obtenerNivelPorCurso(curso) {
+            if (curso === "Inicial") return "Inicial";
+            if (["1ro EGB","2do EGB","3ro EGB","4to EGB","5to EGB","6to EGB","7mo EGB"].includes(curso)) return "Primaria";
+            if (["8vo EGB","9no EGB","10mo EGB"].includes(curso)) return "Secundaria";
+            if (["1ro Bachillerato","2do Bachillerato","3ro Bachillerato"].includes(curso)) return "Bachillerato";
+            return null;
+        }
+
+        // Paso 1: Guardar en localStorage y mostrar paso 2
+        document.getElementById('btn-siguiente-paso1').onclick = function() {
+            // Guardar datos de paso 1 en localStorage
+            function valorNA(id) {
+                const el = document.getElementById(id);
+                return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
+            }
+            const paso1 = {
+                periodo: valorNA('periodo'),
+                curso: valorNA('curso'),
+                paralelo: valorNA('paralelo'),
+                especialidad: valorNA('especialidad'),
+                institucion_procedencia: valorNA('institucion_procedencia')
+            };
+            localStorage.setItem('matricula_paso1', JSON.stringify(paso1));
+            document.getElementById('paso1-form').style.display = 'none';
+            document.getElementById('paso2-form').style.display = 'block';
+            activarPasoWizard(2);
+        };
+
+        // Paso 2: Guardar en localStorage y mostrar paso 3
+        document.getElementById('btn-siguiente-paso2').onclick = function() {
+            // Guardar datos de paso 2 en localStorage
+            function valorNA(id) {
+                const el = document.getElementById(id);
+                return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
+            }
+            const archivoInput = document.getElementById('archivo');
+            let archivoData = null;
+            if (archivoInput.files.length > 0) {
+                archivoData = archivoInput.files[0];
+            }
+            const paso2 = {
+                apellidos: valorNA('apellidos'),
+                nombres: valorNA('nombres'),
+                cedula: valorNA('cedula'),
+                etnia: valorNA('etnia'),
+                nacionalidad: valorNA('nacionalidad'),
+                tipo_sangre: valorNA('tipo_sangre'),
+                fecha_nacimiento: valorNA('fecha_nacimiento'),
+                sexo: valorNA('sexo'),
+                telefono: valorNA('telefono'),
+                telefono_convencional: valorNA('telefono_convencional'),
+                correo: valorNA('correo'),
+                archivo: archivoData // Guardar el archivo temporalmente (solo referencia, no en localStorage)
+            };
+            // Guardar sin archivo en localStorage (no se puede guardar archivos binarios en localStorage)
+            const paso2SinArchivo = { ...paso2, archivo: undefined };
+            localStorage.setItem('matricula_paso2', JSON.stringify(paso2SinArchivo));
+            window.archivoEstudiante = archivoData; // Guardar el archivo en una variable global temporal
+            document.getElementById('paso2-form').style.display = 'none';
+            document.getElementById('paso3-form').style.display = 'block';
+            activarPasoWizard(3);
+            inicializarMapaDireccion();
+        };
+
+        // Paso 3: Guardar dirección y mostrar paso 4 (NO limpiar localStorage aquí)
+        document.getElementById('paso3-form').addEventListener('submit', function(e) {
             e.preventDefault();
+            document.getElementById('paso3-form').style.display = 'none';
+            document.getElementById('paso4-form').style.display = 'block';
+            activarPasoWizard(4);
+        });
 
-            const formData = new FormData(e.target);
-            const data = Object.fromEntries(formData.entries());
+        // Paso 4: Guardar en localStorage y mostrar siguiente paso
+        document.getElementById('btn-siguiente-paso4').onclick = function() {
+            function valorNA(id) {
+                const el = document.getElementById(id);
+                return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
+            }
+            const paso4 = {
+                padre_nombres: valorNA('padre_nombres'),
+                padre_cedula: valorNA('padre_cedula'),
+                padre_ocupacion: valorNA('padre_ocupacion'),
+                padre_telefono_trabajo: valorNA('padre_telefono_trabajo'),
+                padre_email: valorNA('padre_email'),
+                padre_nivel_educacion: valorNA('padre_nivel_educacion'),
+                padre_estado_civil: valorNA('padre_estado_civil'),
+                padre_vive_con_estudiante: valorNA('padre_vive_con_estudiante'),
+                padre_horario_trabajo: valorNA('padre_horario_trabajo'),
+                padre_telefono_celular: valorNA('padre_telefono_celular')
+            };
+            localStorage.setItem('matricula_paso4', JSON.stringify(paso4));
+            document.getElementById('paso4-form').style.display = 'none';
+            document.getElementById('paso5-form').style.display = 'block';
+            activarPasoWizard(5);
+        };
 
-            // Validar que la fecha de nacimiento no esté vacía
-            if (!data.fecha_nacimiento) {
-                alert('Por favor llena la fecha de nacimiento antes de continuar');
+        // Paso 5: Guardar en localStorage y mostrar siguiente paso
+        document.getElementById('btn-siguiente-paso5').onclick = function() {
+            function valorNA(id) {
+                const el = document.getElementById(id);
+                return (el && el.value !== undefined && el.value !== null && el.value.trim() !== "") ? el.value : "";
+            }
+            const paso5 = {
+                madre_nombres: valorNA('madre_nombres'),
+                madre_cedula: valorNA('madre_cedula'),
+                madre_ocupacion: valorNA('madre_ocupacion'),
+                madre_telefono_trabajo: valorNA('madre_telefono_trabajo'),
+                madre_email: valorNA('madre_email'),
+                madre_nivel_educacion: valorNA('madre_nivel_educacion'),
+                madre_estado_civil: valorNA('madre_estado_civil'),
+                madre_vive_con_estudiante: valorNA('madre_vive_con_estudiante'),
+                madre_horario_trabajo: valorNA('madre_horario_trabajo'),
+                madre_telefono_celular: valorNA('madre_telefono_celular')
+            };
+            localStorage.setItem('matricula_paso5', JSON.stringify(paso5));
+            document.getElementById('paso5-form').style.display = 'none';
+            document.getElementById('paso6-form').style.display = 'block';
+            activarPasoWizard(6);
+        };
+
+        // Paso 6: Guardar en localStorage y mostrar siguiente paso
+        document.getElementById('btn-siguiente-paso6').onclick = function() {
+            function valorNA(id) {
+                const el = document.getElementById(id);
+                return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
+            }
+            const paso6 = {
+                representante_nombres: valorNA('representante_nombres'),
+                representante_cedula: valorNA('representante_cedula'),
+                representante_ocupacion: valorNA('representante_ocupacion'),
+                representante_telefono_trabajo: valorNA('representante_telefono_trabajo'),
+                representante_email: valorNA('representante_email'),
+                representante_nivel_educacion: valorNA('representante_nivel_educacion'),
+                representante_estado_civil: valorNA('representante_estado_civil'),
+                representante_vive_con_estudiante: valorNA('representante_vive_con_estudiante'),
+                representante_horario_trabajo: valorNA('representante_horario_trabajo'),
+                representante_telefono_celular: valorNA('representante_telefono_celular')
+            };
+            localStorage.setItem('matricula_paso6', JSON.stringify(paso6));
+            document.getElementById('paso6-form').style.display = 'none';
+            document.getElementById('paso7-form').style.display = 'block';
+            activarPasoWizard(7);
+        };
+
+        // Paso 7: Guardar en localStorage y guardar toda la información en la base de datos
+        document.getElementById('btn-finalizar-matricula').onclick = async function() {
+            function valorNA(id) {
+                const el = document.getElementById(id);
+                return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
+            }
+            const contactos = [
+                {
+                    nombre: valorNA('emergencia1_nombre'),
+                    telefono: valorNA('emergencia1_telefono'),
+                    parentesco: valorNA('emergencia1_parentesco')
+                },
+                {
+                    nombre: valorNA('emergencia2_nombre'),
+                    telefono: valorNA('emergencia2_telefono'),
+                    parentesco: valorNA('emergencia2_parentesco')
+                }
+            ];
+            localStorage.setItem('matricula_paso7', JSON.stringify(contactos));
+
+            // Recuperar todos los datos de localStorage
+            const paso1 = JSON.parse(localStorage.getItem('matricula_paso1')) || {};
+            const paso2 = JSON.parse(localStorage.getItem('matricula_paso2')) || {};
+            const paso4 = JSON.parse(localStorage.getItem('matricula_paso4')) || {};
+            const paso5 = JSON.parse(localStorage.getItem('matricula_paso5')) || {};
+            const paso6 = JSON.parse(localStorage.getItem('matricula_paso6')) || {};
+            const paso7 = contactos;
+            const archivoData = window.archivoEstudiante || null;
+
+            // Paso 3 (dirección) se obtiene directo del DOM porque no se guardó en localStorage
+            const paso3 = {
+                calle_principal: valorNA('calle_principal'),
+                calle_secundaria: valorNA('calle_secundaria'),
+                provincia: valorNA('provincia'),
+                canton: valorNA('canton'),
+                parroquia: valorNA('parroquia'),
+                barrio: valorNA('barrio'),
+                numero_casa: valorNA('numero_casa'),
+                referencia: valorNA('referencia'),
+                latitud: valorNA('latitud'),
+                longitud: valorNA('longitud')
+            };
+
+            // 1. Buscar o crear nivel
+            let id_nivel = null;
+            let nivel_nombre = obtenerNivelPorCurso(paso1.curso);
+            if (nivel_nombre) {
+                let { data: nivelData } = await supabase
+                    .from('nivel_grado')
+                    .select('id_nivel')
+                    .eq('nombre_nivel', nivel_nombre)
+                    .single();
+                if (!nivelData) {
+                    let { data: nuevoNivel } = await supabase
+                        .from('nivel_grado')
+                        .insert([{ nombre_nivel: nivel_nombre }])
+                        .select('id_nivel')
+                        .single();
+                    id_nivel = nuevoNivel ? nuevoNivel.id_nivel : null;
+                } else {
+                    id_nivel = nivelData.id_nivel;
+                }
+            }
+
+            // 2. Buscar o crear curso
+            let id_curso = null;
+            if (paso1.curso && id_nivel) {
+                let { data: cursoData } = await supabase
+                    .from('curso_nivel')
+                    .select('id_curso')
+                    .eq('nombre_curso', paso1.curso)
+                    .eq('id_nivel', id_nivel)
+                    .single();
+                if (!cursoData) {
+                    let { data: nuevoCurso } = await supabase
+                        .from('curso_nivel')
+                        .insert([{ nombre_curso: paso1.curso, id_nivel }])
+                        .select('id_curso')
+                        .single();
+                    id_curso = nuevoCurso ? nuevoCurso.id_curso : null;
+                } else {
+                    id_curso = cursoData.id_curso;
+                }
+            }
+
+            // 3. Insertar solicitud_inscripcion
+            let id_inscripcion = null;
+            const { data: inscData, error: inscError } = await supabase
+                .from('solicitud_inscripcion')
+                .insert([{
+                    periodo: paso1.periodo,
+                    id_nivel,
+                    id_curso,
+                    paralelo: paso1.paralelo,
+                    especialidad: paso1.especialidad,
+                    institucion_procedencia: paso1.institucion_procedencia
+                }])
+                .select('id')
+                .single();
+            if (inscError) {
+                alert('Error al guardar inscripción: ' + inscError.message);
                 return;
             }
+            id_inscripcion = inscData.id;
 
-            try {
-                const { error } = await supabase
-                    .from('solicitudesMatriculacion')
-                    .insert([{
-                        codigo: data.codigo,
-                        apellidos: data.apellidos,
-                        nombres: data.nombres,
-                        cedula_estudiante: data.cedula_estudiante,
-                        provincia_nacimiento: data.provincia_nacimiento,
-                        canton: data.canton,
-                        genero: data.genero,
-                        fecha_nacimiento: data.fecha_nacimiento,
-                        nacionalidad: data.nacionalidad,
-                        institucion_procede: data.institucion_procede,
-                        provincia_vivienda: data.provincia_vivienda,
-                        ciudad: data.ciudad,
-                        parroquia: data.parroquia,
-                        direccion: data.direccion,
-                        telefono_convencional: data.telefono_convencional,
-                        sector: data.sector,
-                        emergencia_nombres: data.emergencia_nombres,
-                        emergencia_parentesco: data.emergencia_parentesco,
-                        telefono_emergencia: data.telefono_emergencia,
-                        padre_nombres: data.padre_nombres,
-                        padre_cedula: data.padre_cedula,
-                        padre_telefono: data.padre_telefono,
-                        padre_celular: data.padre_celular,
-                        padre_profesion: data.padre_profesion,
-                        padre_email: data.padre_email,
-                        direccion_trabajo_padre: data.direccion_trabajo_padre,
-                        madre_nombres: data.madre_nombres,
-                        madre_cedula: data.madre_cedula,
-                        madre_telefono: data.madre_telefono,
-                        madre_celular: data.madre_celular,
-                        madre_profesion: data.madre_profesion,
-                        madre_email: data.madre_email,
-                        direccion_trabajo_madre: data.direccion_trabajo_madre,
-                        representante_nombres: data.representante_nombres,
-                        representante_cedula: data.representante_cedula,
-                        representante_telefono: data.representante_telefono,
-                        representante_celular: data.representante_celular,
-                        representante_profesion: data.representante_profesion,
-                        representante_email: data.representante_email,
-                        direccion_trabajo_representante: data.direccion_trabajo_representante,
-                        latitud: data.latitud,
-                        longitud: data.longitud
-                    }]);
-
-                if (error) {
-                    console.error('Error al guardar la solicitud:', error.message);
-                    alert('Error al guardar la solicitud: ' + error.message);
+            // 4. Insertar cédula si no existe
+            let id_cedula = null;
+            if (paso2.cedula) {
+                let { data: cedulaData } = await supabase
+                    .from('cedulas')
+                    .select('id_cedula')
+                    .eq('cedula', paso2.cedula)
+                    .single();
+                if (!cedulaData) {
+                    let { data: nuevaCedula } = await supabase
+                        .from('cedulas')
+                        .insert([{ cedula: paso2.cedula }])
+                        .select('id_cedula')
+                        .single();
+                    id_cedula = nuevaCedula ? nuevaCedula.id_cedula : null;
                 } else {
-                    alert('Solicitud registrada exitosamente.');
-                    window.location.href = 'index.html'; // Redirigir a la página de inicio
+                    id_cedula = cedulaData.id_cedula;
                 }
-            } catch (err) {
-                console.error('Error inesperado al guardar la solicitud:', err);
-                alert('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
             }
-        });
+
+            // 5. Subir archivo si existe
+            let archivo_url = null;
+            if (archivoData) {
+                let ext = archivoData.name.split('.').pop().toLowerCase();
+                let filePath = `estudiantes/${paso2.cedula}_${Date.now()}.${ext}`;
+                if (archivoData.type.startsWith('image/') && ext !== 'png') {
+                    const imgBitmap = await createImageBitmap(archivoData);
+                    const canvas = document.createElement('canvas');
+                    canvas.width = imgBitmap.width;
+                    canvas.height = imgBitmap.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(imgBitmap, 0, 0);
+                    const blobPng = await new Promise(res => canvas.toBlob(res, 'image/png'));
+                    filePath = `estudiantes/${paso2.cedula}_${Date.now()}.png`;
+                    const { data: uploadData, error: uploadError } = await supabase.storage
+                        .from('archivos')
+                        .upload(filePath, blobPng, { contentType: 'image/png' });
+                    if (!uploadError) {
+                        archivo_url = supabase.storage.from('archivos').getPublicUrl(filePath).publicUrl;
+                    }
+                } else {
+                    const { data: uploadData, error: uploadError } = await supabase.storage
+                        .from('archivos')
+                        .upload(filePath, archivoData);
+                    if (!uploadError) {
+                        archivo_url = supabase.storage.from('archivos').getPublicUrl(filePath).publicUrl;
+                    }
+                }
+            }
+
+            // 6. Insertar estudiante
+            let id_estudiante = null;
+            const { data: estudianteData, error: estudianteError } = await supabase
+                .from('estudiante')
+                .insert([{
+                    id_cedula,
+                    id_inscripcion,
+                    apellidos: paso2.apellidos,
+                    nombres: paso2.nombres,
+                    tipo_sangre: paso2.tipo_sangre,
+                    fecha_nacimiento: paso2.fecha_nacimiento,
+                    sexo: paso2.sexo,
+                    telefono: paso2.telefono,
+                    telefono_convencional: paso2.telefono_convencional,
+                    correo: paso2.correo,
+                    archivo_url: archivo_url,
+                    etnia: paso2.etnia,
+                    nacionalidad: paso2.nacionalidad
+                }])
+                .select('id_estudiante')
+                .single();
+            if (estudianteError) {
+                alert('Error al guardar estudiante: ' + estudianteError.message);
+                return;
+            }
+            id_estudiante = estudianteData.id_estudiante;
+
+            // 7. Insertar dirección
+            await supabase
+                .from('direccion_estudiante')
+                .insert([{ ...paso3, id_estudiante }]);
+
+            // 8. Insertar padre
+            await supabase
+                .from('padre_estudiante')
+                .insert([{
+                    id_estudiante,
+                    nombres: paso4.padre_nombres,
+                    cedula: paso4.padre_cedula,
+                    ocupacion: paso4.padre_ocupacion,
+                    telefono_trabajo: paso4.padre_telefono_trabajo,
+                    email: paso4.padre_email,
+                    nivel_educacion: paso4.padre_nivel_educacion,
+                    estado_civil: paso4.padre_estado_civil,
+                    vive_con_estudiante: paso4.padre_vive_con_estudiante === "true",
+                    horario_trabajo: paso4.padre_horario_trabajo,
+                    telefono_celular: paso4.padre_telefono_celular
+                }]);
+
+            // 9. Insertar madre
+            await supabase
+                .from('madre_estudiante')
+                .insert([{
+                    id_estudiante,
+                    nombres: paso5.madre_nombres,
+                    cedula: paso5.madre_cedula,
+                    ocupacion: paso5.madre_ocupacion,
+                    telefono_trabajo: paso5.madre_telefono_trabajo,
+                    email: paso5.madre_email,
+                    nivel_educacion: paso5.madre_nivel_educacion,
+                    estado_civil: paso5.madre_estado_civil,
+                    vive_con_estudiante: paso5.madre_vive_con_estudiante === "true",
+                    horario_trabajo: paso5.madre_horario_trabajo,
+                    telefono_celular: paso5.madre_telefono_celular
+                }]);
+
+            // 10. Insertar representante
+            await supabase
+                .from('representante_estudiante')
+                .insert([{
+                    id_estudiante,
+                    nombres: paso6.representante_nombres,
+                    cedula: paso6.representante_cedula,
+                    ocupacion: paso6.representante_ocupacion,
+                    telefono_trabajo: paso6.representante_telefono_trabajo,
+                    email: paso6.representante_email,
+                    nivel_educacion: paso6.representante_nivel_educacion,
+                    estado_civil: paso6.representante_estado_civil,
+                    vive_con_estudiante: paso6.representante_vive_con_estudiante === "true",
+                    horario_trabajo: paso6.representante_horario_trabajo,
+                    telefono_celular: paso6.representante_telefono_celular
+                }]);
+
+            // 11. Insertar contactos de emergencia
+            for (const contacto of paso7) {
+                await supabase
+                    .from('contacto_emergencia_estudiante')
+                    .insert([{ id_estudiante, ...contacto }]);
+            }
+
+            // Limpiar localStorage y mostrar mensaje final
+            localStorage.removeItem('matricula_paso1');
+            localStorage.removeItem('matricula_paso2');
+            localStorage.removeItem('matricula_paso4');
+            localStorage.removeItem('matricula_paso5');
+            localStorage.removeItem('matricula_paso6');
+            localStorage.removeItem('matricula_paso7');
+            window.archivoEstudiante = undefined;
+
+            // Mostrar resumen en vez de redirigir
+            mostrarResumenMatricula({
+                paso1, paso2, paso3, paso4, paso5, paso6, paso7
+            });
+            document.getElementById('paso7-form').style.display = 'none';
+            document.getElementById('paso8-form').style.display = 'block';
+            activarPasoWizard(8);
+        };
+
+        // NUEVO: Función para mostrar el resumen con tabla, mapa y foto adjunta
+        function mostrarResumenMatricula({paso1, paso2, paso3, paso4, paso5, paso6, paso7}) {
+            // Imagen del mapa usando Google Static Maps API
+            const mapaUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${paso3.latitud},${paso3.longitud}&zoom=17&size=500x250&markers=color:red%7C${paso3.latitud},${paso3.longitud}&key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE`;
+
+            // Imagen adjunta (si existe)
+            let fotoHtml = '';
+            if (window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
+                fotoHtml = `<tr><td><b>Foto Adjunta:</b></td><td><img id="foto-adjunta-preview" style="max-width:120px;max-height:120px;border-radius:8px;border:1px solid #ccc;" alt="Foto adjunta"></td></tr>`;
+            }
+
+            // Construir tabla resumen
+            const resumen = document.getElementById('resumen-matricula');
+            resumen.innerHTML = `
+                <h2 style="text-align:center;color:#2f5597;">Resumen de Inscripción</h2>
+                <table style="width:100%;border-collapse:collapse;">
+                    <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Datos Académicos</th></tr>
+                    <tr><td><b>Periodo:</b></td><td>${paso1.periodo}</td></tr>
+                    <tr><td><b>Curso:</b></td><td>${paso1.curso} - Paralelo: ${paso1.paralelo}</td></tr>
+                    <tr><td><b>Especialidad:</b></td><td>${paso1.especialidad || 'N/A'}</td></tr>
+                    <tr><td><b>Institución de Procedencia:</b></td><td>${paso1.institucion_procedencia}</td></tr>
+                    <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Datos del Estudiante</th></tr>
+                    <tr><td><b>Apellidos:</b></td><td>${paso2.apellidos}</td></tr>
+                    <tr><td><b>Nombres:</b></td><td>${paso2.nombres}</td></tr>
+                    <tr><td><b>Cédula:</b></td><td>${paso2.cedula}</td></tr>
+                    <tr><td><b>Etnia:</b></td><td>${paso2.etnia}</td></tr>
+                    <tr><td><b>Nacionalidad:</b></td><td>${paso2.nacionalidad}</td></tr>
+                    <tr><td><b>Tipo de Sangre:</b></td><td>${paso2.tipo_sangre}</td></tr>
+                    <tr><td><b>Fecha de Nacimiento:</b></td><td>${paso2.fecha_nacimiento}</td></tr>
+                    <tr><td><b>Sexo:</b></td><td>${paso2.sexo}</td></tr>
+                    <tr><td><b>Teléfono:</b></td><td>${paso2.telefono}</td></tr>
+                    <tr><td><b>Correo:</b></td><td>${paso2.correo}</td></tr>
+                    ${fotoHtml}
+                    <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Dirección</th></tr>
+                    <tr><td><b>Calle Principal:</b></td><td>${paso3.calle_principal}</td></tr>
+                    <tr><td><b>Calle Secundaria:</b></td><td>${paso3.calle_secundaria}</td></tr>
+                    <tr><td><b>Provincia:</b></td><td>${paso3.provincia}</td></tr>
+                    <tr><td><b>Cantón:</b></td><td>${paso3.canton}</td></tr>
+                    <tr><td><b>Parroquia:</b></td><td>${paso3.parroquia}</td></tr>
+                    <tr><td><b>Barrio:</b></td><td>${paso3.barrio}</td></tr>
+                    <tr><td><b>Número de Casa:</b></td><td>${paso3.numero_casa}</td></tr>
+                    <tr><td><b>Referencia:</b></td><td>${paso3.referencia}</td></tr>
+                    <tr><td><b>Ubicación en el Mapa:</b></td>
+                        <td>
+                            <img src="${mapaUrl}" alt="Mapa de ubicación" style="max-width:250px;border-radius:8px;border:1px solid #ccc;">
+                        </td>
+                    </tr>
+                    <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Padre</th></tr>
+                    <tr><td><b>Nombre:</b></td><td>${paso4.padre_nombres}</td></tr>
+                    <tr><td><b>Cédula:</b></td><td>${paso4.padre_cedula}</td></tr>
+                    <tr><td><b>Ocupación:</b></td><td>${paso4.padre_ocupacion}</td></tr>
+                    <tr><td><b>Email:</b></td><td>${paso4.padre_email}</td></tr>
+                    <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Madre</th></tr>
+                    <tr><td><b>Nombre:</b></td><td>${paso5.madre_nombres}</td></tr>
+                    <tr><td><b>Cédula:</b></td><td>${paso5.madre_cedula}</td></tr>
+                    <tr><td><b>Ocupación:</b></td><td>${paso5.madre_ocupacion}</td></tr>
+                    <tr><td><b>Email:</b></td><td>${paso5.madre_email}</td></tr>
+                    <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Representante</th></tr>
+                    <tr><td><b>Nombre:</b></td><td>${paso6.representante_nombres}</td></tr>
+                    <tr><td><b>Cédula:</b></td><td>${paso6.representante_cedula}</td></tr>
+                    <tr><td><b>Ocupación:</b></td><td>${paso6.representante_ocupacion}</td></tr>
+                    <tr><td><b>Email:</b></td><td>${paso6.representante_email}</td></tr>
+                    <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Contactos de Emergencia</th></tr>
+                    <tr><td><b>1:</b></td><td>${paso7[0].nombre} (${paso7[0].parentesco}) - ${paso7[0].telefono}</td></tr>
+                    <tr><td><b>2:</b></td><td>${paso7[1].nombre} (${paso7[1].parentesco}) - ${paso7[1].telefono}</td></tr>
+                </table>
+            `;
+
+            // Si hay foto adjunta, cargarla en el resumen
+            if (window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById('foto-adjunta-preview');
+                    if (img) img.src = e.target.result;
+                };
+                reader.readAsDataURL(window.archivoEstudiante);
+            }
+        }
+
+        // Botón imprimir
+        document.getElementById('btn-imprimir').onclick = function() {
+            window.print();
+        };
+
+        // Botón descargar PDF con diseño profesional en recuadro
+        document.getElementById('btn-descargar-pdf').onclick = async function() {
+            const resumen = document.getElementById('resumen-matricula');
+            const doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+            // Logo institucional
+            const logoUrl = 'unidad-educativa-logo.png';
+            let logoDataUrl = null;
+            try {
+                const resp = await fetch(logoUrl);
+                if (resp.ok) {
+                    const blob = await resp.blob();
+                    logoDataUrl = await new Promise(resolve => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.readAsDataURL(blob);
+                    });
+                }
+            } catch (e) {
+                logoDataUrl = null;
+            }
+
+            // Foto tipo carnet (adjuntada por el usuario en el campo "archivo")
+            let fotoDataUrl = null;
+            if (window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
+                fotoDataUrl = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(window.archivoEstudiante);
+                });
+            } else {
+                // Si no hay archivo, intentar obtener la imagen del resumen (por si acaso)
+                const fotoImg = resumen.querySelector('img[alt="Foto adjunta"]');
+                if (fotoImg && fotoImg.src && fotoImg.src.startsWith('data:')) {
+                    fotoDataUrl = fotoImg.src;
+                }
+            }
+
+            // Mapa: forzar que siempre haya imagen, si falla usa un placeholder
+            let mapaDataUrl = null;
+            const mapaImg = resumen.querySelector('img[alt="Mapa de ubicación"]');
+            if (mapaImg) {
+                try {
+                    const img = new Image();
+                    img.crossOrigin = "anonymous";
+                    img.src = mapaImg.src;
+                    await new Promise((resolve, reject) => {
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0);
+                            mapaDataUrl = canvas.toDataURL('image/png');
+                            resolve();
+                        };
+                        img.onerror = reject;
+                    });
+                } catch (e) {
+                    mapaDataUrl = null;
+                }
+            }
+            if (!mapaDataUrl) {
+                mapaDataUrl = null;
+                try {
+                    const resp = await fetch("https://maps.gstatic.com/mapfiles/api-3/images/google_gray.svg");
+                    if (resp.ok) {
+                        const blob = await resp.blob();
+                        mapaDataUrl = await new Promise(resolve => {
+                            const reader = new FileReader();
+                            reader.onloadend = () => resolve(reader.result);
+                            reader.readAsDataURL(blob);
+                        });
+                    }
+                } catch (e) {
+                    mapaDataUrl = null;
+                }
+            }
+
+            // --- DISEÑO TIPO TABLA DE EXCEL --- (más compacto)
+            // Cabecera con logo, título y foto tipo carnet en la parte superior derecha
+            doc.setLineWidth(0.8);
+            doc.setDrawColor(44, 130, 201);
+            doc.setFillColor(230, 240, 255);
+            doc.roundedRect(10, 10, 190, 22, 2, 2, 'FD');
+            if (logoDataUrl) doc.addImage(logoDataUrl, 'PNG', 13, 12, 15, 15);
+            if (fotoDataUrl) doc.addImage(fotoDataUrl, 'JPEG', 180, 12, 17, 17); // Foto carnet más pequeña
+
+            doc.setFontSize(10);
+            doc.setTextColor(44, 130, 201);
+            doc.setFont(undefined, 'bold');
+            doc.text('Unidad Educativa Victor Manuel Guzmán', 32, 18);
+            doc.setFontSize(9);
+            doc.text('FICHA DE INSCRIPCIÓN', 32, 24);
+            doc.setFont(undefined, 'normal');
+            doc.setTextColor(0,0,0);
+
+            // Tabla de datos (más pequeña)
+            let y = 35;
+            const col1 = 12, col2 = 57, col3 = 102, col4 = 147;
+            const cellW = 45, cellH = 6;
+
+            // Helper para celda con borde y color
+            function cell(x, y, w, h, text, opts = {}) {
+                doc.setDrawColor(180, 180, 180);
+                doc.setLineWidth(0.3);
+                if (opts.header) {
+                    // Cambia el color a un azul más claro (por ejemplo: rgb(173, 208, 245))
+                    doc.setFillColor(173, 208, 245);
+                    doc.setTextColor(44,130,201);
+                    doc.rect(x, y, w, h, 'FD');
+                    doc.setFont(undefined, 'bold');
+                } else if (opts.section) {
+                    doc.setFillColor(230, 240, 255);
+                    doc.setTextColor(44,130,201);
+                    doc.rect(x, y, w, h, 'FD');
+                    doc.setFont(undefined, 'bold');
+                } else {
+                    doc.setFillColor(255,255,255);
+                    doc.setTextColor(0,0,0);
+                    doc.rect(x, y, w, h, 'FD');
+                    doc.setFont(undefined, 'normal');
+                }
+                doc.setFontSize(7.5);
+                doc.text(String(text), x + 1.5, y + 4.2, {maxWidth: w-3});
+            }
+
+            // Extraer datos del resumen de forma segura
+            const tds = resumen.querySelectorAll('td');
+            function safeText(idx) {
+                return tds[idx] ? tds[idx].innerText : '';
+            }
+
+            // Datos académicos
+            cell(col1, y, 180, cellH, 'DATOS ACADÉMICOS', {header:true});
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Periodo:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(1));
+            cell(col3, y, cellW, cellH, 'Curso:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(3));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Especialidad:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(5));
+            cell(col3, y, cellW, cellH, 'Institución:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(7));
+
+            // Datos del estudiante
+            y += cellH;
+            cell(col1, y, 180, cellH, 'DATOS DEL ESTUDIANTE', {header:true});
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Apellidos:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(9));
+            cell(col3, y, cellW, cellH, 'Nombres:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(11));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Cédula:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(13));
+            cell(col3, y, cellW, cellH, 'Etnia:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(15));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Nacionalidad:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(17));
+            cell(col3, y, cellW, cellH, 'Tipo de Sangre:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(19));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Fecha Nac.:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(21));
+            cell(col3, y, cellW, cellH, 'Sexo:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(23));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Teléfono:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(25));
+            cell(col3, y, cellW, cellH, 'Correo:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(27));
+
+            // Dirección
+            y += cellH;
+            cell(col1, y, 180, cellH, 'DIRECCIÓN', {header:true});
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Calle Principal:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(31));
+            cell(col3, y, cellW, cellH, 'Calle Secundaria:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(33));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Provincia:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(35));
+            cell(col3, y, cellW, cellH, 'Cantón:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(37));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Parroquia:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(39));
+            cell(col3, y, cellW, cellH, 'Barrio:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(41));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Nro. Casa:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(43));
+            cell(col3, y, cellW, cellH, 'Referencia:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(45));
+
+            // Padre
+            y += cellH;
+            cell(col1, y, 180, cellH, 'PADRE', {header:true});
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Nombre:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(49));
+            cell(col3, y, cellW, cellH, 'Cédula:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(51));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Ocupación:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(53));
+            cell(col3, y, cellW, cellH, 'Email:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(55));
+
+            // Madre
+            y += cellH;
+            cell(col1, y, 180, cellH, 'MADRE', {header:true});
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Nombre:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(57));
+            cell(col3, y, cellW, cellH, 'Cédula:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(59));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Ocupación:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(61));
+            cell(col3, y, cellW, cellH, 'Email:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(63));
+
+            // Representante
+            y += cellH;
+            cell(col1, y, 180, cellH, 'REPRESENTANTE', {header:true});
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Nombre:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(65));
+            cell(col3, y, cellW, cellH, 'Cédula:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(67));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Ocupación:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(69));
+            cell(col3, y, cellW, cellH, 'Email:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(71));
+
+            // Contactos de emergencia
+            y += cellH;
+            cell(col1, y, 180, cellH, 'CONTACTOS DE EMERGENCIA', {header:true});
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Contacto 1:', {section:true});
+            cell(col2, y, cellW*3, cellH, safeText(73));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Contacto 2:', {section:true});
+            cell(col2, y, cellW*3, cellH, safeText(75));
+
+            // --- SEGUNDA HOJA: MAPA ---
+            doc.addPage();
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(44, 130, 201);
+            doc.text('Ubicación en el Mapa', 105, 18, {align:'center'});
+            doc.setFont(undefined, 'normal');
+            doc.setTextColor(0,0,0);
+            doc.setDrawColor(44, 130, 201);
+            doc.setLineWidth(0.8);
+            doc.roundedRect(25, 25, 160, 90, 4, 4, 'D');
+            if (mapaDataUrl) {
+                try {
+                    doc.addImage(mapaDataUrl, 'PNG', 30, 30, 150, 80);
+                } catch (e) {
+                    doc.setFontSize(10);
+                    doc.text('No se pudo cargar el mapa.', 105, 70, {align:'center'});
+                }
+            }
+
+            doc.save('ficha-inscripcion.pdf');
+        };
+
+        // Botón finalizar (redirige a inicio)
+        document.getElementById('btn-finalizar').onclick = function() {
+            window.location.href = "index.html";
+        };
+
+        // Modificar activarPasoWizard para el paso 8
+        function activarPasoWizard(paso) {
+            document.querySelectorAll('.matricula-step').forEach(step => {
+                step.classList.remove('active');
+                step.querySelector('.matricula-step-icon').style.background = '#f3c14b';
+                step.querySelector('.matricula-step-title').style.color = '#888';
+            });
+            if (paso === 1) {
+                document.getElementById('wizard-academicos').classList.add('active');
+                document.getElementById('wizard-academicos').querySelector('.matricula-step-icon').style.background = '#2f5597';
+                document.getElementById('wizard-academicos').querySelector('.matricula-step-title').style.color = '#2f5597';
+            }
+            if (paso === 2) {
+                document.getElementById('wizard-estudiantes').classList.add('active');
+                document.getElementById('wizard-estudiantes').querySelector('.matricula-step-icon').style.background = '#2f5597';
+                document.getElementById('wizard-estudiantes').querySelector('.matricula-step-title').style.color = '#2f5597';
+            }
+            if (paso === 3) {
+                document.getElementById('wizard-direccion').classList.add('active');
+                document.getElementById('wizard-direccion').querySelector('.matricula-step-icon').style.background = '#2f5597';
+                document.getElementById('wizard-direccion').querySelector('.matricula-step-title').style.color = '#2f5597';
+            }
+            if (paso === 4) {
+                document.getElementById('wizard-padre').classList.add('active');
+                document.getElementById('wizard-padre').querySelector('.matricula-step-icon').style.background = '#2f5597';
+                document.getElementById('wizard-padre').querySelector('.matricula-step-title').style.color = '#2f5597';
+            }
+            if (paso === 5) {
+                document.getElementById('wizard-madre').classList.add('active');
+                document.getElementById('wizard-madre').querySelector('.matricula-step-icon').style.background = '#2f5597';
+                document.getElementById('wizard-madre').querySelector('.matricula-step-title').style.color = '#2f5597';
+            }
+            if (paso === 6) {
+                document.getElementById('wizard-representante').classList.add('active');
+                document.getElementById('wizard-representante').querySelector('.matricula-step-icon').style.background = '#2f5597';
+                document.getElementById('wizard-representante').querySelector('.matricula-step-title').style.color = '#2f5597';
+            }
+            if (paso === 7) {
+                document.getElementById('wizard-emergencia').classList.add('active');
+                document.getElementById('wizard-emergencia').querySelector('.matricula-step-icon').style.background = '#2f5597';
+                document.getElementById('wizard-emergencia').querySelector('.matricula-step-title').style.color = '#2f5597';
+            }
+            if (paso === 8) {
+                document.getElementById('wizard-resumen').classList.add('active');
+                document.getElementById('wizard-resumen').querySelector('.matricula-step-icon').style.background = '#2f5597';
+                document.getElementById('wizard-resumen').querySelector('.matricula-step-title').style.color = '#2f5597';
+            }
+        }
+
+        // Al cargar, mostrar solo el wizard una vez y el paso 1 activo
+        window.onload = function() {
+            activarPasoWizard(1);
+            document.getElementById('paso1-form').style.display = 'block';
+            document.getElementById('paso2-form').style.display = 'none';
+            document.getElementById('paso3-form').style.display = 'none';
+            document.getElementById('paso4-form').style.display = 'none';
+            document.getElementById('paso5-form').style.display = 'none';
+            document.getElementById('paso6-form').style.display = 'none';
+            document.getElementById('paso7-form').style.display = 'none';
+            document.getElementById('paso8-form').style.display = 'none';
+        };
+
+        // Inicializar Google Maps pequeño y arrastrable
+        function inicializarMapaDireccion() {
+            const defaultLatLng = { lat: -0.3392, lng: -78.1223 }; // Cambia por tu ubicación por defecto
+            const latInput = document.getElementById('latitud');
+            const lngInput = document.getElementById('longitud');
+            const map = new google.maps.Map(document.getElementById('mapa-direccion'), {
+                center: defaultLatLng,
+                zoom: 16
+            });
+            let marker = new google.maps.Marker({
+                position: defaultLatLng,
+                map: map,
+                draggable: true,
+                icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+            });
+            latInput.value = defaultLatLng.lat;
+            lngInput.value = defaultLatLng.lng;
+            marker.addListener('dragend', function(e) {
+                latInput.value = e.latLng.lat();
+                lngInput.value = e.latLng.lng();
+            });
+            map.addListener('click', function(e) {
+                marker.setPosition(e.latLng);
+                latInput.value = e.latLng.lat();
+                lngInput.value = e.latLng.lng();
+            });
+        }
     </script>
-    <script src="script.js" defer></script> 
+    <script src="script.js" defer></script>
 </body>
 </html>

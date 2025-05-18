@@ -2,329 +2,187 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <title>Solicitudes de Matriculación</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitud de Matriculación</title>
     <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="shortcut icon" href="unidad-educativa-logo.png" />
+    <style>
+        .solicitudes-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .solicitudes-tab-btn {
+            background: #2f5597;
+            color: #fff;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            padding: 0.8rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            outline: none;
+        }
+        .solicitudes-tab-btn.active, .solicitudes-tab-btn:hover {
+            background: #548235;
+            color: #fff;
+        }
+        .solicitudes-filtros {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .solicitudes-filtros input {
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            min-width: 180px;
+        }
+        .solicitudes-filtros button {
+            border-radius: 6px;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            background: #2f5597;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .solicitudes-filtros button:hover {
+            background: #548235;
+        }
+        .solicitudes-table-container {
+            max-width: 1200px;
+            margin: 0 auto 3rem auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(44,130,201,0.08);
+            padding: 2rem 1rem;
+        }
+        .solicitudes-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .solicitudes-table th, .solicitudes-table td {
+            padding: 12px 8px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .solicitudes-table th {
+            background: #2f5597;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .solicitudes-table tbody tr:nth-child(even) {
+            background: #f7fafd;
+        }
+        .solicitudes-table tbody tr:hover {
+            background: #eaf6ea;
+        }
+        .verificar-btn {
+            background: #548235;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .verificar-btn:hover {
+            background: #2f5597;
+        }
+        .pdf-link {
+            color: #2f5597;
+            font-weight: bold;
+            text-decoration: underline;
+        }
+        .pdf-link:hover {
+            color: #548235;
+        }
+        .estado-label {
+            font-weight: bold;
+            color: #548235;
+        }
+        @media (max-width: 900px) {
+            .solicitudes-table-container { padding: 1rem 0.2rem; }
+            .solicitudes-table th, .solicitudes-table td { font-size: 0.85rem; padding: 8px 4px; }
+            .solicitudes-filtros input { min-width: 120px; }
+        }
+        @media (max-width: 600px) {
+            .solicitudes-table-container { padding: 0.5rem 0; }
+            .solicitudes-table th, .solicitudes-table td { font-size: 0.75rem; padding: 6px 2px; }
+            .solicitudes-filtros { flex-direction: column; gap: 0.5rem; }
+        }
+    </style>
 </head>
 <body>
-    <div class="top-info-bar">
-        <p> Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador | uevmg@gmail.com</p>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
     </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
     <header>
         <div class="header-top">
             <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
             <div class="header-text">
-                <h1>Unidad Educativa "Victor Manuel Guzman"</h1>
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
                 <p>50 años de Educación Estudiantil</p>
             </div>
-            <div class="auth-links">
-                <a href="registro.html">Registrarse</a>
-                <a href="#" id="logout">Cerrar Sesión</a>
+            <div class="auth-links"></div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main style="margin-top: 120px;">
+        <div class="centered-section" style="background: #f8fafc; border-radius: 16px; box-shadow: 0 4px 24px rgba(44,130,201,0.10); padding: 2rem 0;">
+            <h2 class="section-title" style="color:#2f5597;text-align:center;">Solicitudes de Matriculación</h2>
+            <div class="solicitudes-tabs">
+                <button id="btn-entrantes" class="solicitudes-tab-btn active">Solicitudes Entrantes</button>
+                <button id="btn-verificadas" class="solicitudes-tab-btn">Solicitudes Verificadas</button>
+            </div>
+            <div class="solicitudes-filtros">
+                <input type="text" id="filtro-cedula" placeholder="Buscar por cédula">
+                <input type="text" id="filtro-nombres" placeholder="Buscar por nombres">
+                <input type="text" id="filtro-curso" placeholder="Buscar por curso/grado">
+                <input type="text" id="filtro-especialidad" placeholder="Buscar por especialidad">
+                <button id="btn-filtrar">Filtrar</button>
+                <button id="btn-limpiar" style="background:#ccc;color:#222;">Limpiar</button>
+            </div>
+            <div class="solicitudes-table-container">
+                <div id="tabla-solicitudes"></div>
             </div>
         </div>
-        <nav>
-            <ul class="menu">
-                <li><a href="index.html">Inicio</a></li>
-                <li class="dropdown">
-                    <a href="#">Institución</a>
-                    <ul class="submenu">
-                        <li><a href="autoridades.html">Autoridades</a></li>
-                        <li><a href="index.html#consejo">Consejo Ejecutivo</a></li>
-                        <li><a href="index.html#historia">Historia</a></li>
-                        <li><a href="index.html#patrono">Patrono</a></li>
-                        <li><a href="index.html#uniforme">Uniforme</a></li>
-                        <li><a href="index.html#himno">Himno</a></li>
-                        <li><a href="index.html#datos">Datos Informativos</a></li>
-                    </ul>
-                </li>
-                <li><a href="index.html#docentes">Docentes</a></li>
-                <li><a href="index.html#dece">DECE</a></li>
-                <li><a href="index.html#recursos">Recursos Didácticos</a></li>
-                <li><a href="index.html#fotos">Fotos</a></li>
-                <li><a href="ubicacion.html">Ubicación</a></li>
-                <li class="dropdown">
-                    <a href="#">Registro</a>
-                    <ul class="submenu">
-                        <li><a href="matriculacion.html" target="_blank">Matriculación</a></li>
-                        <li><a href="requisitos.html" target="_blank">Requisitos</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="centered-section">
-            <h2>Solicitudes de Matriculación</h2>
-            <div class="category">
-                <div class="category-header">
-                    <h3>Solicitudes Entrantes</h3>
-                    <button class="toggle-category" data-category="entrantes">▼</button>
-                </div>
-                <div id="solicitudes-entrantes" class="category-content">
-                    <!-- Las solicitudes entrantes se cargarán aquí dinámicamente -->
-                </div>
-            </div>
-            <div class="category">
-                <div class="category-header">
-                    <h3>Solicitudes Verificadas</h3>
-                    <button class="toggle-category" data-category="verificadas">▼</button>
-                </div>
-                <div id="solicitudes-verificadas" class="category-content"> 
-                    <!-- Las solicitudes verificadas se cargarán aquí dinámicamente -->
-                </div>
-            </div>
-            
-        </section>
     </main>
-    <script type="module">
-        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-        // Configuración de Supabase
-        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
-        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE"; // Reemplaza con la nueva clave válida
-        const supabase = createClient(supabaseUrl, supabaseKey);
-
-        document.addEventListener("DOMContentLoaded", async () => {
-            const usuarioActivo = localStorage.getItem('usuarioActivo');
-
-            if (!usuarioActivo) {
-                alert('No tienes permisos para acceder a esta página.');
-                window.location.href = 'index.html';
-                return;
-            }
-
-            try {
-                const { data: usuarios, error } = await supabase
-                    .from('usuarios')
-                    .select('rol')
-                    .eq('email', usuarioActivo);
-
-                if (error || !usuarios || usuarios.length === 0 || (usuarios[0].rol !== 'administrador' && usuarios[0].rol !== 'admin')) {
-                    alert('No tienes permisos para acceder a esta página.');
-                    window.location.href = 'index.html';
-                }
-            } catch (err) {
-                console.error('Error al verificar permisos:', err);
-                alert('Ocurrió un error inesperado. Serás redirigido al inicio.');
-                window.location.href = 'index.html';
-            }
-
-            const solicitudesEntrantesContainer = document.getElementById("solicitudes-entrantes");
-            const solicitudesVerificadasContainer = document.getElementById("solicitudes-verificadas");
-            const menu = document.querySelector('.menu');
-            const adminEmail = localStorage.getItem('adminEmail') || 'admin@ejemplo.com';
-            const authLinks = document.querySelector('.auth-links');
-
-            // Función para cargar solicitudes
-            async function cargarSolicitudes() {
-                try {
-                    const { data: solicitudes, error } = await supabase
-                        .from('solicitudesMatriculacion')
-                        .select('*');
-
-                    if (error) {
-                        console.error('Error al cargar solicitudes:', error.message);
-                        return;
-                    }
-
-                    solicitudesEntrantesContainer.innerHTML = '';
-                    solicitudesVerificadasContainer.innerHTML = '';
-
-                    solicitudes.forEach((solicitud, index) => {
-                        const solicitudDiv = document.createElement("div");
-                        solicitudDiv.classList.add("solicitud");
-
-                        solicitudDiv.innerHTML = `
-                            <div class="solicitud-header">
-                                <h3>Solicitud #${index + 1}</h3>
-                                <button class="toggle-btn" data-index="${index}">▼</button>
-                            </div>
-                            <div class="solicitud-content" id="solicitud-content-${index}" style="display: none;">
-                                <h4 class="section-header">Datos del Estudiante</h4>
-                                <p><strong>Código:</strong> ${solicitud.codigo}</p>
-                                <p><strong>Apellidos:</strong> ${solicitud.apellidos}</p>
-                                <p><strong>Nombres:</strong> ${solicitud.nombres}</p>
-                                <p><strong>Cédula:</strong> ${solicitud.cedula_estudiante}</p>
-                                <p><strong>Provincia de Nacimiento:</strong> ${solicitud.provincia_nacimiento}</p>
-                                <p><strong>Cantón:</strong> ${solicitud.canton}</p>
-                                <p><strong>Género:</strong> ${solicitud.genero}</p>
-                                <p><strong>Fecha de Nacimiento:</strong> ${solicitud.fecha_nacimiento}</p>
-                                <p><strong>Nacionalidad:</strong> ${solicitud.nacionalidad}</p>
-                                <p><strong>Institución de Procedencia:</strong> ${solicitud.institucion_procede}</p>
-                                <h4 class="section-header">Datos del Representante</h4>
-                                <p><strong>Apellidos y Nombres:</strong> ${solicitud.representante_nombres}</p>
-                                <p><strong>Cédula:</strong> ${solicitud.representante_cedula}</p>
-                                <p><strong>Teléfono Convencional:</strong> ${solicitud.representante_telefono}</p>
-                                <p><strong>Número Celular:</strong> ${solicitud.representante_celular}</p>
-                                <p><strong>Profesión:</strong> ${solicitud.representante_profesion}</p>
-                                <p><strong>Email:</strong> ${solicitud.representante_email}</p>
-                                <p><strong>Dirección del Trabajo:</strong> ${solicitud.direccion_trabajo_representante}</p>
-                                <p><strong>Vive con el Estudiante:</strong> ${solicitud.vive_con_estudiante_representante ? 'Sí' : 'No'}</p>
-                                <p><strong>Es Representante del Estudiante:</strong> ${solicitud.es_representante_representante ? 'Sí' : 'No'}</p>
-                                <p><strong>Nacionalidad:</strong> ${solicitud.nacionalidad_representante}</p>
-                                <h4 class="section-header">Datos de la Madre</h4>
-                                <p><strong>Apellidos y Nombres:</strong> ${solicitud.madre_nombres}</p>
-                                <p><strong>Cédula:</strong> ${solicitud.madre_cedula}</p>
-                                <p><strong>Teléfono Convencional:</strong> ${solicitud.madre_telefono}</p>
-                                <p><strong>Número Celular:</strong> ${solicitud.madre_celular}</p>
-                                <p><strong>Profesión:</strong> ${solicitud.madre_profesion}</p>
-                                <p><strong>Email:</strong> ${solicitud.madre_email}</p>
-                                <p><strong>Dirección del Trabajo:</strong> ${solicitud.direccion_trabajo_madre}</p>
-                                <p><strong>Vive con el Estudiante:</strong> ${solicitud.vive_con_estudiante_madre ? 'Sí' : 'No'}</p>
-                                <p><strong>Es Representante del Estudiante:</strong> ${solicitud.es_representante_madre ? 'Sí' : 'No'}</p>
-                                <p><strong>Nacionalidad:</strong> ${solicitud.nacionalidad_madre}</p>
-                                <h4 class="section-header">Datos del Padre</h4>
-                                <p><strong>Apellidos y Nombres:</strong> ${solicitud.padre_nombres}</p>
-                                <p><strong>Cédula:</strong> ${solicitud.padre_cedula}</p>
-                                <p><strong>Teléfono Convencional:</strong> ${solicitud.padre_telefono}</p>
-                                <p><strong>Número Celular:</strong> ${solicitud.padre_celular}</p>
-                                <p><strong>Profesión:</strong> ${solicitud.padre_profesion}</p>
-                                <p><strong>Email:</strong> ${solicitud.padre_email}</p>
-                                <p><strong>Dirección del Trabajo:</strong> ${solicitud.direccion_trabajo_padre}</p>
-                                <p><strong>Vive con el Estudiante:</strong> ${solicitud.vive_con_estudiante_padre ? 'Sí' : 'No'}</p>
-                                <p><strong>Es Representante del Estudiante:</strong> ${solicitud.es_representante_padre ? 'Sí' : 'No'}</p>
-                                <p><strong>Nacionalidad:</strong> ${solicitud.nacionalidad_padre}</p>
-                                <h4 class="section-header">Ubicación de la Vivienda</h4>
-                                <p><strong>Provincia:</strong> ${solicitud.provincia_vivienda}</p>
-                                <p><strong>Ciudad:</strong> ${solicitud.ciudad}</p>
-                                <p><strong>Parroquia:</strong> ${solicitud.parroquia}</p>
-                                <p><strong>Sector:</strong> ${solicitud.sector}</p>
-                                <p><strong>Dirección:</strong> ${solicitud.direccion}</p>
-                                <p><strong>Teléfono Convencional:</strong> ${solicitud.telefono_convencional}</p>
-                                <h4 class="section-header">Contacto de Emergencia</h4>
-                                <p><strong>Nombres y Apellidos:</strong> ${solicitud.emergencia_nombres}</p>
-                                <p><strong>Parentesco:</strong> ${solicitud.emergencia_parentesco}</p>
-                                <p><strong>Teléfono:</strong> ${solicitud.telefono_emergencia}</p>
-                                <h4 class="section-header">Ubicación</h4>
-                                <p><strong>Latitud:</strong> ${solicitud.latitud}</p>
-                                <p><strong>Longitud:</strong> ${solicitud.longitud}</p>
-                                <div id="map-${index}" style="width: 100%; height: 300px; border: 1px solid #ccc; margin-top: 1rem;"></div>
-                                <button class="verificar-btn" data-id="${solicitud.id}" data-verificado="${solicitud.verificado}">
-                                    ${solicitud.verificado ? 'Mover a Entrantes' : 'Verificar Solicitud'}
-                                </button>
-                            </div>
-                        `;
-
-                        const container = solicitud.verificado ? solicitudesVerificadasContainer : solicitudesEntrantesContainer;
-                        container.appendChild(solicitudDiv);
-
-                        // Mostrar el mapa
-                        const map = new google.maps.Map(document.getElementById(`map-${index}`), {
-                            center: { lat: parseFloat(solicitud.latitud), lng: parseFloat(solicitud.longitud) },
-                            zoom: 15,
-                        });
-
-                        new google.maps.Marker({
-                            position: { lat: parseFloat(solicitud.latitud), lng: parseFloat(solicitud.longitud) },
-                            map: map,
-                        });
-                    });
-                } catch (err) {
-                    console.error('Error inesperado al cargar solicitudes:', err);
-                }
-            }
-
-            // Función para cambiar el estado de verificación de una solicitud
-            async function cambiarEstadoSolicitud(id, verificado) {
-                try {
-                    const { error } = await supabase
-                        .from('solicitudesMatriculacion')
-                        .update({ verificado })
-                        .eq('id', id);
-
-                    if (error) {
-                        console.error('Error al cambiar el estado de la solicitud:', error.message);
-                        alert('Error al cambiar el estado de la solicitud.');
-                    } else {
-                        cargarSolicitudes();
-                    }
-                } catch (err) {
-                    console.error('Error inesperado al cambiar el estado de la solicitud:', err);
-                }
-            }
-
-            // Delegación de eventos para manejar clics en los botones de verificar
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('verificar-btn')) {
-                    const id = e.target.dataset.id;
-                    const verificado = e.target.dataset.verificado === 'true' ? false : true;
-                    cambiarEstadoSolicitud(id, verificado);
-                }
-            });
-
-            // Delegación de eventos para minimizar/maximizar solicitudes
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('toggle-btn')) {
-                    const index = e.target.dataset.index;
-                    const content = document.getElementById(`solicitud-content-${index}`);
-                    const isVisible = content.style.display !== 'none';
-                    content.style.display = isVisible ? 'none' : 'block';
-                    e.target.textContent = isVisible ? '▼' : '▲';
-                }
-            });
-
-            // Delegación de eventos para minimizar/maximizar categorías
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('toggle-category')) {
-                    const category = e.target.dataset.category;
-                    const content = document.getElementById(`solicitudes-${category}`);
-                    const isVisible = content.style.display !== 'none';
-                    content.style.display = isVisible ? 'none' : 'block';
-                    e.target.textContent = isVisible ? '▼' : '▲';
-                }
-            });
-
-            cargarSolicitudes();
-
-            // Cargar el script de Google Maps
-            const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE`;
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
-
-            if (usuarioActivo) {
-                // Mostrar "Matricularse" y "Cerrar Sesión"
-                authLinks.innerHTML = `
-                    <a href="matricularse.html">Matricularse</a>
-                    <a href="#" id="logout">Cerrar Sesión</a>
-                `;
-                document.getElementById('logout').addEventListener('click', () => {
-                    localStorage.removeItem('usuarioActivo');
-                    alert('Sesión cerrada exitosamente.');
-                    window.location.href = 'index.html';
-                });
-
-                // Verificar si el usuario tiene rol de administrador o admin
-                try {
-                    const { data: usuarios, error } = await supabase
-                        .from('usuarios')
-                        .select('rol')
-                        .eq('email', usuarioActivo);
-
-                    if (error) {
-                        console.error('Error al verificar el rol del usuario:', error.message);
-                    } else if (usuarios && usuarios.length > 0 && (usuarios[0].rol === 'administrador' || usuarios[0].rol === 'admin')) {
-                        // Agregar opción de "Administración" al menú
-                        if (!menu.querySelector('a[href="verUsuarios.html"]')) {
-                            const adminMenuItem = document.createElement('li');
-                            adminMenuItem.classList.add('dropdown');
-                            adminMenuItem.innerHTML = `
-                                <a href="#">Administración</a>
-                                <ul class="submenu">
-                                    <li><a href="verUsuarios.html">Ver Usuarios</a></li>
-                                    <li><a href="solicitudMatriculacion.html">Solicitudes de Matriculación</a></li>
-                                </ul>
-                            `;
-                            menu.appendChild(adminMenuItem);
-                        }
-                    }
-                } catch (err) {
-                    console.error('Error inesperado al verificar el rol del usuario:', err);
-                }
-            }
-        });
-    </script>
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -338,7 +196,7 @@
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="registro.html">Registro</a></li>
-                    <li><a href="autoridades.html">Autoridades</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -348,8 +206,203 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo
+                +-
+            </p>
         </div>
     </footer>
+    <script>
+        const usuarioActivo = localStorage.getItem('usuarioActivo');
+        if (!usuarioActivo) {
+            alert('Debe iniciar sesión para acceder.');
+            window.location.href = 'login.html';
+        }
+        async function verificarRol() {
+            const supabase = window.supabase.createClient(
+                "https://zeijayrxciyzymysbyvp.supabase.co",
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE"
+            );
+            const { data, error } = await supabase
+                .from('usuarios')
+                .select('rol')
+                .eq('email', usuarioActivo);
+            if (!data || !data[0] || (data[0].rol !== 'admin' && data[0].rol !== 'administrador')) {
+                alert('Acceso restringido solo para administradores.');
+                window.location.href = 'index.html';
+            }
+        }
+        verificarRol();
+
+        const supabase = window.supabase.createClient(
+            "https://zeijayrxciyzymysbyvp.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE"
+        );
+
+        let estadoActual = 'entrante';
+
+        document.getElementById('btn-entrantes').onclick = () => {
+            estadoActual = 'entrante';
+            document.getElementById('btn-entrantes').classList.add('active');
+            document.getElementById('btn-verificadas').classList.remove('active');
+            cargarSolicitudes();
+        };
+        document.getElementById('btn-verificadas').onclick = () => {
+            estadoActual = 'verificada';
+            document.getElementById('btn-verificadas').classList.add('active');
+            document.getElementById('btn-entrantes').classList.remove('active');
+            cargarSolicitudes();
+        };
+        document.getElementById('btn-filtrar').onclick = cargarSolicitudes;
+        document.getElementById('btn-limpiar').onclick = () => {
+            document.getElementById('filtro-cedula').value = '';
+            document.getElementById('filtro-nombres').value = '';
+            document.getElementById('filtro-curso').value = '';
+            document.getElementById('filtro-especialidad').value = '';
+            cargarSolicitudes();
+        };
+
+        async function cargarSolicitudes() {
+            const cedula = document.getElementById('filtro-cedula').value.trim();
+            const nombres = document.getElementById('filtro-nombres').value.trim();
+            const curso = document.getElementById('filtro-curso').value.trim();
+            const especialidad = document.getElementById('filtro-especialidad').value.trim();
+
+            let { data: solicitudes, error } = await supabase
+                .from('solicitud_matriculacion')
+                .select('id, estado, pdf_url, fecha_creacion, fecha_verificacion, verificado_por, id_estudiante')
+                .eq('estado', estadoActual)
+                .order('fecha_creacion', { ascending: false });
+
+            if (error) {
+                document.getElementById('tabla-solicitudes').innerHTML = `<p style="color:red;">Error al cargar solicitudes: ${error.message}</p>`;
+                return;
+            }
+            if (!solicitudes || solicitudes.length === 0) {
+                document.getElementById('tabla-solicitudes').innerHTML = `<p style="text-align:center;">No hay solicitudes en este estado.</p>`;
+                return;
+            }
+
+            const idsEstudiantes = solicitudes.map(s => s.id_estudiante).filter(Boolean);
+            let estudiantes = [];
+            if (idsEstudiantes.length > 0) {
+                const { data: ests, error: errEst } = await supabase
+                    .from('estudiante')
+                    .select('id_estudiante, apellidos, nombres, id_cedula, correo, archivo_url, id_inscripcion')
+                    .in('id_estudiante', idsEstudiantes);
+                if (!errEst && ests) estudiantes = ests;
+            }
+
+            const idsInscripciones = estudiantes.map(e => e.id_inscripcion).filter(Boolean);
+            let inscripciones = [];
+            if (idsInscripciones.length > 0) {
+                const { data: inscs, error: errIns } = await supabase
+                    .from('solicitud_inscripcion')
+                    .select('id, id_curso, especialidad, paralelo, periodo')
+                    .in('id', idsInscripciones);
+                if (!errIns && inscs) inscripciones = inscs;
+            }
+
+            const idsCursos = inscripciones.map(i => i.id_curso).filter(Boolean);
+            let cursos = [];
+            if (idsCursos.length > 0) {
+                const { data: cursosData, error: errCursos } = await supabase
+                    .from('curso_nivel')
+                    .select('id_curso, nombre_curso')
+                    .in('id_curso', idsCursos);
+                if (!errCursos && cursosData) cursos = cursosData;
+            }
+
+            function getEstudiante(id) {
+                return estudiantes.find(e => e.id_estudiante === id) || {};
+            }
+            function getInscripcion(id) {
+                return inscripciones.find(i => i.id === id) || {};
+            }
+            function getCurso(id_curso) {
+                return cursos.find(c => c.id_curso === id_curso) || {};
+            }
+
+            let filtradas = solicitudes.map(s => {
+                const est = getEstudiante(s.id_estudiante);
+                const insc = getInscripcion(est.id_inscripcion);
+                const cursoObj = getCurso(insc.id_curso);
+                return {
+                    ...s,
+                    estudiante: est,
+                    inscripcion: insc,
+                    curso: cursoObj
+                };
+            }).filter(s => {
+                let ok = true;
+                if (cedula && !(s.estudiante.id_cedula || '').toString().toLowerCase().includes(cedula.toLowerCase())) ok = false;
+                if (nombres && !(s.estudiante.nombres || '').toLowerCase().includes(nombres.toLowerCase())) ok = false;
+                if (curso && !(s.curso.nombre_curso || '').toLowerCase().includes(curso.toLowerCase())) ok = false;
+                if (especialidad && !(s.inscripcion.especialidad || '').toLowerCase().includes(especialidad.toLowerCase())) ok = false;
+                return ok;
+            });
+
+            if (filtradas.length === 0) {
+                document.getElementById('tabla-solicitudes').innerHTML = `<p style="text-align:center;">No hay solicitudes que coincidan con los filtros.</p>`;
+                return;
+            }
+
+            let html = `<table class="solicitudes-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Apellidos</th>
+                        <th>Nombres</th>
+                        <th>Cédula</th>
+                        <th>Curso</th>
+                        <th>Especialidad</th>
+                        <th>Correo</th>
+                        <th>PDF</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            for (const s of filtradas) {
+                html += `<tr>
+                    <td>${(s.fecha_creacion || '').substring(0, 10)}</td>
+                    <td>${s.estudiante.apellidos || ''}</td>
+                    <td>${s.estudiante.nombres || ''}</td>
+                    <td>${s.estudiante.id_cedula || ''}</td>
+                    <td>${s.curso.nombre_curso || ''}</td>
+                    <td>${s.inscripcion.especialidad || ''}</td>
+                    <td>${s.estudiante.correo || ''}</td>
+                    <td>${s.pdf_url ? `<a class="pdf-link" href="${s.pdf_url}" target="_blank">Ver PDF</a>` : 'No disponible'}</td>
+                    <td>
+                        ${estadoActual === 'entrante'
+                            ? `<button class="verificar-btn" onclick="verificarSolicitud(${s.id})">Verificar</button>`
+                            : (s.verificado_por ? `<span class="estado-label">Verificado por ${s.verificado_por}</span>` : '<span class="estado-label">Verificado</span>')}
+                    </td>
+                </tr>`;
+            }
+            html += `</tbody></table>`;
+            document.getElementById('tabla-solicitudes').innerHTML = html;
+        }
+
+        window.verificarSolicitud = async function(id) {
+            const confirmar = confirm('¿Está seguro de verificar esta solicitud?');
+            if (!confirmar) return;
+            const { error } = await supabase
+                .from('solicitud_matriculacion')
+                .update({
+                    estado: 'verificada',
+                    fecha_verificacion: new Date().toISOString(),
+                    verificado_por: usuarioActivo
+                })
+                .eq('id', id);
+            if (error) {
+                alert('Error al verificar: ' + error.message);
+            } else {
+                alert('Solicitud verificada correctamente.');
+                cargarSolicitudes();
+            }
+        };
+
+        cargarSolicitudes();
+    </script>
+    <script src="script.js" defer></script>
 </body>
 </html>

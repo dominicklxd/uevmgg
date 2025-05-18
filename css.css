@@ -926,7 +926,11 @@ header.scrolled .auth-links a {
 }
 
 .fifty-years-images img {
-    width: 45%; /* Ajustar el ancho de las imágenes */
+    width: 100%;
+    min-width: 200px;
+    max-width: 420px;
+    height: 600px;
+    object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para destacar */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -935,6 +939,11 @@ header.scrolled .auth-links a {
 .fifty-years-images img:hover {
     transform: scale(1.05); /* Efecto de zoom al pasar el cursor */
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+}
+
+/* Solo la imagen con enlace muestra el cursor pointer */
+.fifty-years-images a img {
+    cursor: pointer;
 }
 
 .table-container {
