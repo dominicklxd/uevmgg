@@ -1097,7 +1097,7 @@
 
             // Mostrar resumen en vez de redirigir
             mostrarResumenMatricula({
-                paso1, paso2, paso3, paso4, paso5, paso6, paso7
+                paso1, paso2, paso3, paso4, paso5, paso6, paso7, archivo_url
             });
             document.getElementById('paso7-form').style.display = 'none';
             document.getElementById('paso8-form').style.display = 'block';
@@ -1105,13 +1105,16 @@
         };
 
         // NUEVO: Función para mostrar el resumen con tabla, mapa y foto adjunta
-        function mostrarResumenMatricula({paso1, paso2, paso3, paso4, paso5, paso6, paso7}) {
+        function mostrarResumenMatricula({paso1, paso2, paso3, paso4, paso5, paso6, paso7, archivo_url}) {
             // Imagen del mapa usando Google Static Maps API
             const mapaUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${paso3.latitud},${paso3.longitud}&zoom=17&size=500x250&markers=color:red%7C${paso3.latitud},${paso3.longitud}&key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE`;
 
             // Imagen adjunta (si existe)
             let fotoHtml = '';
-            if (window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
+            if (archivo_url) {
+                fotoHtml = `<tr><td><b>Foto Adjunta:</b></td><td><img id="foto-adjunta-preview" src="${archivo_url}" style="max-width:120px;max-height:120px;border-radius:8px;border:1px solid #ccc;" alt="Foto adjunta"></td></tr>`;
+            } else if (window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
+                // fallback local
                 fotoHtml = `<tr><td><b>Foto Adjunta:</b></td><td><img id="foto-adjunta-preview" style="max-width:120px;max-height:120px;border-radius:8px;border:1px solid #ccc;" alt="Foto adjunta"></td></tr>`;
             }
 
@@ -1172,8 +1175,8 @@
                 </table>
             `;
 
-            // Si hay foto adjunta, cargarla en el resumen
-            if (window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
+            // Si hay foto adjunta local y no hay archivo_url, cargarla en el resumen (solo para vista previa local)
+            if (!archivo_url && window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const img = document.getElementById('foto-adjunta-preview');
@@ -1210,19 +1213,33 @@
                 logoDataUrl = null;
             }
 
-            // Foto tipo carnet (adjuntada por el usuario en el campo "archivo")
+            // Foto tipo carnet (usar la imagen del resumen, que ya tiene src con la url pública si existe)
             let fotoDataUrl = null;
-            if (window.archivoEstudiante && window.archivoEstudiante.type && window.archivoEstudiante.type.startsWith('image/')) {
-                fotoDataUrl = await new Promise(resolve => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(window.archivoEstudiante);
-                });
-            } else {
-                // Si no hay archivo, intentar obtener la imagen del resumen (por si acaso)
-                const fotoImg = resumen.querySelector('img[alt="Foto adjunta"]');
-                if (fotoImg && fotoImg.src && fotoImg.src.startsWith('data:')) {
+            const fotoImg = resumen.querySelector('img[alt="Foto adjunta"]');
+            if (fotoImg && fotoImg.src) {
+                if (fotoImg.src.startsWith('data:')) {
                     fotoDataUrl = fotoImg.src;
+                } else {
+                    // Si es una URL pública, conviértela a dataURL para jsPDF
+                    try {
+                        const img = new Image();
+                        img.crossOrigin = "anonymous";
+                        img.src = fotoImg.src;
+                        await new Promise((resolve, reject) => {
+                            img.onload = () => {
+                                const canvas = document.createElement('canvas');
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                const ctx = canvas.getContext('2d');
+                                ctx.drawImage(img, 0, 0);
+                                fotoDataUrl = canvas.toDataURL('image/jpeg');
+                                resolve();
+                            };
+                            img.onerror = reject;
+                        });
+                    } catch (e) {
+                        fotoDataUrl = null;
+                    }
                 }
             }
 
