@@ -677,6 +677,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE"></script>
+    <script src="https://static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
     <script>
     window.addEventListener('DOMContentLoaded', function() {
         // Configuración de Supabase
@@ -1590,21 +1591,22 @@
                 a.remove();
             }, 100);
 
-            // 2. Subir el PDF a Supabase Storage
-            const filePath = `pdfs/ficha_inscripcion_${idSolicitud}_${Date.now()}.pdf`;
-            const { data: uploadData, error: uploadError } = await supabase.storage
-                .from('archivos')
-                .upload(filePath, pdfBlob, { contentType: 'application/pdf', upsert: true });
-            if (uploadError) {
-                mostrarMensajeArriba('No se pudo subir el PDF a la nube: ' + uploadError.message, true);
+            // 2. Subir el PDF a Filestack
+            const filestackClient = filestack.init('AzEI80Y42TJO0FG49T4rtz');
+            const pdfFile = new File([pdfBlob], 'ficha_inscripcion.pdf', { type: 'application/pdf' });
+            let pdfUrl = null;
+            try {
+                const uploadRes = await filestackClient.upload(pdfFile);
+                pdfUrl = uploadRes.url;
+            } catch (err) {
+                mostrarMensajeArriba('No se pudo subir el PDF a Filestack: ' + err.message, true);
                 return;
             }
-            // Obtener la URL pública
-            const { publicUrl } = supabase.storage.from('archivos').getPublicUrl(filePath);
+
             // Guardar la URL en Supabase
             await supabase
                 .from('solicitud_matriculacion')
-                .update({ pdf_url: publicUrl })
+                .update({ pdf_url: pdfUrl })
                 .eq('id', idSolicitud);
 
             mostrarMensajeArriba('PDF guardado en la nube con éxito.', false);
