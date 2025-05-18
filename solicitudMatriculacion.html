@@ -38,7 +38,7 @@
             justify-content: center;
             margin-bottom: 1.5rem;
         }
-        .solicitudes-filtros input {
+        .solicitudes-filtros input, .solicitudes-filtros select {
             border-radius: 6px;
             border: 1px solid #ccc;
             padding: 0.5rem 1rem;
@@ -105,6 +105,20 @@
         .verificar-btn:hover {
             background: #2f5597;
         }
+        .eliminar-btn {
+            background: #d9534f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .eliminar-btn:hover {
+            background: #c9302c;
+        }
         .pdf-link {
             color: #2f5597;
             font-weight: bold;
@@ -120,7 +134,7 @@
         @media (max-width: 900px) {
             .solicitudes-table-container { padding: 1rem 0.2rem; }
             .solicitudes-table th, .solicitudes-table td { font-size: 0.85rem; padding: 8px 4px; }
-            .solicitudes-filtros input { min-width: 120px; }
+            .solicitudes-filtros input, .solicitudes-filtros select { min-width: 120px; }
         }
         @media (max-width: 600px) {
             .solicitudes-table-container { padding: 0.5rem 0; }
@@ -137,25 +151,67 @@
     <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
     <header>
         <div class="header-top">
+            
             <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
             <div class="header-text">
                 <h1>Unidad Educativa </h1>
                 <h1>"Víctor Manuel Guzmán"</h1>
                 <p>50 años de Educación Estudiantil</p>
             </div>
-            <div class="auth-links"></div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
             <nav>
                 <ul class="menu">
                     <li><a href="index.html">Inicio</a></li>
                     <li class="dropdown">
                         <a href="#">Nosotros</a>
                         <ul class="submenu">
-                            <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
                             <li><a href="autoridades.html">Autoridades</a></li>
                             <li><a href="historia.html">Historia</a></li>
                             <li><a href="ambientes.html">Sede y Ambientes</a></li>
                             <li><a href="simbolos.html">Símbolos Institucionales</a></li>
                             <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                           
+                            
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
                         </ul>
                     </li>
                     <li><a href="ubicacion.html">Contactos</a></li>
@@ -173,8 +229,38 @@
             <div class="solicitudes-filtros">
                 <input type="text" id="filtro-cedula" placeholder="Buscar por cédula">
                 <input type="text" id="filtro-nombres" placeholder="Buscar por nombres">
-                <input type="text" id="filtro-curso" placeholder="Buscar por curso/grado">
-                <input type="text" id="filtro-especialidad" placeholder="Buscar por especialidad">
+                <select id="filtro-curso" style="min-width:180px;">
+                    <option value="">Curso/Grado</option>
+                    <option value="Inicial">Inicial</option>
+                    <option value="1ro EGB">1ro EGB</option>
+                    <option value="2do EGB">2do EGB</option>
+                    <option value="3ro EGB">3ro EGB</option>
+                    <option value="4to EGB">4to EGB</option>
+                    <option value="5to EGB">5to EGB</option>
+                    <option value="6to EGB">6to EGB</option>
+                    <option value="7mo EGB">7mo EGB</option>
+                    <option value="8vo EGB">8vo EGB</option>
+                    <option value="9no EGB">9no EGB</option>
+                    <option value="10mo EGB">10mo EGB</option>
+                    <option value="1ro Bachillerato">1ro Bachillerato</option>
+                    <option value="2do Bachillerato">2do Bachillerato</option>
+                    <option value="3ro Bachillerato">3ro Bachillerato</option>
+                </select>
+                <select id="filtro-paralelo" style="min-width:100px;">
+                    <option value="">Paralelo</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                </select>
+                <select id="filtro-especialidad" style="min-width:180px;">
+                    <option value="">Especialidad</option>
+                    <option value="Informática">Informática</option>
+                    <option value="Contabilidad">Contabilidad</option>
+                    <option value="Gestión Administrativa">Gestión Administrativa</option>
+                    <option value="Ciencias">Ciencias</option>
+                </select>
                 <button id="btn-filtrar">Filtrar</button>
                 <button id="btn-limpiar" style="background:#ccc;color:#222;">Limpiar</button>
             </div>
@@ -257,6 +343,7 @@
             document.getElementById('filtro-cedula').value = '';
             document.getElementById('filtro-nombres').value = '';
             document.getElementById('filtro-curso').value = '';
+            document.getElementById('filtro-paralelo').value = '';
             document.getElementById('filtro-especialidad').value = '';
             cargarSolicitudes();
         };
@@ -264,8 +351,9 @@
         async function cargarSolicitudes() {
             const cedula = document.getElementById('filtro-cedula').value.trim();
             const nombres = document.getElementById('filtro-nombres').value.trim();
-            const curso = document.getElementById('filtro-curso').value.trim();
-            const especialidad = document.getElementById('filtro-especialidad').value.trim();
+            const curso = document.getElementById('filtro-curso').value;
+            const paralelo = document.getElementById('filtro-paralelo').value;
+            const especialidad = document.getElementById('filtro-especialidad').value;
 
             let { data: solicitudes, error } = await supabase
                 .from('solicitud_matriculacion')
@@ -351,8 +439,9 @@
                 let ok = true;
                 if (cedula && !(s.cedula || '').toString().toLowerCase().includes(cedula.toLowerCase())) ok = false;
                 if (nombres && !(s.estudiante.nombres || '').toLowerCase().includes(nombres.toLowerCase())) ok = false;
-                if (curso && !(s.curso.nombre_curso || '').toLowerCase().includes(curso.toLowerCase())) ok = false;
-                if (especialidad && !(s.inscripcion.especialidad || '').toLowerCase().includes(especialidad.toLowerCase())) ok = false;
+                if (curso && (s.curso.nombre_curso !== curso)) ok = false;
+                if (paralelo && (s.inscripcion.paralelo !== paralelo)) ok = false;
+                if (especialidad && (s.inscripcion.especialidad !== especialidad)) ok = false;
                 return ok;
             });
 
@@ -373,6 +462,7 @@
                         <th>Correo</th>
                         <th>PDF</th>
                         <th>Acción</th>
+                        <th>Eliminar solicitud</th>
                     </tr>
                 </thead>
                 <tbody>`;
@@ -390,6 +480,9 @@
                         ${estadoActual === 'entrante'
                             ? `<button class="verificar-btn" onclick="verificarSolicitud(${s.id})">Verificar</button>`
                             : (s.verificado_por ? `<span class="estado-label">Verificado por ${s.verificado_por}</span>` : '<span class="estado-label">Verificado</span>')}
+                    </td>
+                    <td>
+                        <button class="eliminar-btn" onclick="eliminarSolicitud(${s.id})">Eliminar</button>
                     </td>
                 </tr>`;
             }
@@ -412,6 +505,20 @@
                 alert('Error al verificar: ' + error.message);
             } else {
                 alert('Solicitud verificada correctamente.');
+                cargarSolicitudes();
+            }
+        };
+
+        window.eliminarSolicitud = async function(id) {
+            if (!confirm('¿Está seguro de eliminar esta solicitud? Esta acción no se puede deshacer.')) return;
+            const { error } = await supabase
+                .from('solicitud_matriculacion')
+                .delete()
+                .eq('id', id);
+            if (error) {
+                alert('Error al eliminar: ' + error.message);
+            } else {
+                alert('Solicitud eliminada correctamente.');
                 cargarSolicitudes();
             }
         };
