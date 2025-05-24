@@ -26,7 +26,7 @@ h1, h2, h3, h4, p, label, button {
 header {
     background: linear-gradient(to right, #548235, #2f5597); /* Degradado verde a azul */
     color: white;
-    padding: 35px 0;
+    padding: 47px 0; /* Aumentar el padding vertical para hacerlo más alto */
     position: fixed;
     top: 0;
     left: 0;
@@ -133,7 +133,11 @@ nav ul a {
 }
 
 header.scrolled nav ul a {
-    color: rgb(0, 0, 0); /* Cambiar a color blanco al hacer scroll */
+    color: rgb(0, 0, 0); /* Cambiar a color negro al hacer scroll */
+    text-transform: lowercase !important;
+}
+header.scrolled nav ul a::first-letter {
+    text-transform: uppercase;
 }
 
 nav ul a:hover {
@@ -192,6 +196,14 @@ nav ul .submenu a {
     background-color: white; /* Fondo blanco para las opciones */
     padding: 0.5rem 1rem;
     transition: background-color 0.3s ease, color 0.3s ease; /* Transición suave */
+}
+
+/* Opciones del submenú (listas dropeadas) en minúsculas, solo primera letra en mayúscula */
+nav ul .submenu a {
+    text-transform: lowercase !important;
+}
+nav ul .submenu a::first-letter {
+    text-transform: uppercase;
 }
 
 nav ul .submenu a:hover {
@@ -1729,7 +1741,6 @@ button:hover {
     height: 4px;
     background-color: #548235; /* Línea verde */
     margin: 1rem auto 0;
-    border-radius: 2px;
 }
 
 /* Centrar los mapas */
@@ -1842,4 +1853,23 @@ button:hover {
 
 .banner-overlay a:hover {
     text-decoration: underline;
+}
+
+/* Opciones del menú principal (encabezados de las listas dropeadas) */
+.menu > li > a,
+.menu .dropdown > a {
+    text-transform: none !important;
+    font-variant: normal;
+    text-transform: lowercase;
+    white-space: nowrap;
+}
+.menu > li > a::first-letter,
+.menu .dropdown > a::first-letter {
+    text-transform: uppercase;
+}
+
+/* Evitar salto de línea en el menú principal para "Padres de Familia" */
+.menu > li > a,
+.menu .dropdown > a {
+    white-space: nowrap;
 }

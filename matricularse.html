@@ -411,11 +411,12 @@
                     <input type="email" id="correo" name="correo">
                 </div>
                 <div class="matricula-form-group">
-                    <label for="archivo">Adjuntar archivo</label>
+                    <label for="archivo">Adjuntar Foto tipo carnet (seleccione guardar archivo para seguir)</label>
                     <input type="file" id="archivo" name="archivo">
                     <button type="button" id="btn-guardar-archivo" class="matricula-btn" style="background:#2f5597;margin-top:0.5rem;">Guardar Archivo</button>
                     <span id="archivo-guardado-msg" style="display:none;color:green;font-weight:bold;margin-left:10px;">Archivo guardado correctamente</span>
                 </div>
+                <label>Porfavor guarde el archivo antes de continuar</label>
                 <button type="button" id="btn-siguiente-paso2" class="matricula-btn">Siguiente</button>
             </form>
             <form id="paso3-form" style="display:none;">
@@ -454,11 +455,12 @@
                 </div>
                 <div class="matricula-form-group">
                     <label>Ubicación en el mapa</label>
+                    <label>Porfavor arrastre el emotícono rojo en la ubicación de su vivienda</label>
                     <div id="mapa-direccion" style="width:100%;height:220px;border-radius:8px;border:1px solid #ccc;"></div>
                     <input type="hidden" id="latitud" name="latitud">
                     <input type="hidden" id="longitud" name="longitud">
                 </div>
-                <button type="submit" class="matricula-btn">Guardar dirección</button>
+                <button type="submit" class="matricula-btn">Siguiente</button>
             </form>
             <form id="paso4-form" style="display:none;">
                 <div class="matricula-section-title">DATOS DEL PADRE</div>
@@ -505,6 +507,12 @@
                 <div class="matricula-form-group">
                     <label for="padre_telefono_celular">Teléfono Celular</label>
                     <input type="text" id="padre_telefono_celular" name="padre_telefono_celular">
+                </div>
+                <div class="matricula-form-group">
+                    <label>
+                        <input type="checkbox" id="padre_es_representante" name="padre_es_representante">
+                        Es representante del estudiante
+                    </label>
                 </div>
                 <button type="button" id="btn-siguiente-paso4" class="matricula-btn">Siguiente</button>
             </form>
@@ -553,6 +561,12 @@
                 <div class="matricula-form-group">
                     <label for="madre_telefono_celular">Teléfono Celular</label>
                     <input type="text" id="madre_telefono_celular" name="madre_telefono_celular">
+                </div>
+                <div class="matricula-form-group">
+                    <label>
+                        <input type="checkbox" id="madre_es_representante" name="madre_es_representante">
+                        Es representante del estudiante
+                    </label>
                 </div>
                 <button type="button" id="btn-siguiente-paso5" class="matricula-btn">Siguiente</button>
             </form>
@@ -665,6 +679,13 @@
             <div class="footer-section">
                 <h3>CONTACTOS</h3>
                 <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+                        <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
                 <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
             </div>
         </div>
@@ -673,6 +694,7 @@
                 +-
             </p>
         </div>
+        
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -687,25 +709,47 @@
 
         let archivoGuardadoUrl = null;
 
-        document.getElementById('btn-guardar-archivo').onclick = async function() {
-            const archivoInput = document.getElementById('archivo');
-            const msg = document.getElementById('archivo-guardado-msg');
-            msg.style.display = 'none';
+        // --- PASO 2: Botón guardar archivo con retroceso y bloqueo de "Siguiente" ---
+        const btnGuardarArchivo = document.getElementById('btn-guardar-archivo');
+        const btnSiguientePaso2 = document.getElementById('btn-siguiente-paso2');
+        const archivoInput = document.getElementById('archivo');
+        const archivoGuardadoMsg = document.getElementById('archivo-guardado-msg');
+        let archivoGuardadoCorrectamente = false;
+
+        // Inicialmente, deshabilitar el botón "Siguiente" en paso 2
+        btnSiguientePaso2.disabled = true;
+
+        btnGuardarArchivo.onclick = async function() {
+            archivoGuardadoMsg.style.display = 'none';
+            btnGuardarArchivo.disabled = true;
+            btnGuardarArchivo.textContent = 'Guardando archivo...';
+            btnSiguientePaso2.disabled = true;
+
             if (!archivoInput.files.length) {
                 alert('Seleccione un archivo antes de guardar.');
+                btnGuardarArchivo.disabled = false;
+                btnGuardarArchivo.textContent = 'Guardar Archivo';
                 return;
             }
             const archivoData = archivoInput.files[0];
-                // Solo imágenes JPG/PNG soportadas por imgbb
             if (!archivoData.type.startsWith('image/')) {
                 alert('Solo se permiten imágenes JPG o PNG.');
+                btnGuardarArchivo.disabled = false;
+                btnGuardarArchivo.textContent = 'Guardar Archivo';
                 return;
             }
-            // Leer archivo como base64
+
+            // Simular retroceso de 3 segundos mientras sube el archivo
+            let tiempo = 3;
+            btnGuardarArchivo.textContent = `Guardando archivo... (${tiempo})`;
+            const intervalo = setInterval(() => {
+                tiempo--;
+                btnGuardarArchivo.textContent = `Guardando archivo... (${tiempo})`;
+            }, 1000);
+
             const reader = new FileReader();
             reader.onload = async function(e) {
                 const base64 = e.target.result.split(',')[1];
-                // Reemplaza TU_API_KEY_IMGBB por tu API key de imgbb
                 const apiKey = '64089dc19a53f406a3e99785d33b9465';
                 const formData = new FormData();
                 formData.append('key', apiKey);
@@ -716,66 +760,83 @@
                         body: formData
                     });
                     const data = await res.json();
+                    clearInterval(intervalo);
                     if (data && data.data && data.data.url) {
                         const url = data.data.url;
                         localStorage.setItem('archivo_guardado_url', url);
                         window.archivoEstudianteUrl = url;
-                        msg.style.display = 'inline';
+                        archivoGuardadoMsg.style.display = 'inline';
+                        archivoGuardadoCorrectamente = true;
+                        btnGuardarArchivo.textContent = 'Archivo guardado';
+                        btnGuardarArchivo.disabled = true;
+                        btnSiguientePaso2.disabled = false;
                     } else {
+                        archivoGuardadoCorrectamente = false;
+                        btnGuardarArchivo.textContent = 'Guardar Archivo';
+                        btnGuardarArchivo.disabled = false;
                         alert('No se pudo obtener la URL de la imagen.');
                     }
                 } catch (err) {
+                    clearInterval(intervalo);
+                    archivoGuardadoCorrectamente = false;
+                    btnGuardarArchivo.textContent = 'Guardar Archivo';
+                    btnGuardarArchivo.disabled = false;
                     alert('Error al subir la imagen: ' + err.message);
                 }
             };
             reader.readAsDataURL(archivoData);
         };
 
-        // Mostrar especialidad solo si es Bachillerato
-        document.getElementById('curso').addEventListener('change', function() {
-            const value = this.value;
-            const especialidadGroup = document.getElementById('especialidad-group');
-            if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
-                especialidadGroup.style.display = 'block';
-                document.getElementById('especialidad').required = true;
-            } else {
-                especialidadGroup.style.display = 'none';
-                document.getElementById('especialidad').required = false;
-                document.getElementById('especialidad').value = '';
-            }
+        // Si el usuario cambia el archivo, volver a bloquear el botón "Siguiente"
+        archivoInput.addEventListener('change', function() {
+            archivoGuardadoCorrectamente = false;
+            btnSiguientePaso2.disabled = true;
+            btnGuardarArchivo.disabled = false;
+            btnGuardarArchivo.textContent = 'Guardar Archivo';
+            archivoGuardadoMsg.style.display = 'none';
         });
 
-        // Mapeo de curso a nivel
-        function obtenerNivelPorCurso(curso) {
-            if (curso === "Inicial") return "Inicial";
-            if (["1ro EGB","2do EGB","3ro EGB","4to EGB","5to EGB","6to EGB","7mo EGB"].includes(curso)) return "Primaria";
-            if (["8vo EGB","9no EGB","10mo EGB"].includes(curso)) return "Secundaria";
-            if (["1ro Bachillerato","2do Bachillerato","3ro Bachillerato"].includes(curso)) return "Bachillerato";
-            return null;
-        }
-
-        // Paso 1: Guardar en localStorage y mostrar paso 2
-        document.getElementById('btn-siguiente-paso1').onclick = function() {
-            // Guardar datos de paso 1 en localStorage
-            function valorNA(id) {
-                const el = document.getElementById(id);
-                return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
+        // --- PASO 2: Validar antes de avanzar (incluye campos adicionales obligatorios) ---
+        btnSiguientePaso2.onclick = function() {
+            if (!archivoGuardadoCorrectamente) {
+                // Mostrar notificación visual DENTRO del panel, justo antes del botón "Siguiente"
+                let notif = document.getElementById('notif-archivo');
+                if (!notif) {
+                    notif = document.createElement('div');
+                    notif.id = 'notif-archivo';
+                    notif.style.background = '#ffeaea';
+                    notif.style.color = '#b71c1c';
+                    notif.style.fontWeight = 'bold';
+                    notif.style.border = '1px solid #b71c1c';
+                    notif.style.borderRadius = '6px';
+                    notif.style.padding = '0.7em 1em';
+                    notif.style.marginBottom = '1em';
+                    notif.style.textAlign = 'center';
+                    notif.style.position = 'relative';
+                    notif.style.zIndex = '10';
+                    notif.textContent = 'Guarde el archivo antes de continuar';
+                    // Insertar justo antes del botón "Siguiente" en el panel
+                    const form = document.getElementById('paso2-form');
+                    const btn = document.getElementById('btn-siguiente-paso2');
+                    form.insertBefore(notif, btn);
+                } else {
+                    notif.style.display = 'block';
+                }
+                setTimeout(() => {
+                    if (notif) notif.style.display = 'none';
+                }, 3500);
+                return;
             }
-            const paso1 = {
-                periodo: valorNA('periodo'),
-                curso: valorNA('curso'),
-                paralelo: valorNA('paralelo'),
-                especialidad: valorNA('especialidad'),
-                institucion_procedencia: valorNA('institucion_procedencia')
-            };
-            localStorage.setItem('matricula_paso1', JSON.stringify(paso1));
-            document.getElementById('paso1-form').style.display = 'none';
-            document.getElementById('paso2-form').style.display = 'block';
-            activarPasoWizard(2);
-        };
-
-        // Paso 2: Guardar en localStorage y mostrar paso 3
-        document.getElementById('btn-siguiente-paso2').onclick = function() {
+            document.getElementById('telefono').setAttribute('required', 'required');
+            document.getElementById('tipo_sangre').setAttribute('required', 'required');
+            document.getElementById('fecha_nacimiento').setAttribute('required', 'required');
+            document.getElementById('telefono_convencional').setAttribute('required', 'required');
+            document.getElementById('correo').setAttribute('required', 'required');
+            document.getElementById('archivo').setAttribute('required', 'required');
+            if (!validarCamposRequeridos('paso2-form')) {
+                alert('Por favor, complete todos los campos requeridos del estudiante.');
+                return;
+            }
             // Guardar datos de paso 2 en localStorage
             function valorNA(id) {
                 const el = document.getElementById(id);
@@ -813,16 +874,91 @@
             inicializarMapaDireccion();
         };
 
-        // Paso 3: Guardar dirección y mostrar paso 4 (NO limpiar localStorage aquí)
+        // --- PASO 3: Hacer todos los campos obligatorios ---
         document.getElementById('paso3-form').addEventListener('submit', function(e) {
             e.preventDefault();
+            // Hacer obligatorios todos los campos de dirección
+            [
+                'calle_principal','calle_secundaria','provincia','canton','parroquia',
+                'barrio','numero_casa','referencia','latitud','longitud'
+            ].forEach(id => {
+                document.getElementById(id).setAttribute('required', 'required');
+            });
+            if (!validarCamposRequeridos('paso3-form')) {
+                alert('Por favor, complete todos los campos requeridos de dirección.');
+                return;
+            }
             document.getElementById('paso3-form').style.display = 'none';
             document.getElementById('paso4-form').style.display = 'block';
             activarPasoWizard(4);
         });
 
-        // Paso 4: Guardar en localStorage y mostrar siguiente paso
+        // --- AUTOLLENADO Y VISIBILIDAD DEL PASO 6 SEGÚN CHECKBOX PADRE/MADRE ---
+        function copiarDatosPadreARepresentante() {
+            document.getElementById('representante_nombres').value = document.getElementById('padre_nombres').value;
+            document.getElementById('representante_cedula').value = document.getElementById('padre_cedula').value;
+            document.getElementById('representante_ocupacion').value = document.getElementById('padre_ocupacion').value;
+            document.getElementById('representante_telefono_trabajo').value = document.getElementById('padre_telefono_trabajo').value;
+            document.getElementById('representante_email').value = document.getElementById('padre_email').value;
+            document.getElementById('representante_nivel_educacion').value = document.getElementById('padre_nivel_educacion').value;
+            document.getElementById('representante_estado_civil').value = document.getElementById('padre_estado_civil').value;
+            document.getElementById('representante_vive_con_estudiante').value = document.getElementById('padre_vive_con_estudiante').value;
+            document.getElementById('representante_horario_trabajo').value = document.getElementById('padre_horario_trabajo').value;
+            document.getElementById('representante_telefono_celular').value = document.getElementById('padre_telefono_celular').value;
+        }
+        function copiarDatosMadreARepresentante() {
+            document.getElementById('representante_nombres').value = document.getElementById('madre_nombres').value;
+            document.getElementById('representante_cedula').value = document.getElementById('madre_cedula').value;
+            document.getElementById('representante_ocupacion').value = document.getElementById('madre_ocupacion').value;
+            document.getElementById('representante_telefono_trabajo').value = document.getElementById('madre_telefono_trabajo').value;
+            document.getElementById('representante_email').value = document.getElementById('madre_email').value;
+            document.getElementById('representante_nivel_educacion').value = document.getElementById('madre_nivel_educacion').value;
+            document.getElementById('representante_estado_civil').value = document.getElementById('madre_estado_civil').value;
+            document.getElementById('representante_vive_con_estudiante').value = document.getElementById('madre_vive_con_estudiante').value;
+            document.getElementById('representante_horario_trabajo').value = document.getElementById('madre_horario_trabajo').value;
+            document.getElementById('representante_telefono_celular').value = document.getElementById('madre_telefono_celular').value;
+        }
+
+        // --- CORRECCIÓN: El checkbox del padre solo autollenará, pero NO saltará el paso 5 ---
+        let padreEsRepresentanteMarcado = false;
+        document.getElementById('padre_es_representante').addEventListener('change', function() {
+            padreEsRepresentanteMarcado = this.checked;
+            if (this.checked) {
+                copiarDatosPadreARepresentante();
+                // Bloquear el checkbox de la madre para que no se pueda marcar
+                document.getElementById('madre_es_representante').checked = false;
+                document.getElementById('madre_es_representante').disabled = true;
+            } else {
+                document.getElementById('madre_es_representante').disabled = false;
+            }
+        });
+        [
+            'padre_nombres','padre_cedula','padre_ocupacion','padre_telefono_trabajo','padre_email',
+            'padre_nivel_educacion','padre_estado_civil','padre_vive_con_estudiante','padre_horario_trabajo','padre_telefono_celular'
+        ].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                if (document.getElementById('padre_es_representante').checked) {
+                    copiarDatosPadreARepresentante();
+                }
+            });
+        });
+
+        // PASO 4: Siguiente (si el checkbox está marcado, solo autollenar, NO saltar paso 5)
         document.getElementById('btn-siguiente-paso4').onclick = function() {
+            document.getElementById('padre_nombres').setAttribute('required', 'required');
+            document.getElementById('padre_cedula').setAttribute('required', 'required');
+            document.getElementById('padre_ocupacion').setAttribute('required', 'required');
+            document.getElementById('padre_telefono_trabajo').setAttribute('required', 'required');
+            document.getElementById('padre_email').setAttribute('required', 'required');
+            document.getElementById('padre_nivel_educacion').setAttribute('required', 'required');
+            document.getElementById('padre_estado_civil').setAttribute('required', 'required');
+            document.getElementById('padre_vive_con_estudiante').setAttribute('required', 'required');
+            document.getElementById('padre_horario_trabajo').setAttribute('required', 'required');
+            document.getElementById('padre_telefono_celular').setAttribute('required', 'required');
+            if (!validarCamposRequeridos('paso4-form')) {
+                alert('Por favor, complete todos los campos requeridos del padre.');
+                return;
+            }
             function valorNA(id) {
                 const el = document.getElementById(id);
                 return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
@@ -837,16 +973,39 @@
                 padre_estado_civil: valorNA('padre_estado_civil'),
                 padre_vive_con_estudiante: valorNA('padre_vive_con_estudiante'),
                 padre_horario_trabajo: valorNA('padre_horario_trabajo'),
-                padre_telefono_celular: valorNA('padre_telefono_celular')
+                padre_telefono_celular: valorNA('padre_telefono_celular'),
+                padre_es_representante: document.getElementById('padre_es_representante').checked
             };
             localStorage.setItem('matricula_paso4', JSON.stringify(paso4));
+            if (document.getElementById('padre_es_representante').checked) {
+                copiarDatosPadreARepresentante();
+                // Bloquear el checkbox de la madre para que no se pueda marcar
+                document.getElementById('madre_es_representante').checked = false;
+                document.getElementById('madre_es_representante').disabled = true;
+            } else {
+                document.getElementById('madre_es_representante').disabled = false;
+            }
             document.getElementById('paso4-form').style.display = 'none';
             document.getElementById('paso5-form').style.display = 'block';
             activarPasoWizard(5);
         };
 
-        // Paso 5: Guardar en localStorage y mostrar siguiente paso
+        // PASO 5: Siguiente (si el padre fue marcado como representante, duplicar datos del padre como representante)
         document.getElementById('btn-siguiente-paso5').onclick = function() {
+            document.getElementById('madre_nombres').setAttribute('required', 'required');
+            document.getElementById('madre_cedula').setAttribute('required', 'required');
+            document.getElementById('madre_ocupacion').setAttribute('required', 'required');
+            document.getElementById('madre_telefono_trabajo').setAttribute('required', 'required');
+            document.getElementById('madre_email').setAttribute('required', 'required');
+            document.getElementById('madre_nivel_educacion').setAttribute('required', 'required');
+            document.getElementById('madre_estado_civil').setAttribute('required', 'required');
+            document.getElementById('madre_vive_con_estudiante').setAttribute('required', 'required');
+            document.getElementById('madre_horario_trabajo').setAttribute('required', 'required');
+            document.getElementById('madre_telefono_celular').setAttribute('required', 'required');
+            if (!validarCamposRequeridos('paso5-form')) {
+                alert('Por favor, complete todos los campos requeridos de la madre.');
+                return;
+            }
             function valorNA(id) {
                 const el = document.getElementById(id);
                 return (el && el.value !== undefined && el.value !== null && el.value.trim() !== "") ? el.value : "";
@@ -861,40 +1020,156 @@
                 madre_estado_civil: valorNA('madre_estado_civil'),
                 madre_vive_con_estudiante: valorNA('madre_vive_con_estudiante'),
                 madre_horario_trabajo: valorNA('madre_horario_trabajo'),
-                madre_telefono_celular: valorNA('madre_telefono_celular')
+                madre_telefono_celular: valorNA('madre_telefono_celular'),
+                madre_es_representante: document.getElementById('madre_es_representante').checked
             };
             localStorage.setItem('matricula_paso5', JSON.stringify(paso5));
-            document.getElementById('paso5-form').style.display = 'none';
-            document.getElementById('paso6-form').style.display = 'block';
-            activarPasoWizard(6);
+            if (padreEsRepresentanteMarcado) {
+                // Duplicar datos del padre como representante y guardar en localStorage
+                const representante = {
+                    representante_nombres: valorNA('padre_nombres'),
+                    representante_cedula: valorNA('padre_cedula'),
+                    representante_ocupacion: valorNA('padre_ocupacion'),
+                    representante_telefono_trabajo: valorNA('padre_telefono_trabajo'),
+                    representante_email: valorNA('padre_email'),
+                    representante_nivel_educacion: valorNA('padre_nivel_educacion'),
+                    representante_estado_civil: valorNA('padre_estado_civil'),
+                    representante_vive_con_estudiante: valorNA('padre_vive_con_estudiante'),
+                    representante_horario_trabajo: valorNA('padre_horario_trabajo'),
+                    representante_telefono_celular: valorNA('padre_telefono_celular')
+                };
+                localStorage.setItem('matricula_paso6', JSON.stringify(representante));
+                // También llenar los campos del DOM para el resumen
+                document.getElementById('representante_nombres').value = representante.representante_nombres;
+                document.getElementById('representante_cedula').value = representante.representante_cedula;
+                document.getElementById('representante_ocupacion').value = representante.representante_ocupacion;
+                document.getElementById('representante_telefono_trabajo').value = representante.representante_telefono_trabajo;
+                document.getElementById('representante_email').value = representante.representante_email;
+                document.getElementById('representante_nivel_educacion').value = representante.representante_nivel_educacion;
+                document.getElementById('representante_estado_civil').value = representante.representante_estado_civil;
+                document.getElementById('representante_vive_con_estudiante').value = representante.representante_vive_con_estudiante;
+                document.getElementById('representante_horario_trabajo').value = representante.representante_horario_trabajo;
+                document.getElementById('representante_telefono_celular').value = representante.representante_telefono_celular;
+
+                document.getElementById('paso5-form').style.display = 'none';
+                document.getElementById('paso6-form').style.display = 'none';
+                document.getElementById('paso7-form').style.display = 'block';
+                activarPasoWizard(7);
+            } else if (document.getElementById('madre_es_representante').checked) {
+                // Llenar automáticamente los datos del representante con los de la madre
+                document.getElementById('representante_nombres').value = paso5.madre_nombres;
+                document.getElementById('representante_cedula').value = paso5.madre_cedula;
+                document.getElementById('representante_ocupacion').value = paso5.madre_ocupacion;
+                document.getElementById('representante_telefono_trabajo').value = paso5.madre_telefono_trabajo;
+                document.getElementById('representante_email').value = paso5.madre_email;
+                document.getElementById('representante_nivel_educacion').value = paso5.madre_nivel_educacion;
+                document.getElementById('representante_estado_civil').value = paso5.madre_estado_civil;
+                document.getElementById('representante_vive_con_estudiante').value = paso5.madre_vive_con_estudiante;
+                document.getElementById('representante_horario_trabajo').value = paso5.madre_horario_trabajo;
+                document.getElementById('representante_telefono_celular').value = paso5.madre_telefono_celular;
+                document.getElementById('paso5-form').style.display = 'none';
+                document.getElementById('paso7-form').style.display = 'block';
+                activarPasoWizard(7);
+            } else {
+                // Si no es representante, mostrar paso 6 y hacer obligatorios sus campos
+                document.getElementById('paso5-form').style.display = 'none';
+                document.getElementById('paso6-form').style.display = 'block';
+                activarPasoWizard(6);
+                // Hacer obligatorios TODOS los campos del paso 6
+                Array.from(document.querySelectorAll('#paso6-form input, #paso6-form select')).forEach(input => {
+                    if (input.type !== 'checkbox') input.required = true;
+                });
+                // Limpiar los campos del representante para que el usuario los llene
+                document.getElementById('representante_nombres').value = '';
+                document.getElementById('representante_cedula').value = '';
+                document.getElementById('representante_ocupacion').value = '';
+                document.getElementById('representante_telefono_trabajo').value = '';
+                document.getElementById('representante_email').value = '';
+                document.getElementById('representante_nivel_educacion').value = '';
+                document.getElementById('representante_estado_civil').value = '';
+                document.getElementById('representante_vive_con_estudiante').value = '';
+                document.getElementById('representante_horario_trabajo').value = '';
+                document.getElementById('representante_telefono_celular').value = '';
+            }
         };
 
-        // Paso 6: Guardar en localStorage y mostrar siguiente paso
-        document.getElementById('btn-siguiente-paso6').onclick = function() {
+        // Mostrar especialidad solo si es Bachillerato
+        document.getElementById('curso').addEventListener('change', function() {
+            const value = this.value;
+            const especialidadGroup = document.getElementById('especialidad-group');
+            if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
+                especialidadGroup.style.display = 'block';
+                document.getElementById('especialidad').required = true;
+            } else {
+                especialidadGroup.style.display = 'none';
+                document.getElementById('especialidad').required = false;
+                document.getElementById('especialidad').value = '';
+            }
+        });
+
+        // Mapeo de curso a nivel
+        function obtenerNivelPorCurso(curso) {
+            if (curso === "Inicial") return "Inicial";
+            if (["1ro EGB","2do EGB","3ro EGB","4to EGB","5to EGB","6to EGB","7mo EGB"].includes(curso)) return "Primaria";
+            if (["8vo EGB","9no EGB","10mo EGB"].includes(curso)) return "Secundaria";
+            if (["1ro Bachillerato","2do Bachillerato","3ro Bachillerato"].includes(curso)) return "Bachillerato";
+            return null;
+        }
+
+        // --- VALIDACIÓN CAMPOS REQUERIDOS ---
+        function validarCamposRequeridos(formId) {
+            const form = document.getElementById(formId);
+            let valido = true;
+            Array.from(form.querySelectorAll('[required]')).forEach(input => {
+                if (!input.value || input.value.trim() === "") {
+                    input.style.borderColor = 'red';
+                    valido = false;
+                } else {
+                    input.style.borderColor = '';
+                }
+            });
+            return valido;
+        }
+
+        // Paso 1: Guardar en localStorage y mostrar paso 2
+        document.getElementById('btn-siguiente-paso1').onclick = function() {
+            // Guardar datos de paso 1 en localStorage
             function valorNA(id) {
                 const el = document.getElementById(id);
                 return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
             }
-            const paso6 = {
-                representante_nombres: valorNA('representante_nombres'),
-                representante_cedula: valorNA('representante_cedula'),
-                representante_ocupacion: valorNA('representante_ocupacion'),
-                representante_telefono_trabajo: valorNA('representante_telefono_trabajo'),
-                representante_email: valorNA('representante_email'),
-                representante_nivel_educacion: valorNA('representante_nivel_educacion'),
-                representante_estado_civil: valorNA('representante_estado_civil'),
-                representante_vive_con_estudiante: valorNA('representante_vive_con_estudiante'),
-                representante_horario_trabajo: valorNA('representante_horario_trabajo'),
-                representante_telefono_celular: valorNA('representante_telefono_celular')
+            const paso1 = {
+                periodo: valorNA('periodo'),
+                curso: valorNA('curso'),
+                paralelo: valorNA('paralelo'),
+                especialidad: valorNA('especialidad'),
+                institucion_procedencia: valorNA('institucion_procedencia')
             };
-            localStorage.setItem('matricula_paso6', JSON.stringify(paso6));
+            localStorage.setItem('matricula_paso1', JSON.stringify(paso1));
+            document.getElementById('paso1-form').style.display = 'none';
+            document.getElementById('paso2-form').style.display = 'block';
+            activarPasoWizard(2);
+        };
+
+        // PASO 6: Validar antes de avanzar SOLO si el formulario está visible
+        document.getElementById('btn-siguiente-paso6').onclick = function() {
+            if (document.getElementById('paso6-form').style.display !== 'none') {
+                if (!validarCamposRequeridos('paso6-form')) {
+                    alert('Por favor, complete todos los campos requeridos del representante.');
+                    return;
+                }
+            }
             document.getElementById('paso6-form').style.display = 'none';
             document.getElementById('paso7-form').style.display = 'block';
             activarPasoWizard(7);
         };
 
-        // Paso 7: Guardar en localStorage y guardar toda la información en la base de datos
+        // --- PASO 7: Validar antes de finalizar ---
         document.getElementById('btn-finalizar-matricula').onclick = async function() {
+            if (!validarCamposRequeridos('paso7-form')) {
+                alert('Por favor, complete todos los campos requeridos de contactos de emergencia.');
+                return;
+            }
             function valorNA(id) {
                 const el = document.getElementById(id);
                 return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
@@ -1187,54 +1462,69 @@
                 <h2 style="text-align:center;color:#2f5597;">Resumen de Inscripción</h2>
                 <table style="width:100%;border-collapse:collapse;">
                     <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Datos Académicos</th></tr>
-                    <tr><td><b>Periodo:</b></td><td>${paso1.periodo}</td></tr>
-                    <tr><td><b>Curso:</b></td><td>${paso1.curso} - Paralelo: ${paso1.paralelo}</td></tr>
-                    <tr><td><b>Especialidad:</b></td><td>${paso1.especialidad || 'N/A'}</td></tr>
-                    <tr><td><b>Institución de Procedencia:</b></td><td>${paso1.institucion_procedencia}</td></tr>
+                    <tr><td><b>Periodo:</b></td><td>${paso1.periodo || ''}</td></tr>
+                    <tr><td><b>Curso:</b></td><td>${paso1.curso || ''} - Paralelo: ${paso1.paralelo || ''}</td></tr>
+                    <tr><td><b>Especialidad:</b></td><td>${paso1.especialidad || ''}</td></tr>
+                    <tr><td><b>Institución de Procedencia:</b></td><td>${paso1.institucion_procedencia || ''}</td></tr>
                     <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Datos del Estudiante</th></tr>
-                    <tr><td><b>Apellidos:</b></td><td>${paso2.apellidos}</td></tr>
-                    <tr><td><b>Nombres:</b></td><td>${paso2.nombres}</td></tr>
-                    <tr><td><b>Cédula:</b></td><td>${paso2.cedula}</td></tr>
-                    <tr><td><b>Etnia:</b></td><td>${paso2.etnia}</td></tr>
-                    <tr><td><b>Nacionalidad:</b></td><td>${paso2.nacionalidad}</td></tr>
-                    <tr><td><b>Tipo de Sangre:</b></td><td>${paso2.tipo_sangre}</td></tr>
-                    <tr><td><b>Fecha de Nacimiento:</b></td><td>${paso2.fecha_nacimiento}</td></tr>
-                    <tr><td><b>Sexo:</b></td><td>${paso2.sexo}</td></tr>
-                    <tr><td><b>Teléfono:</b></td><td>${paso2.telefono}</td></tr>
-                    <tr><td><b>Correo:</b></td><td>${paso2.correo}</td></tr>
+                    <tr><td><b>Apellidos:</b></td><td>${paso2.apellidos || ''}</td></tr>
+                    <tr><td><b>Nombres:</b></td><td>${paso2.nombres || ''}</td></tr>
+                    <tr><td><b>Cédula:</b></td><td>${paso2.cedula || ''}</td></tr>
+                    <tr><td><b>Etnia:</b></td><td>${paso2.etnia || ''}</td></tr>
+                    <tr><td><b>Nacionalidad:</b></td><td>${paso2.nacionalidad || ''}</td></tr>
+                    <tr><td><b>Tipo de Sangre:</b></td><td>${paso2.tipo_sangre || ''}</td></tr>
+                    <tr><td><b>Fecha de Nacimiento:</b></td><td>${paso2.fecha_nacimiento || ''}</td></tr>
+                    <tr><td><b>Sexo:</b></td><td>${paso2.sexo || ''}</td></tr>
+                    <tr><td><b>Teléfono:</b></td><td>${paso2.telefono || ''}</td></tr>
+                    <tr><td><b>Correo:</b></td><td>${paso2.correo || ''}</td></tr>
                     ${fotoHtml}
                     <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Dirección</th></tr>
-                    <tr><td><b>Calle Principal:</b></td><td>${paso3.calle_principal}</td></tr>
-                    <tr><td><b>Calle Secundaria:</b></td><td>${paso3.calle_secundaria}</td></tr>
-                    <tr><td><b>Provincia:</b></td><td>${paso3.provincia}</td></tr>
-                    <tr><td><b>Cantón:</b></td><td>${paso3.canton}</td></tr>
-                    <tr><td><b>Parroquia:</b></td><td>${paso3.parroquia}</td></tr>
-                    <tr><td><b>Barrio:</b></td><td>${paso3.barrio}</td></tr>
-                    <tr><td><b>Número de Casa:</b></td><td>${paso3.numero_casa}</td></tr>
-                    <tr><td><b>Referencia:</b></td><td>${paso3.referencia}</td></tr>
+                    <tr><td><b>Calle Principal:</b></td><td>${paso3.calle_principal || ''}</td></tr>
+                    <tr><td><b>Calle Secundaria:</b></td><td>${paso3.calle_secundaria || ''}</td></tr>
+                    <tr><td><b>Provincia:</b></td><td>${paso3.provincia || ''}</td></tr>
+                    <tr><td><b>Cantón:</b></td><td>${paso3.canton || ''}</td></tr>
+                    <tr><td><b>Parroquia:</b></td><td>${paso3.parroquia || ''}</td></tr>
+                    <tr><td><b>Barrio:</b></td><td>${paso3.barrio || ''}</td></tr>
+                    <tr><td><b>Número de Casa:</b></td><td>${paso3.numero_casa || ''}</td></tr>
+                    <tr><td><b>Referencia:</b></td><td>${paso3.referencia || ''}</td></tr>
                     <tr><td><b>Ubicación en el Mapa:</b></td>
                         <td>
                             <img src="${mapaUrl}" alt="Mapa de ubicación" style="max-width:250px;border-radius:8px;border:1px solid #ccc;">
                         </td>
                     </tr>
                     <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Padre</th></tr>
-                    <tr><td><b>Nombre:</b></td><td>${paso4.padre_nombres}</td></tr>
-                    <tr><td><b>Cédula:</b></td><td>${paso4.padre_cedula}</td></tr>
-                    <tr><td><b>Ocupación:</b></td><td>${paso4.padre_ocupacion}</td></tr>
-                    <tr><td><b>Email:</b></td><td>${paso4.padre_email}</td></tr>
+                    <tr><td><b>Nombre:</b></td><td>${paso4.padre_nombres || ''}</td></tr>
+                    <tr><td><b>Cédula:</b></td><td>${paso4.padre_cedula || ''}</td></tr>
+                    <tr><td><b>Ocupación:</b></td><td>${paso4.padre_ocupacion || ''}</td></tr>
+                    <tr><td><b>Email:</b></td><td>${paso4.padre_email || ''}</td></tr>
+                    <tr><td><b>Nivel Educación:</b></td><td>${paso4.padre_nivel_educacion || ''}</td></tr>
+                    <tr><td><b>Estado Civil:</b></td><td>${paso4.padre_estado_civil || ''}</td></tr>
+                    <tr><td><b>¿Vive con el estudiante?</b></td><td>${paso4.padre_vive_con_estudiante === "true" ? "Sí" : (paso4.padre_vive_con_estudiante === "false" ? "No" : (paso4.padre_vive_con_estudiante || ''))}</td></tr>
+                    <tr><td><b>Horario de Trabajo:</b></td><td>${paso4.padre_horario_trabajo || ''}</td></tr>
+                    <tr><td><b>Tel. Celular:</b></td><td>${paso4.padre_telefono_celular || ''}</td></tr>
                     <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Madre</th></tr>
-                    <tr><td><b>Nombre:</b></td><td>${paso5.madre_nombres}</td></tr>
-                    <tr><td><b>Cédula:</b></td><td>${paso5.madre_cedula}</td></tr>
-                    <tr><td><b>Ocupación:</b></td><td>${paso5.madre_ocupacion}</td></tr>
-                    <tr><td><b>Email:</b></td><td>${paso5.madre_email}</td></tr>
+                    <tr><td><b>Nombre:</b></td><td>${paso5.madre_nombres || ''}</td></tr>
+                    <tr><td><b>Cédula:</b></td><td>${paso5.madre_cedula || ''}</td></tr>
+                    <tr><td><b>Ocupación:</b></td><td>${paso5.madre_ocupacion || ''}</td></tr>
+                    <tr><td><b>Email:</b></td><td>${paso5.madre_email || ''}</td></tr>
+                    <tr><td><b>Nivel Educación:</b></td><td>${paso5.madre_nivel_educacion || ''}</td></tr>
+                    <tr><td><b>Estado Civil:</b></td><td>${paso5.madre_estado_civil || ''}</td></tr>
+                    <tr><td><b>¿Vive con el estudiante?</b></td><td>${paso5.madre_vive_con_estudiante === "true" ? "Sí" : (paso5.madre_vive_con_estudiante === "false" ? "No" : (paso5.madre_vive_con_estudiante || ''))}</td></tr>
+                    <tr><td><b>Horario de Trabajo:</b></td><td>${paso5.madre_horario_trabajo || ''}</td></tr>
+                    <tr><td><b>Tel. Celular:</b></td><td>${paso5.madre_telefono_celular || ''}</td></tr>
                     <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Representante</th></tr>
-                    <tr><td><b>Nombre:</b></td><td>${paso6.representante_nombres}</td></tr>
-                    <tr><td><b>Cédula:</b></td><td>${paso6.representante_cedula}</td></tr>
-                    <tr><td><b>Ocupación:</b></td><td>${paso6.representante_ocupacion}</td></tr>
-                    <tr><td><b>Email:</b></td><td>${paso6.representante_email}</td></tr>
+                    <tr><td><b>Nombre:</b></td><td>${paso6.representante_nombres || ''}</td></tr>
+                    <tr><td><b>Cédula:</b></td><td>${paso6.representante_cedula || ''}</td></tr>
+                    <tr><td><b>Ocupación:</b></td><td>${paso6.representante_ocupacion || ''}</td></tr>
+                    <tr><td><b>Email:</b></td><td>${paso6.representante_email || ''}</td></tr>
+                    <tr><td><b>Nivel Educación:</b></td><td>${paso6.representante_nivel_educacion || ''}</td></tr>
+                    <tr><td><b>Estado Civil:</b></td><td>${paso6.representante_estado_civil || ''}</td></tr>
+                    <tr><td><b>¿Vive con el estudiante?</b></td><td>${paso6.representante_vive_con_estudiante === "true" ? "Sí" : (paso6.representante_vive_con_estudiante === "false" ? "No" : (paso6.representante_vive_con_estudiante || ''))}</td></tr>
+                    <tr><td><b>Horario de Trabajo:</b></td><td>${paso6.representante_horario_trabajo || ''}</td></tr>
+                    <tr><td><b>Tel. Celular:</b></td><td>${paso6.representante_telefono_celular || ''}</td></tr>
                     <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Contactos de Emergencia</th></tr>
-                    <tr><td><b>1:</b></td><td>${paso7[0].nombre} (${paso7[0].parentesco}) - ${paso7[0].telefono}</td></tr>
-                    <tr><td><b>2:</b></td><td>${paso7[1].nombre} (${paso7[1].parentesco}) - ${paso7[1].telefono}</td></tr>
+                    <tr><td><b>1:</b></td><td>${(paso7[0]?.nombre || '')} (${(paso7[0]?.parentesco || '')}) - ${(paso7[0]?.telefono || '')}</td></tr>
+                    <tr><td><b>2:</b></td><td>${(paso7[1]?.nombre || '')} (${(paso7[1]?.parentesco || '')}) - ${(paso7[1]?.telefono || '')}</td></tr>
                 </table>
             `;
 
@@ -1513,44 +1803,83 @@
             cell(col2, y, cellW, cellH, safeText(53));
             cell(col3, y, cellW, cellH, 'Email:', {section:true});
             cell(col4, y, cellW, cellH, safeText(55));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Nivel Educación:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(57));
+            cell(col3, y, cellW, cellH, 'Estado Civil:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(59));
+            y += cellH;
+            cell(col1, y, cellW, cellH, '¿Vive con estudiante?', {section:true});
+            cell(col2, y, cellW, cellH, safeText(61));
+            cell(col3, y, cellW, cellH, 'Horario Trabajo:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(63));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Tel. Celular:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(65));
 
             // Madre
             y += cellH;
             cell(col1, y, 180, cellH, 'MADRE', {header:true});
             y += cellH;
             cell(col1, y, cellW, cellH, 'Nombre:', {section:true});
-            cell(col2, y, cellW, cellH, safeText(57));
+            cell(col2, y, cellW, cellH, safeText(67));
             cell(col3, y, cellW, cellH, 'Cédula:', {section:true});
-            cell(col4, y, cellW, cellH, safeText(59));
+            cell(col4, y, cellW, cellH, safeText(69));
             y += cellH;
             cell(col1, y, cellW, cellH, 'Ocupación:', {section:true});
-            cell(col2, y, cellW, cellH, safeText(61));
+            cell(col2, y, cellW, cellH, safeText(71));
             cell(col3, y, cellW, cellH, 'Email:', {section:true});
-            cell(col4, y, cellW, cellH, safeText(63));
+            cell(col4, y, cellW, cellH, safeText(73));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Nivel Educación:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(75));
+            cell(col3, y, cellW, cellH, 'Estado Civil:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(77));
+            y += cellH;
+            cell(col1, y, cellW, cellH, '¿Vive con estudiante?', {section:true});
+            cell(col2, y, cellW, cellH, safeText(79));
+            cell(col3, y, cellW, cellH, 'Horario Trabajo:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(81));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Tel. Celular:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(83));
 
             // Representante
             y += cellH;
             cell(col1, y, 180, cellH, 'REPRESENTANTE', {header:true});
             y += cellH;
             cell(col1, y, cellW, cellH, 'Nombre:', {section:true});
-            cell(col2, y, cellW, cellH, safeText(65));
+            cell(col2, y, cellW, cellH, safeText(85));
             cell(col3, y, cellW, cellH, 'Cédula:', {section:true});
-            cell(col4, y, cellW, cellH, safeText(67));
+            cell(col4, y, cellW, cellH, safeText(87));
             y += cellH;
             cell(col1, y, cellW, cellH, 'Ocupación:', {section:true});
-            cell(col2, y, cellW, cellH, safeText(69));
+            cell(col2, y, cellW, cellH, safeText(89));
             cell(col3, y, cellW, cellH, 'Email:', {section:true});
-            cell(col4, y, cellW, cellH, safeText(71));
+            cell(col4, y, cellW, cellH, safeText(91));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Nivel Educación:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(93));
+            cell(col3, y, cellW, cellH, 'Estado Civil:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(95));
+            y += cellH;
+            cell(col1, y, cellW, cellH, '¿Vive con estudiante?', {section:true});
+            cell(col2, y, cellW, cellH, safeText(97));
+            cell(col3, y, cellW, cellH, 'Horario Trabajo:', {section:true});
+            cell(col4, y, cellW, cellH, safeText(99));
+            y += cellH;
+            cell(col1, y, cellW, cellH, 'Tel. Celular:', {section:true});
+            cell(col2, y, cellW, cellH, safeText(101));
 
             // Contactos de emergencia
             y += cellH;
             cell(col1, y, 180, cellH, 'CONTACTOS DE EMERGENCIA', {header:true});
             y += cellH;
             cell(col1, y, cellW, cellH, 'Contacto 1:', {section:true});
-            cell(col2, y, cellW*3, cellH, safeText(73));
+            cell(col2, y, cellW*3, cellH, safeText(103));
             y += cellH;
             cell(col1, y, cellW, cellH, 'Contacto 2:', {section:true});
-            cell(col2, y, cellW*3, cellH, safeText(75));
+            cell(col2, y, cellW*3, cellH, safeText(105));
 
             // --- SEGUNDA HOJA: MAPA ---
             doc.addPage();
@@ -1698,16 +2027,20 @@
             document.getElementById('paso6-form').style.display = 'none';
             document.getElementById('paso7-form').style.display = 'none';
             document.getElementById('paso8-form').style.display = 'none';
+            document.getElementById('madre_es_representante').disabled = false;
+            document.getElementById('madre_es_representante').checked = false;
+            document.getElementById('padre_es_representante').checked = false;
         };
 
         // Inicializar Google Maps pequeño y arrastrable
         function inicializarMapaDireccion() {
-            const defaultLatLng = { lat: -0.3392, lng: -78.1223 }; // Cambia por tu ubicación por defecto
+            // Coordenadas de la Unidad Educativa Víctor Manuel Guzmán
+            const defaultLatLng = { lat: 0.33616444871436085, lng: -78.11604869660802 };
             const latInput = document.getElementById('latitud');
             const lngInput = document.getElementById('longitud');
             const map = new google.maps.Map(document.getElementById('mapa-direccion'), {
                 center: defaultLatLng,
-                zoom: 16
+                zoom: 17
             });
             let marker = new google.maps.Marker({
                 position: defaultLatLng,
@@ -1727,6 +2060,77 @@
                 lngInput.value = e.latLng.lng();
             });
         }
+
+        // --- AUTOLLENADO DE REPRESENTANTE SEGUN CHECKBOX ---
+        function copiarDatosPadreARepresentante() {
+            document.getElementById('representante_nombres').value = document.getElementById('padre_nombres').value;
+            document.getElementById('representante_cedula').value = document.getElementById('padre_cedula').value;
+            document.getElementById('representante_ocupacion').value = document.getElementById('padre_ocupacion').value;
+            document.getElementById('representante_telefono_trabajo').value = document.getElementById('padre_telefono_trabajo').value;
+            document.getElementById('representante_email').value = document.getElementById('padre_email').value;
+            document.getElementById('representante_nivel_educacion').value = document.getElementById('padre_nivel_educacion').value;
+            document.getElementById('representante_estado_civil').value = document.getElementById('padre_estado_civil').value;
+            document.getElementById('representante_vive_con_estudiante').value = document.getElementById('padre_vive_con_estudiante').value;
+            document.getElementById('representante_horario_trabajo').value = document.getElementById('padre_horario_trabajo').value;
+            document.getElementById('representante_telefono_celular').value = document.getElementById('padre_telefono_celular').value;
+        }
+        function copiarDatosMadreARepresentante() {
+            document.getElementById('representante_nombres').value = document.getElementById('madre_nombres').value;
+            document.getElementById('representante_cedula').value = document.getElementById('madre_cedula').value;
+            document.getElementById('representante_ocupacion').value = document.getElementById('madre_ocupacion').value;
+            document.getElementById('representante_telefono_trabajo').value = document.getElementById('madre_telefono_trabajo').value;
+            document.getElementById('representante_email').value = document.getElementById('madre_email').value;
+            document.getElementById('representante_nivel_educacion').value = document.getElementById('madre_nivel_educacion').value;
+            document.getElementById('representante_estado_civil').value = document.getElementById('madre_estado_civil').value;
+            document.getElementById('representante_vive_con_estudiante').value = document.getElementById('madre_vive_con_estudiante').value;
+            document.getElementById('representante_horario_trabajo').value = document.getElementById('madre_horario_trabajo').value;
+            document.getElementById('representante_telefono_celular').value = document.getElementById('madre_telefono_celular').value;
+        }
+
+        // Escuchar cambios en los campos del padre si el checkbox está marcado
+        function activarAutoPadre() {
+            if (document.getElementById('padre_es_representante').checked) {
+                copiarDatosPadreARepresentante();
+            }
+        }
+        document.getElementById('padre_es_representante').addEventListener('change', function() {
+            if (this.checked) {
+                copiarDatosPadreARepresentante();
+            }
+        });
+        [
+            'padre_nombres','padre_cedula','padre_ocupacion','padre_telefono_trabajo','padre_email',
+            'padre_nivel_educacion','padre_estado_civil','padre_vive_con_estudiante','padre_horario_trabajo','padre_telefono_celular'
+        ].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                if (document.getElementById('padre_es_representante').checked) {
+                    copiarDatosPadreARepresentante();
+                }
+            });
+        });
+
+        // Escuchar cambios en los campos de la madre si el checkbox está marcado
+        function activarAutoMadre() {
+            if (document.getElementById('madre_es_representante').checked) {
+                copiarDatosMadreARepresentante();
+            }
+        }
+        document.getElementById('madre_es_representante').addEventListener('change', function() {
+            if (this.checked) {
+                copiarDatosMadreARepresentante();
+            }
+        });
+        [
+            'madre_nombres','madre_cedula','madre_ocupacion','madre_telefono_trabajo','madre_email',
+            'madre_nivel_educacion','madre_estado_civil','madre_vive_con_estudiante','madre_horario_trabajo','madre_telefono_celular'
+        ].forEach(id => {
+            document.getElementById(id).addEventListener('input', function() {
+                if (document.getElementById('madre_es_representante').checked) {
+                    copiarDatosMadreARepresentante();
+                }
+            });
+        });
+
     });
     </script>
 </body>

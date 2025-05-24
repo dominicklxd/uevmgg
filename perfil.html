@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario - Victor Manuel Guzman</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="/unidad-educativa-logo.png" />
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
+                <!-- Aquí se mostrará el saludo -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main style="margin-top: 120px;">
+        <section class="centered-section" style="max-width: 600px; margin: 3rem auto 2rem; padding: 2rem;">
+            <h2 class="section-title" style="text-align:center;">Perfil de Usuario</h2>
+            <div id="perfil-info" style="margin-bottom:2rem;">
+                <div style="text-align:center;">
+                    <img src="user-profile.png" alt="Foto de perfil" style="width:100px;height:100px;border-radius:50%;margin-bottom:1rem;background:#eee;">
+                </div>
+                <div id="datos-usuario" style="text-align:center;">
+                    <!-- Aquí se mostrarán los datos del usuario -->
+                </div>
+            </div>
+            <hr>
+            <form id="form-cambiar-usuario" style="margin-bottom:2rem;">
+                <h3 style="text-align:left;">Cambiar usuario</h3>
+                <input type="text" id="nuevoUsuario" placeholder="Nuevo usuario" required>
+                <button type="submit">Actualizar usuario</button>
+            </form>
+            <form id="form-cambiar-contrasena" style="margin-bottom:2rem;">
+                <h3 style="text-align:left;">Cambiar contraseña</h3>
+                <input type="password" id="contrasenaActual" placeholder="Contraseña actual" required>
+                <input type="password" id="nuevaContrasena" placeholder="Nueva contraseña" required>
+                <input type="password" id="confirmarContrasena" placeholder="Confirmar nueva contraseña" required>
+                <button type="submit">Actualizar contraseña</button>
+            </form>
+            <form id="form-actualizar-inscripcion" style="margin-bottom:2rem;">
+                <h3 style="text-align:left;">Actualizar inscripción</h3>
+                <button type="button" id="btn-actualizar-inscripcion">Actualizar datos de inscripción</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+                <div style="margin-top:10px; text-align:right;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo
+                +-
+            </p>
+        </div>
+    </footer>
+    <script>
+    // --- Encabezado dinámico y saludo ---
+    const authLinks = document.querySelector('.auth-links');
+    const usuarioActivo = localStorage.getItem('usuarioActivo');
+    if (authLinks) {
+        if (usuarioActivo) {
+            authLinks.innerHTML = `
+                <a href="matricularse.html">Matricularse</a>
+                <a href="perfil.html">Perfil</a>
+                <a href="#" id="logout">Cerrar Sesión</a>
+            `;
+            document.getElementById('logout').addEventListener('click', () => {
+                localStorage.removeItem('usuarioActivo');
+                alert('Sesión cerrada exitosamente.');
+                window.location.href = 'index.html';
+            });
+        } else {
+            authLinks.innerHTML = `
+                <a href="registro.html">Registrarse</a>
+                <a href="login.html">Iniciar Sesión</a>
+            `;
+        }
+    }
+    // --- Mostrar saludo ---
+    async function mostrarSaludoUsuario() {
+        const saludoDiv = document.getElementById('saludo-usuario');
+        if (!usuarioActivo) {
+            saludoDiv.style.display = 'none';
+            return;
+        }
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        let nombre = '';
+        try {
+            let { data: cedulaData } = await supabase
+                .from('cedulas')
+                .select('id_cedula')
+                .eq('cedula', usuarioActivo)
+                .maybeSingle();
+            let idCedula = cedulaData && cedulaData.id_cedula ? cedulaData.id_cedula : null;
+            if (idCedula) {
+                let { data: estudianteData } = await supabase
+                    .from('estudiante')
+                    .select('nombres')
+                    .eq('id_cedula', idCedula)
+                    .order('id_estudiante', { ascending: false })
+                    .limit(1)
+                    .maybeSingle();
+                if (estudianteData && estudianteData.nombres) {
+                    nombre = estudianteData.nombres.trim().split(' ')[0];
+                }
+            }
+            if (!nombre) {
+                let { data: estudianteData2 } = await supabase
+                    .from('estudiante')
+                    .select('nombres')
+                    .eq('cedula', usuarioActivo)
+                    .order('id_estudiante', { ascending: false })
+                    .limit(1)
+                    .maybeSingle();
+                if (estudianteData2 && estudianteData2.nombres) {
+                    nombre = estudianteData2.nombres.trim().split(' ')[0];
+                }
+            }
+        } catch (e) {
+            nombre = '';
+        }
+        if (nombre) {
+            saludoDiv.textContent = `Hola, ${nombre}`;
+            saludoDiv.style.display = 'block';
+        } else {
+            saludoDiv.textContent = '';
+            saludoDiv.style.display = 'none';
+        }
+    }
+    mostrarSaludoUsuario();
+
+    // --- Mostrar datos del usuario en el perfil ---
+    async function cargarDatosUsuario() {
+        const datosDiv = document.getElementById('datos-usuario');
+        if (!usuarioActivo) {
+            datosDiv.innerHTML = '<p>No has iniciado sesión.</p>';
+            return;
+        }
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        let nombre = '', usuario = usuarioActivo, correo = '', cedula = usuarioActivo;
+        try {
+            let { data: cedulaData } = await supabase
+                .from('cedulas')
+                .select('id_cedula')
+                .eq('cedula', usuarioActivo)
+                .maybeSingle();
+            let idCedula = cedulaData && cedulaData.id_cedula ? cedulaData.id_cedula : null;
+            if (idCedula) {
+                let { data: estudianteData } = await supabase
+                    .from('estudiante')
+                    .select('nombres, correo')
+                    .eq('id_cedula', idCedula)
+                    .order('id_estudiante', { ascending: false })
+                    .limit(1)
+                    .maybeSingle();
+                if (estudianteData) {
+                    nombre = estudianteData.nombres || '';
+                    correo = estudianteData.correo || '';
+                }
+            }
+        } catch {}
+        datosDiv.innerHTML = `
+            <p><strong>Nombre:</strong> ${nombre || '(No registrado)'}</p>
+            <p><strong>Usuario (cédula):</strong> ${cedula}</p>
+            <p><strong>Correo:</strong> ${correo || '(No registrado)'}</p>
+        `;
+    }
+    cargarDatosUsuario();
+
+    // --- Cambiar usuario ---
+    document.getElementById('form-cambiar-usuario').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const nuevoUsuario = document.getElementById('nuevoUsuario').value.trim();
+        if (!nuevoUsuario) return alert('Ingrese un nuevo usuario.');
+        // Aquí deberías actualizar el usuario en la base de datos y en localStorage
+        // Ejemplo: Actualizar en la tabla 'cedulas'
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        try {
+            // Actualizar cédula en la tabla 'cedulas'
+            await supabase
+                .from('cedulas')
+                .update({ cedula: nuevoUsuario })
+                .eq('cedula', usuarioActivo);
+            localStorage.setItem('usuarioActivo', nuevoUsuario);
+            alert('Usuario actualizado correctamente. Vuelva a iniciar sesión.');
+            window.location.href = 'login.html';
+        } catch {
+            alert('Error al actualizar el usuario.');
+        }
+    });
+
+    // --- Cambiar contraseña ---
+    document.getElementById('form-cambiar-contrasena').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const actual = document.getElementById('contrasenaActual').value;
+        const nueva = document.getElementById('nuevaContrasena').value;
+        const confirmar = document.getElementById('confirmarContrasena').value;
+        if (!actual || !nueva || !confirmar) return alert('Complete todos los campos.');
+        if (nueva !== confirmar) return alert('Las contraseñas no coinciden.');
+        // Aquí deberías validar la contraseña actual y actualizar la nueva en la base de datos
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        // Validar contraseña actual
+        let { data: userData } = await supabase
+            .from('usuarios')
+            .select('contrasena')
+            .eq('usuario', usuarioActivo)
+            .maybeSingle();
+        if (!userData || userData.contrasena !== actual) {
+            alert('Contraseña actual incorrecta.');
+            return;
+        }
+        // Actualizar contraseña
+        await supabase
+            .from('usuarios')
+            .update({ contrasena: nueva })
+            .eq('usuario', usuarioActivo);
+        alert('Contraseña actualizada correctamente.');
+        document.getElementById('form-cambiar-contrasena').reset();
+    });
+
+    // --- Actualizar inscripción ---
+    document.getElementById('btn-actualizar-inscripcion').addEventListener('click', function() {
+        // Redirigir a la página de inscripción o abrir un modal
+        window.location.href = 'matricularse.html';
+    });
+
+    // --- Scroll header ---
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+    </script>
+</body>
+</html>
