@@ -350,6 +350,7 @@
                     <label for="institucion_procedencia">Institución de Procedencia</label>
                     <input type="text" id="institucion_procedencia" name="institucion_procedencia" required>
                 </div>
+                <label>Porfavor llene todos los campos requeridos para continuar y que el botón de siguiente funcione</label>
                 <button type="button" id="btn-siguiente-paso1" class="matricula-btn">Siguiente</button>
             </form>
             <form id="paso2-form" style="display:none;">
@@ -1138,6 +1139,31 @@
                 const el = document.getElementById(id);
                 return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
             }
+            // Validar campos requeridos y mostrar notificación si falta alguno
+            const campos = [
+                { id: 'periodo', label: 'Periodo' },
+                { id: 'curso', label: 'Curso' },
+                { id: 'paralelo', label: 'Paralelo' },
+                { id: 'institucion_procedencia', label: 'Institución de Procedencia' }
+            ];
+            let faltantes = [];
+            campos.forEach(campo => {
+                const el = document.getElementById(campo.id);
+                if (!el.value || el.value.trim() === "") {
+                    faltantes.push(campo.label);
+                    el.style.borderColor = 'red';
+                    setTimeout(() => { el.style.borderColor = ''; }, 2000);
+                }
+            });
+            // Si hay faltantes, mostrar notificación y no avanzar
+            let notif = document.getElementById('notif-paso1');
+            if (faltantes.length > 0) {
+                alert('Debe llenar todos los campos antes de continuar.');
+                return;
+            } else if (notif) {
+                notif.style.display = 'none';
+                notif.style.opacity = '0';
+            }
             const paso1 = {
                 periodo: valorNA('periodo'),
                 curso: valorNA('curso'),
@@ -1151,7 +1177,26 @@
             activarPasoWizard(2);
         };
 
-        // PASO 6: Validar antes de avanzar SOLO si el formulario está visible
+        // --- DESHABILITAR BOTÓN SIGUIENTE EN PASO 1 HASTA QUE CAMPOS REQUERIDOS ESTÉN LLENOS ---
+        const btnSiguientePaso1 = document.getElementById('btn-siguiente-paso1');
+        btnSiguientePaso1.disabled = true;
+        function verificarPaso1Campos() {
+            const periodo = document.getElementById('periodo').value.trim();
+            const curso = document.getElementById('curso').value.trim();
+            const paralelo = document.getElementById('paralelo').value.trim();
+            const institucion = document.getElementById('institucion_procedencia').value.trim();
+            if (periodo && curso && paralelo && institucion) {
+                btnSiguientePaso1.disabled = false;
+            } else {
+                btnSiguientePaso1.disabled = true;
+            }
+        }
+        ['periodo','curso','paralelo','institucion_procedencia'].forEach(id => {
+            document.getElementById(id).addEventListener('input', verificarPaso1Campos);
+            document.getElementById(id).addEventListener('change', verificarPaso1Campos);
+        });
+
+        // --- PASO 6: Validar antes de avanzar SOLO si el formulario está visible
         document.getElementById('btn-siguiente-paso6').onclick = function() {
             if (document.getElementById('paso6-form').style.display !== 'none') {
                 if (!validarCamposRequeridos('paso6-form')) {
