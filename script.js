@@ -155,6 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </ul>
                     </div>
                 ` : ''}
+                <a href="perfil.html">Perfil</a>
                 <a href="#" id="logout">Cerrar Sesión</a>
             `;
             const logoutBtn = document.getElementById('logout');
@@ -205,20 +206,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const header = document.querySelector('header');
     const usuarioActivo = localStorage.getItem('usuarioActivo');
 
+    // Mostrar enlaces de autenticación en el encabezado, incluyendo "Perfil"
     if (authLinks) {
         if (usuarioActivo) {
             authLinks.innerHTML = `
                 <a href="matricularse.html">Matricularse</a>
+                <a href="perfil.html">Perfil</a>
                 <a href="#" id="logout">Cerrar Sesión</a>
             `;
-            const logoutBtn = document.getElementById('logout');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', () => {
-                    localStorage.removeItem('usuarioActivo');
-                    alert('Sesión cerrada exitosamente.');
-                    window.location.href = 'index.html';
-                });
-            }
+            document.getElementById('logout').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.removeItem('usuarioActivo');
+                alert('Sesión cerrada exitosamente.');
+                window.location.href = 'index.html';
+            });
         } else {
             authLinks.innerHTML = `
                 <a href="registro.html">Registrarse</a>

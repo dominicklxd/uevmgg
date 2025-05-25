@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualizar Inscripción</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        /* ...estilos existentes... */
+        body {
+            background: url('Abanderados.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .matricula-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            max-width: 700px;
+            margin: 40px auto 0 auto;
+            padding: 3.5rem 3.5rem 2.5rem 3.5rem;
+            position: relative;
+            z-index: 2;
+            min-height: 50vh;
+        }
+        .matricula-section-title {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 0.7rem;
+            margin-top: 0.7rem;
+        }
+        .matricula-form-group {
+            margin-bottom: 1.2rem;
+        }
+        .matricula-form-group label {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+            display: block;
+            color: #333;
+        }
+        .matricula-form-group input,
+        .matricula-form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .editar-btn, .guardar-btn {
+            margin-top: 0.3rem;
+            margin-right: 0.5rem;
+            background: #2f5597;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .guardar-btn {
+            background: #f3c14b;
+            color: #222;
+        }
+        .editar-btn:hover, .guardar-btn:hover {
+            background: #548235;
+            color: #fff;
+        }
+        .matricula-btn {
+            background: #f3c14b;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.7rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: block;
+            margin-left: auto;
+            margin-right: 0;
+        }
+        .matricula-btn:hover {
+            background: #e0a800;
+        }
+        .actualizar-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .actualizar-tab-btn {
+            background: #2f5597;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.7rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .actualizar-tab-btn.active, .actualizar-tab-btn:focus {
+            background: #f3c14b;
+            color: #222;
+            transform: scale(1.05);
+        }
+        .actualizar-tab-content {
+            display: none;
+        }
+        .actualizar-tab-content.active {
+            display: block;
+        }
+        .matricula-btn.pdf-btn {
+            background: #2f5597;
+            margin-top: 2rem;
+        }
+        .matricula-btn.pdf-btn:hover {
+            background: #548235;
+        }
+        #resumen-panel {
+            display: none;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            max-width: 700px;
+            margin: 40px auto 0 auto;
+            padding: 2rem 2rem 2rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- ...encabezado igual que index.html... -->
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main style="margin-top: 120px;">
+        <div class="matricula-card" id="panel-edicion">
+            <div class="actualizar-tabs">
+                <button type="button" class="actualizar-tab-btn active" data-tab="academicos">Datos Académicos</button>
+                <button type="button" class="actualizar-tab-btn" data-tab="estudiante">Datos del Estudiante</button>
+                <button type="button" class="actualizar-tab-btn" data-tab="vivienda">Datos Vivienda</button>
+                <button type="button" class="actualizar-tab-btn" data-tab="padre">Datos Padre</button>
+                <button type="button" class="actualizar-tab-btn" data-tab="madre">Datos Madre</button>
+                <button type="button" class="actualizar-tab-btn" data-tab="representante">Datos Representante</button>
+                <button type="button" class="actualizar-tab-btn" data-tab="emergencia">Datos de Emergencia</button>
+            </div>
+            <form id="form-actualizar-inscripcion">
+                <!-- DATOS ACADÉMICOS -->
+                <div class="actualizar-tab-content active" id="tab-academicos">
+                    <div class="matricula-section-title">Datos Académicos</div>
+                    <div class="matricula-form-group">
+                        <label for="periodo">Periodo</label>
+                        <select id="periodo" name="periodo" disabled>
+                            <option value="">-SELECCIONA-</option>
+                            <option value="2025-2026">2025-2026</option>
+                            <option value="2024-2025">2024-2025</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="curso">Curso</label>
+                        <select id="curso" name="curso" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="Inicial">Inicial</option>
+                            <option value="1ro EGB">1ro EGB</option>
+                            <option value="2do EGB">2do EGB</option>
+                            <option value="3ro EGB">3ro EGB</option>
+                            <option value="4to EGB">4to EGB</option>
+                            <option value="5to EGB">5to EGB</option>
+                            <option value="6to EGB">6to EGB</option>
+                            <option value="7mo EGB">7mo EGB</option>
+                            <option value="8vo EGB">8vo EGB</option>
+                            <option value="9no EGB">9no EGB</option>
+                            <option value="10mo EGB">10mo EGB</option>
+                            <option value="1ro Bachillerato">1ro Bachillerato</option>
+                            <option value="2do Bachillerato">2do Bachillerato</option>
+                            <option value="3ro Bachillerato">3ro Bachillerato</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="paralelo">Paralelo</label>
+                        <select id="paralelo" name="paralelo" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group" id="especialidad-group" style="display:none;">
+                        <label for="especialidad">Especialidad (solo Bachillerato)</label>
+                        <select id="especialidad" name="especialidad" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="Informática">Informática</option>
+                            <option value="Contabilidad">Contabilidad</option>
+                            <option value="Gestión Administrativa">Gestión Administrativa</option>
+                            <option value="Ciencias">Ciencias</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="institucion_procedencia">Institución de Procedencia</label>
+                        <input type="text" id="institucion_procedencia" name="institucion_procedencia" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                </div>
+                <!-- DATOS DEL ESTUDIANTE -->
+                <div class="actualizar-tab-content" id="tab-estudiante">
+                    <div class="matricula-section-title">Datos del Estudiante</div>
+                    <div class="matricula-form-group">
+                        <label for="apellidos">Apellidos</label>
+                        <input type="text" id="apellidos" name="apellidos" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="nombres">Nombres</label>
+                        <input type="text" id="nombres" name="nombres" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="cedula">Cédula</label>
+                        <input type="text" id="cedula" name="cedula" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="etnia">Etnia</label>
+                        <input type="text" id="etnia" name="etnia" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="nacionalidad">Nacionalidad</label>
+                        <input type="text" id="nacionalidad" name="nacionalidad" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="tipo_sangre">Tipo de Sangre</label>
+                        <input type="text" id="tipo_sangre" name="tipo_sangre" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="sexo">Sexo</label>
+                        <input type="text" id="sexo" name="sexo" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="text" id="telefono" name="telefono" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="telefono_convencional">Teléfono Convencional</label>
+                        <input type="text" id="telefono_convencional" name="telefono_convencional" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="correo">Correo</label>
+                        <input type="email" id="correo" name="correo" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                </div>
+                <!-- DATOS VIVIENDA -->
+                <div class="actualizar-tab-content" id="tab-vivienda">
+                    <div class="matricula-section-title">Datos de Vivienda</div>
+                    <div class="matricula-form-group">
+                        <label for="calle_principal">Calle Principal</label>
+                        <input type="text" id="calle_principal" name="calle_principal" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="calle_secundaria">Calle Secundaria</label>
+                        <input type="text" id="calle_secundaria" name="calle_secundaria" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="provincia">Provincia</label>
+                        <input type="text" id="provincia" name="provincia" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="canton">Cantón</label>
+                        <input type="text" id="canton" name="canton" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="parroquia">Parroquia</label>
+                        <input type="text" id="parroquia" name="parroquia" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="barrio">Barrio</label>
+                        <input type="text" id="barrio" name="barrio" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="numero_casa">Número de Casa</label>
+                        <input type="text" id="numero_casa" name="numero_casa" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="referencia">Referencia</label>
+                        <input type="text" id="referencia" name="referencia" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                </div>
+                <!-- DATOS PADRE -->
+                <div class="actualizar-tab-content" id="tab-padre">
+                    <div class="matricula-section-title">Datos del Padre</div>
+                    <div class="matricula-form-group">
+                        <label for="padre_nombres">Nombre del Padre</label>
+                        <input type="text" id="padre_nombres" name="padre_nombres" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_cedula">Cédula del Padre</label>
+                        <input type="text" id="padre_cedula" name="padre_cedula" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_ocupacion">Ocupación del Padre</label>
+                        <input type="text" id="padre_ocupacion" name="padre_ocupacion" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_telefono_trabajo">Teléfono de Trabajo</label>
+                        <input type="text" id="padre_telefono_trabajo" name="padre_telefono_trabajo" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_email">Email del Padre</label>
+                        <input type="email" id="padre_email" name="padre_email" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_nivel_educacion">Nivel de Educación</label>
+                        <input type="text" id="padre_nivel_educacion" name="padre_nivel_educacion" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_estado_civil">Estado Civil</label>
+                        <select id="padre_estado_civil" name="padre_estado_civil" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="Casado/a">Casado/a</option>
+                            <option value="Soltero/a">Soltero/a</option>
+                            <option value="Divorciado/a">Divorciado/a</option>
+                            <option value="Viudo/a">Viudo/a</option>
+                            <option value="Unión libre">Unión libre</option>
+                            <option value="Separado/a">Separado/a</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_vive_con_estudiante">¿Vive con el estudiante?</label>
+                        <select id="padre_vive_con_estudiante" name="padre_vive_con_estudiante" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_horario_trabajo">Horario de Trabajo</label>
+                        <input type="text" id="padre_horario_trabajo" name="padre_horario_trabajo" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="padre_telefono_celular">Teléfono Celular</label>
+                        <input type="text" id="padre_telefono_celular" name="padre_telefono_celular" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                </div>
+                <!-- DATOS MADRE -->
+                <div class="actualizar-tab-content" id="tab-madre">
+                    <div class="matricula-section-title">Datos de la Madre</div>
+                    <div class="matricula-form-group">
+                        <label for="madre_nombres">Nombre de la Madre</label>
+                        <input type="text" id="madre_nombres" name="madre_nombres" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_cedula">Cédula de la Madre</label>
+                        <input type="text" id="madre_cedula" name="madre_cedula" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_ocupacion">Ocupación de la Madre</label>
+                        <input type="text" id="madre_ocupacion" name="madre_ocupacion" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_telefono_trabajo">Teléfono de Trabajo</label>
+                        <input type="text" id="madre_telefono_trabajo" name="madre_telefono_trabajo" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_email">Email de la Madre</label>
+                        <input type="email" id="madre_email" name="madre_email" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_nivel_educacion">Nivel de Educación</label>
+                        <input type="text" id="madre_nivel_educacion" name="madre_nivel_educacion" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_estado_civil">Estado Civil</label>
+                        <select id="madre_estado_civil" name="madre_estado_civil" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="Casado/a">Casado/a</option>
+                            <option value="Soltero/a">Soltero/a</option>
+                            <option value="Divorciado/a">Divorciado/a</option>
+                            <option value="Viudo/a">Viudo/a</option>
+                            <option value="Unión libre">Unión libre</option>
+                            <option value="Separado/a">Separado/a</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_vive_con_estudiante">¿Vive con el estudiante?</label>
+                        <select id="madre_vive_con_estudiante" name="madre_vive_con_estudiante" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_horario_trabajo">Horario de Trabajo</label>
+                        <input type="text" id="madre_horario_trabajo" name="madre_horario_trabajo" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="madre_telefono_celular">Teléfono Celular</label>
+                        <input type="text" id="madre_telefono_celular" name="madre_telefono_celular" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                </div>
+                <!-- DATOS REPRESENTANTE -->
+                <div class="actualizar-tab-content" id="tab-representante">
+                    <div class="matricula-section-title">Datos del Representante</div>
+                    <div class="matricula-form-group">
+                        <label for="representante_nombres">Nombre del Representante</label>
+                        <input type="text" id="representante_nombres" name="representante_nombres" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_cedula">Cédula del Representante</label>
+                        <input type="text" id="representante_cedula" name="representante_cedula" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_ocupacion">Ocupación del Representante</label>
+                        <input type="text" id="representante_ocupacion" name="representante_ocupacion" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_telefono_trabajo">Teléfono de Trabajo</label>
+                        <input type="text" id="representante_telefono_trabajo" name="representante_telefono_trabajo" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_email">Email del Representante</label>
+                        <input type="email" id="representante_email" name="representante_email" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_nivel_educacion">Nivel de Educación</label>
+                        <input type="text" id="representante_nivel_educacion" name="representante_nivel_educacion" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_estado_civil">Estado Civil</label>
+                        <select id="representante_estado_civil" name="representante_estado_civil" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="Casado/a">Casado/a</option>
+                            <option value="Soltero/a">Soltero/a</option>
+                            <option value="Divorciado/a">Divorciado/a</option>
+                            <option value="Viudo/a">Viudo/a</option>
+                            <option value="Unión libre">Unión libre</option>
+                            <option value="Separado/a">Separado/a</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_vive_con_estudiante">¿Vive con el estudiante?</label>
+                        <select id="representante_vive_con_estudiante" name="representante_vive_con_estudiante" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_horario_trabajo">Horario de Trabajo</label>
+                        <input type="text" id="representante_horario_trabajo" name="representante_horario_trabajo" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="representante_telefono_celular">Teléfono Celular</label>
+                        <input type="text" id="representante_telefono_celular" name="representante_telefono_celular" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                </div>
+                <!-- DATOS EMERGENCIA -->
+                <div class="actualizar-tab-content" id="tab-emergencia">
+                    <div class="matricula-section-title">Datos de Emergencia</div>
+                    <div class="matricula-form-group">
+                        <label for="emergencia1_nombre">Nombre del Contacto 1</label>
+                        <input type="text" id="emergencia1_nombre" name="emergencia1_nombre" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="emergencia1_telefono">Teléfono del Contacto 1</label>
+                        <input type="text" id="emergencia1_telefono" name="emergencia1_telefono" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="emergencia1_parentesco">Parentesco del Contacto 1</label>
+                        <input type="text" id="emergencia1_parentesco" name="emergencia1_parentesco" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="emergencia2_nombre">Nombre del Contacto 2</label>
+                        <input type="text" id="emergencia2_nombre" name="emergencia2_nombre" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="emergencia2_telefono">Teléfono del Contacto 2</label>
+                        <input type="text" id="emergencia2_telefono" name="emergencia2_telefono" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="emergencia2_parentesco">Parentesco del Contacto 2</label>
+                        <input type="text" id="emergencia2_parentesco" name="emergencia2_parentesco" disabled>
+                        <button type="button" class="editar-btn" onclick="editarCampo(this)">Editar</button>
+                        <button type="button" class="guardar-btn" style="display:none;" onclick="guardarCampo(this)">Guardar</button>
+                    </div>
+                </div>
+                <button type="submit" class="matricula-btn" style="margin-top:2rem;">Guardar cambios</button>
+                <button type="button" class="matricula-btn pdf-btn" id="btn-imprimir-pdf">Imprimir PDF</button>
+            </form>
+            <button type="button" class="matricula-btn" id="btn-ir-resumen" style="margin-top:2rem;">Ir a imprimir</button>
+        </div>
+        <!-- Resumen oculto inicialmente -->
+        <div id="panel-resumen" style="display:none;">
+            <div class="matricula-section-title">Resumen de Actualización</div>
+            <div id="resumen-actualizacion" style="background:#f9f9f9;padding:1.5rem;border-radius:12px;margin-bottom:1rem;">
+                <!-- Aquí se llenará el resumen con JS -->
+            </div>
+            <button type="button" class="matricula-btn pdf-btn" id="btn-descargar-pdf">Descargar PDF</button>
+            <button type="button" class="matricula-btn" id="btn-volver-editar" style="background:#888;">Volver a editar</button>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+                <div style="margin-top:10px; text-align:right;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo
+                +-
+            </p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+    // --- Tabs ---
+    document.querySelectorAll('.actualizar-tab-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.actualizar-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.actualizar-tab-content').forEach(tab => tab.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+        });
+    });
+
+    // --- Mostrar/ocultar especialidad según curso seleccionado ---
+    document.getElementById('curso').addEventListener('change', function() {
+        const value = this.value;
+        const especialidadGroup = document.getElementById('especialidad-group');
+        if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
+            especialidadGroup.style.display = 'block';
+        } else {
+            especialidadGroup.style.display = 'none';
+            document.getElementById('especialidad').value = '';
+        }
+    });
+
+    // --- Supabase setup ---
+    const usuarioActivo = localStorage.getItem('usuarioActivo');
+    const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    let idEstudiante = null;
+    let idInscripcion = null;
+
+    // --- Cargar datos desde la base de datos ---
+    async function cargarDatos() {
+        if (!usuarioActivo) return;
+        let { data: cedulaData } = await supabase
+            .from('cedulas')
+            .select('id_cedula, cedula')
+            .eq('cedula', usuarioActivo)
+            .maybeSingle();
+        let idCedula = cedulaData && cedulaData.id_cedula ? cedulaData.id_cedula : null;
+        if (!idCedula) return;
+
+        let { data: estudianteList } = await supabase
+            .from('estudiante')
+            .select('id_estudiante, nombres, apellidos, correo, tipo_sangre, fecha_nacimiento, sexo, telefono, telefono_convencional, etnia, nacionalidad, id_inscripcion')
+            .eq('id_cedula', idCedula)
+            .order('id_estudiante', { ascending: false })
+            .limit(1);
+
+        if (!estudianteList || estudianteList.length === 0) return;
+        const estudiante = estudianteList[0];
+        idEstudiante = estudiante.id_estudiante;
+        idInscripcion = estudiante.id_inscripcion;
+
+        // Inscripción
+        let { data: inscData } = await supabase
+            .from('solicitud_inscripcion')
+            .select('periodo, curso, especialidad, institucion_procedencia, paralelo')
+            .eq('id', idInscripcion)
+            .maybeSingle();
+
+        if (inscData) {
+            document.getElementById('periodo').value = inscData.periodo || '';
+            document.getElementById('curso').value = inscData.curso || '';
+            document.getElementById('especialidad').value = inscData.especialidad || '';
+            document.getElementById('institucion_procedencia').value = inscData.institucion_procedencia || '';
+            document.getElementById('paralelo').value = inscData.paralelo || '';
+            if (inscData.curso && (inscData.curso.includes('Bachillerato'))) {
+                document.getElementById('especialidad-group').style.display = 'block';
+            }
+        }
+
+        // Estudiante
+        document.getElementById('apellidos').value = estudiante.apellidos || '';
+        document.getElementById('nombres').value = estudiante.nombres || '';
+        document.getElementById('correo').value = estudiante.correo || '';
+        document.getElementById('tipo_sangre').value = estudiante.tipo_sangre || '';
+        document.getElementById('fecha_nacimiento').value = estudiante.fecha_nacimiento ? estudiante.fecha_nacimiento.split('T')[0] : '';
+        document.getElementById('sexo').value = estudiante.sexo || '';
+        document.getElementById('telefono').value = estudiante.telefono || '';
+        document.getElementById('telefono_convencional').value = estudiante.telefono_convencional || '';
+        document.getElementById('etnia').value = estudiante.etnia || '';
+        document.getElementById('nacionalidad').value = estudiante.nacionalidad || '';
+        document.getElementById('cedula').value = usuarioActivo || '';
+
+        // Vivienda
+        let { data: viviendaData } = await supabase
+            .from('direccion_estudiante')
+            .select('calle_principal, calle_secundaria, provincia, canton, parroquia, barrio, numero_casa, referencia')
+            .eq('id_estudiante', idEstudiante)
+            .maybeSingle();
+        if (viviendaData) {
+            document.getElementById('calle_principal').value = viviendaData.calle_principal || '';
+            document.getElementById('calle_secundaria').value = viviendaData.calle_secundaria || '';
+            document.getElementById('provincia').value = viviendaData.provincia || '';
+            document.getElementById('canton').value = viviendaData.canton || '';
+            document.getElementById('parroquia').value = viviendaData.parroquia || '';
+            document.getElementById('barrio').value = viviendaData.barrio || '';
+            document.getElementById('numero_casa').value = viviendaData.numero_casa || '';
+            document.getElementById('referencia').value = viviendaData.referencia || '';
+        }
+
+        // Padre
+        let { data: padreData } = await supabase
+            .from('padre_estudiante')
+            .select('nombres, cedula, ocupacion, telefono_trabajo, email, nivel_educacion, estado_civil, vive_con_estudiante, horario_trabajo, telefono_celular')
+            .eq('id_estudiante', idEstudiante)
+            .maybeSingle();
+        if (padreData) {
+            document.getElementById('padre_nombres').value = padreData.nombres || '';
+            document.getElementById('padre_cedula').value = padreData.cedula || '';
+            document.getElementById('padre_ocupacion').value = padreData.ocupacion || '';
+            document.getElementById('padre_telefono_trabajo').value = padreData.telefono_trabajo || '';
+            document.getElementById('padre_email').value = padreData.email || '';
+            document.getElementById('padre_nivel_educacion').value = padreData.nivel_educacion || '';
+            document.getElementById('padre_estado_civil').value = padreData.estado_civil || '';
+            document.getElementById('padre_vive_con_estudiante').value = padreData.vive_con_estudiante === true ? "true" : padreData.vive_con_estudiante === false ? "false" : (padreData.vive_con_estudiante || '');
+            document.getElementById('padre_horario_trabajo').value = padreData.horario_trabajo || '';
+            document.getElementById('padre_telefono_celular').value = padreData.telefono_celular || '';
+        }
+
+        // Madre
+        let { data: madreData } = await supabase
+            .from('madre_estudiante')
+            .select('nombres, cedula, ocupacion, telefono_trabajo, email, nivel_educacion, estado_civil, vive_con_estudiante, horario_trabajo, telefono_celular')
+            .eq('id_estudiante', idEstudiante)
+            .maybeSingle();
+        if (madreData) {
+            document.getElementById('madre_nombres').value = madreData.nombres || '';
+            document.getElementById('madre_cedula').value = madreData.cedula || '';
+            document.getElementById('madre_ocupacion').value = madreData.ocupacion || '';
+            document.getElementById('madre_telefono_trabajo').value = madreData.telefono_trabajo || '';
+            document.getElementById('madre_email').value = madreData.email || '';
+            document.getElementById('madre_nivel_educacion').value = madreData.nivel_educacion || '';
+            document.getElementById('madre_estado_civil').value = madreData.estado_civil || '';
+            document.getElementById('madre_vive_con_estudiante').value = madreData.vive_con_estudiante === true ? "true" : madreData.vive_con_estudiante === false ? "false" : (madreData.vive_con_estudiante || '');
+            document.getElementById('madre_horario_trabajo').value = madreData.horario_trabajo || '';
+            document.getElementById('madre_telefono_celular').value = madreData.telefono_celular || '';
+        }
+
+        // Representante
+        let { data: representanteData } = await supabase
+            .from('representante_estudiante')
+            .select('nombres, cedula, ocupacion, telefono_trabajo, email, nivel_educacion, estado_civil, vive_con_estudiante, horario_trabajo, telefono_celular')
+            .eq('id_estudiante', idEstudiante)
+            .maybeSingle();
+        if (representanteData) {
+            document.getElementById('representante_nombres').value = representanteData.nombres || '';
+            document.getElementById('representante_cedula').value = representanteData.cedula || '';
+            document.getElementById('representante_ocupacion').value = representanteData.ocupacion || '';
+            document.getElementById('representante_telefono_trabajo').value = representanteData.telefono_trabajo || '';
+            document.getElementById('representante_email').value = representanteData.email || '';
+            document.getElementById('representante_nivel_educacion').value = representanteData.nivel_educacion || '';
+            document.getElementById('representante_estado_civil').value = representanteData.estado_civil || '';
+            document.getElementById('representante_vive_con_estudiante').value = representanteData.vive_con_estudiante === true ? "true" : representanteData.vive_con_estudiante === false ? "false" : (representanteData.vive_con_estudiante || '');
+            document.getElementById('representante_horario_trabajo').value = representanteData.horario_trabajo || '';
+            document.getElementById('representante_telefono_celular').value = representanteData.telefono_celular || '';
+        }
+
+        // Emergencia
+        let { data: emergenciaData } = await supabase
+            .from('contacto_emergencia_estudiante')
+            .select('id, nombre, telefono, parentesco')
+            .eq('id_estudiante', idEstudiante);
+
+        // Guardar los IDs de emergencia para actualización
+        window.emergenciaIds = [];
+        if (emergenciaData && emergenciaData.length > 0) {
+            if (emergenciaData[0]) {
+                document.getElementById('emergencia1_nombre').value = emergenciaData[0].nombre || '';
+                document.getElementById('emergencia1_telefono').value = emergenciaData[0].telefono || '';
+                document.getElementById('emergencia1_parentesco').value = emergenciaData[0].parentesco || '';
+                window.emergenciaIds[0] = emergenciaData[0].id;
+            }
+            if (emergenciaData[1]) {
+                document.getElementById('emergencia2_nombre').value = emergenciaData[1].nombre || '';
+                document.getElementById('emergencia2_telefono').value = emergenciaData[1].telefono || '';
+                document.getElementById('emergencia2_parentesco').value = emergenciaData[1].parentesco || '';
+                window.emergenciaIds[1] = emergenciaData[1].id;
+            }
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', cargarDatos);
+
+    // --- Edición y guardado campo a campo ---
+    document.querySelectorAll('.matricula-form-group').forEach(group => {
+        const input = group.querySelector('input, select');
+        if (!input) return;
+        // Elimina botones previos
+        group.querySelectorAll('.editar-btn, .guardar-btn').forEach(btn => btn.remove());
+        // Crea botón editar
+        const btnEditar = document.createElement('button');
+        btnEditar.type = 'button';
+        btnEditar.className = 'editar-btn';
+        btnEditar.textContent = 'Editar';
+        // Crea botón guardar
+        const btnGuardar = document.createElement('button');
+        btnGuardar.type = 'button';
+        btnGuardar.className = 'guardar-btn';
+        btnGuardar.textContent = 'Guardar';
+        btnGuardar.style.display = 'none';
+        // Añade botones
+        group.appendChild(btnEditar);
+        group.appendChild(btnGuardar);
+
+        btnEditar.addEventListener('click', function() {
+            input.disabled = false;
+            btnEditar.style.display = 'none';
+            btnGuardar.style.display = 'inline-block';
+            input.focus();
+        });
+        btnGuardar.addEventListener('click', async function() {
+            input.disabled = true;
+            btnEditar.style.display = 'inline-block';
+            btnGuardar.style.display = 'none';
+            // Guardar campo en la base de datos
+            await guardarCampoEnBD(input);
+        });
+    });
+
+    // --- Guardar campo individual en la base de datos ---
+    async function guardarCampoEnBD(input) {
+        const name = input.name;
+        const value = input.type === "checkbox" ? input.checked : input.value;
+        // Determinar a qué tabla y campo pertenece
+        if (["nombres", "apellidos", "correo", "tipo_sangre", "fecha_nacimiento", "sexo", "telefono", "telefono_convencional", "etnia", "nacionalidad"].includes(name)) {
+            await supabase.from('estudiante').update({ [name]: value }).eq('id_estudiante', idEstudiante);
+        } else if (["periodo", "curso", "especialidad", "institucion_procedencia", "paralelo"].includes(name)) {
+            await supabase.from('solicitud_inscripcion').update({ [name]: value }).eq('id', idInscripcion);
+        } else if (["calle_principal", "calle_secundaria", "provincia", "canton", "parroquia", "barrio", "numero_casa", "referencia"].includes(name)) {
+            await supabase.from('direccion_estudiante').update({ [name]: value }).eq('id_estudiante', idEstudiante);
+        } else if (name.startsWith("padre_")) {
+            let campo = name.replace("padre_", "");
+            let val = campo === "vive_con_estudiante" ? (value === "true") : value;
+            await supabase.from('padre_estudiante').update({ [campo]: val }).eq('id_estudiante', idEstudiante);
+        } else if (name.startsWith("madre_")) {
+            let campo = name.replace("madre_", "");
+            let val = campo === "vive_con_estudiante" ? (value === "true") : value;
+            await supabase.from('madre_estudiante').update({ [campo]: val }).eq('id_estudiante', idEstudiante);
+        } else if (name.startsWith("representante_")) {
+            let campo = name.replace("representante_", "");
+            let val = campo === "vive_con_estudiante" ? (value === "true") : value;
+            await supabase.from('representante_estudiante').update({ [campo]: val }).eq('id_estudiante', idEstudiante);
+        } else if (name.startsWith("emergencia")) {
+            // Emergencia 1 o 2
+            let idx = name[10] === "1" ? 0 : 1;
+            let campo = name.split("_")[1];
+            let idEmergencia = window.emergenciaIds && window.emergenciaIds[idx];
+            if (idEmergencia) {
+                let updateObj = {};
+                updateObj[campo] = value;
+                await supabase.from('contacto_emergencia_estudiante').update(updateObj).eq('id', idEmergencia);
+            }
+        }
+    }
+
+    // --- Guardar cambios (formulario completo) ---
+    document.getElementById('form-actualizar-inscripcion').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const datos = Object.fromEntries(new FormData(e.target).entries());
+
+        // Actualizar estudiante
+        await supabase
+            .from('estudiante')
+            .update({
+                nombres: datos.nombres,
+                apellidos: datos.apellidos,
+                correo: datos.correo,
+                tipo_sangre: datos.tipo_sangre,
+                fecha_nacimiento: datos.fecha_nacimiento,
+                sexo: datos.sexo,
+                telefono: datos.telefono,
+                telefono_convencional: datos.telefono_convencional,
+                etnia: datos.etnia,
+                nacionalidad: datos.nacionalidad
+            })
+            .eq('id_estudiante', idEstudiante);
+
+        // Actualizar inscripción
+        await supabase
+            .from('solicitud_inscripcion')
+            .update({
+                periodo: datos.periodo,
+                curso: datos.curso,
+                especialidad: datos.especialidad,
+                institucion_procedencia: datos.institucion_procedencia,
+                paralelo: datos.paralelo
+            })
+            .eq('id', idInscripcion);
+
+        // Actualizar vivienda
+        await supabase
+            .from('direccion_estudiante')
+            .update({
+                calle_principal: datos.calle_principal,
+                calle_secundaria: datos.calle_secundaria,
+                provincia: datos.provincia,
+                canton: datos.canton,
+                parroquia: datos.parroquia,
+                barrio: datos.barrio,
+                numero_casa: datos.numero_casa,
+                referencia: datos.referencia
+            })
+            .eq('id_estudiante', idEstudiante);
+
+        // Actualizar padre
+        await supabase
+            .from('padre_estudiante')
+            .update({
+                nombres: datos.padre_nombres,
+                cedula: datos.padre_cedula,
+                ocupacion: datos.padre_ocupacion,
+                telefono_trabajo: datos.padre_telefono_trabajo,
+                email: datos.padre_email,
+                nivel_educacion: datos.padre_nivel_educacion,
+                estado_civil: datos.padre_estado_civil,
+                vive_con_estudiante: datos.padre_vive_con_estudiante === "true",
+                horario_trabajo: datos.padre_horario_trabajo,
+                telefono_celular: datos.padre_telefono_celular
+            })
+            .eq('id_estudiante', idEstudiante);
+
+        // Actualizar madre
+        await supabase
+            .from('madre_estudiante')
+            .update({
+                nombres: datos.madre_nombres,
+                cedula: datos.madre_cedula,
+                ocupacion: datos.madre_ocupacion,
+                telefono_trabajo: datos.madre_telefono_trabajo,
+                email: datos.madre_email,
+                nivel_educacion: datos.madre_nivel_educacion,
+                estado_civil: datos.madre_estado_civil,
+                vive_con_estudiante: datos.madre_vive_con_estudiante === "true",
+                horario_trabajo: datos.madre_horario_trabajo,
+                telefono_celular: datos.madre_telefono_celular
+            })
+            .eq('id_estudiante', idEstudiante);
+
+        // Actualizar representante
+        await supabase
+            .from('representante_estudiante')
+            .update({
+                nombres: datos.representante_nombres,
+                cedula: datos.representante_cedula,
+                ocupacion: datos.representante_ocupacion,
+                telefono_trabajo: datos.representante_telefono_trabajo,
+                email: datos.representante_email,
+                nivel_educacion: datos.representante_nivel_educacion,
+                estado_civil: datos.representante_estado_civil,
+                vive_con_estudiante: datos.representante_vive_con_estudiante === "true",
+                horario_trabajo: datos.representante_horario_trabajo,
+                telefono_celular: datos.representante_telefono_celular
+            })
+            .eq('id_estudiante', idEstudiante);
+
+        // Actualizar emergencia 1 y 2
+        if (window.emergenciaIds && window.emergenciaIds[0]) {
+            await supabase
+                .from('contacto_emergencia_estudiante')
+                .update({
+                    nombre: datos.emergencia1_nombre,
+                    telefono: datos.emergencia1_telefono,
+                    parentesco: datos.emergencia1_parentesco
+                })
+                .eq('id', window.emergenciaIds[0]);
+        }
+        if (window.emergenciaIds && window.emergenciaIds[1]) {
+            await supabase
+                .from('contacto_emergencia_estudiante')
+                .update({
+                    nombre: datos.emergencia2_nombre,
+                    telefono: datos.emergencia2_telefono,
+                    parentesco: datos.emergencia2_parentesco
+                })
+                .eq('id', window.emergenciaIds[1]);
+        }
+
+        alert('Datos actualizados correctamente.');
+        window.location.reload();
+    });
+
+    // --- Imprimir PDF (estructura similar a matricularse) ---
+    document.getElementById('btn-imprimir-pdf').addEventListener('click', function() {
+        alert('Funcionalidad de impresión PDF: reutiliza la lógica de matricularse.html aquí.');
+    });
+
+    // --- Botón "Ir a imprimir" muestra el resumen ---
+    document.getElementById('btn-ir-resumen').addEventListener('click', function() {
+        mostrarResumenActualizacion();
+        document.getElementById('panel-edicion').style.display = 'none';
+        document.getElementById('panel-resumen').style.display = 'block';
+    });
+
+    // --- Botón "Volver a editar" ---
+    document.getElementById('btn-volver-editar').addEventListener('click', function() {
+        document.getElementById('panel-resumen').style.display = 'none';
+        document.getElementById('panel-edicion').style.display = 'block';
+    });
+
+    // --- Descargar PDF igual que matricularse.html ---
+    document.getElementById('btn-descargar-pdf').onclick = function() {
+        const resumen = document.getElementById('resumen-actualizacion');
+        const doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        doc.setFontSize(12);
+        doc.text('Resumen de Actualización de Inscripción', 15, 15);
+        let y = 25;
+        resumen.querySelectorAll('tr').forEach(tr => {
+            const tds = tr.querySelectorAll('td');
+            if (tds.length === 2) {
+                doc.text(`${tds[0].innerText}: ${tds[1].innerText}`, 15, y);
+                y += 8;
+            }
+        });
+        doc.save('actualizacion_inscripcion.pdf');
+    };
+
+    // --- Resumen igual a matricularse.html ---
+    function mostrarResumenActualizacion() {
+        const resumenDiv = document.getElementById('resumen-actualizacion');
+        resumenDiv.innerHTML = `
+            <h2 style="text-align:center;color:#2f5597;">Resumen de Actualización</h2>
+            <table style="width:100%;border-collapse:collapse;">
+                <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Datos Académicos</th></tr>
+                <tr><td><b>Periodo:</b></td><td>${document.getElementById('periodo').value || ''}</td></tr>
+                <tr><td><b>Curso:</b></td><td>${document.getElementById('curso').value || ''}</td></tr>
+                <tr><td><b>Paralelo:</b></td><td>${document.getElementById('paralelo').value || ''}</td></tr>
+                <tr><td><b>Especialidad:</b></td><td>${document.getElementById('especialidad').value || ''}</td></tr>
+                <tr><td><b>Institución de Procedencia:</b></td><td>${document.getElementById('institucion_procedencia').value || ''}</td></tr>
+                <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Datos del Estudiante</th></tr>
+                <tr><td><b>Apellidos:</b></td><td>${document.getElementById('apellidos').value || ''}</td></tr>
+                <tr><td><b>Nombres:</b></td><td>${document.getElementById('nombres').value || ''}</td></tr>
+                <tr><td><b>Cédula:</b></td><td>${document.getElementById('cedula').value || ''}</td></tr>
+                <tr><td><b>Etnia:</b></td><td>${document.getElementById('etnia').value || ''}</td></tr>
+                <tr><td><b>Nacionalidad:</b></td><td>${document.getElementById('nacionalidad').value || ''}</td></tr>
+                <tr><td><b>Tipo de Sangre:</b></td><td>${document.getElementById('tipo_sangre').value || ''}</td></tr>
+                <tr><td><b>Fecha de Nacimiento:</b></td><td>${document.getElementById('fecha_nacimiento').value || ''}</td></tr>
+                <tr><td><b>Sexo:</b></td><td>${document.getElementById('sexo').value || ''}</td></tr>
+                <tr><td><b>Teléfono:</b></td><td>${document.getElementById('telefono').value || ''}</td></tr>
+                <tr><td><b>Correo:</b></td><td>${document.getElementById('correo').value || ''}</td></tr>
+                <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Padre</th></tr>
+                <tr><td><b>Nombre:</b></td><td>${document.getElementById('padre_nombres').value || ''}</td></tr>
+                <tr><td><b>Cédula:</b></td><td>${document.getElementById('padre_cedula').value || ''}</td></tr>
+                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('padre_ocupacion').value || ''}</td></tr>
+                <tr><td><b>Email:</b></td><td>${document.getElementById('padre_email').value || ''}</td></tr>
+                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('padre_nivel_educacion').value || ''}</td></tr>
+                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('padre_estado_civil').value || ''}</td></tr>
+                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('padre_vive_con_estudiante').value === "true" ? "Sí" : (document.getElementById('padre_vive_con_estudiante').value === "false" ? "No" : '')}</td></tr>
+                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('padre_horario_trabajo').value || ''}</td></tr>
+                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('padre_telefono_celular').value || ''}</td></tr>
+                <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Madre</th></tr>
+                <tr><td><b>Nombre:</b></td><td>${document.getElementById('madre_nombres').value || ''}</td></tr>
+                <tr><td><b>Cédula:</b></td><td>${document.getElementById('madre_cedula').value || ''}</td></tr>
+                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('madre_ocupacion').value || ''}</td></tr>
+                <tr><td><b>Email:</b></td><td>${document.getElementById('madre_email').value || ''}</td></tr>
+                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('madre_nivel_educacion').value || ''}</td></tr>
+                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('madre_estado_civil').value || ''}</td></tr>
+                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('madre_vive_con_estudiante').value === "true" ? "Sí" : (document.getElementById('madre_vive_con_estudiante').value === "false" ? "No" : '')}</td></tr>
+                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('madre_horario_trabajo').value || ''}</td></tr>
+                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('madre_telefono_celular').value || ''}</td></tr>
+                <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Representante</th></tr>
+                <tr><td><b>Nombre:</b></td><td>${document.getElementById('representante_nombres').value || ''}</td></tr>
+                <tr><td><b>Cédula:</b></td><td>${document.getElementById('representante_cedula').value || ''}</td></tr>
+                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('representante_ocupacion').value || ''}</td></tr>
+                <tr><td><b>Email:</b></td><td>${document.getElementById('representante_email').value || ''}</td></tr>
+                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('representante_nivel_educacion').value || ''}</td></tr>
+                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('representante_estado_civil').value || ''}</td></tr>
+                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('representante_vive_con_estudiante').value === "true" ? "Sí" : (document.getElementById('representante_vive_con_estudiante').value === "false" ? "No" : '')}</td></tr>
+                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('representante_horario_trabajo').value || ''}</td></tr>
+                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('representante_telefono_celular').value || ''}</td></tr>
+            </table>
+        `;
+    }
+    </script>
+</body>
+</html>

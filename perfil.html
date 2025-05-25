@@ -90,7 +90,7 @@
             <h2 class="section-title" style="text-align:center;">Perfil de Usuario</h2>
             <div id="perfil-info" style="margin-bottom:2rem;">
                 <div style="text-align:center;">
-                    <img src="user-profile.png" alt="Foto de perfil" style="width:100px;height:100px;border-radius:50%;margin-bottom:1rem;background:#eee;">
+                    <img id="foto-perfil" src="user-profile.png" alt="Foto de perfil" style="width:100px;height:100px;border-radius:50%;margin-bottom:1rem;background:#eee;">
                 </div>
                 <div id="datos-usuario" style="text-align:center;">
                     <!-- Aquí se mostrarán los datos del usuario -->
@@ -237,41 +237,64 @@
     // --- Mostrar datos del usuario en el perfil ---
     async function cargarDatosUsuario() {
         const datosDiv = document.getElementById('datos-usuario');
+        const fotoPerfil = document.getElementById('foto-perfil');
         if (!usuarioActivo) {
             datosDiv.innerHTML = '<p>No has iniciado sesión.</p>';
+            fotoPerfil.src = "user-profile.png";
             return;
         }
         const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
         const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        let nombre = '', usuario = usuarioActivo, correo = '', cedula = usuarioActivo;
+        let nombres = '', apellidos = '', correo = '', foto = '';
         try {
+            // Buscar el estudiante más reciente por id_cedula (NO por cedula)
             let { data: cedulaData } = await supabase
                 .from('cedulas')
                 .select('id_cedula')
                 .eq('cedula', usuarioActivo)
                 .maybeSingle();
             let idCedula = cedulaData && cedulaData.id_cedula ? cedulaData.id_cedula : null;
+
             if (idCedula) {
-                let { data: estudianteData } = await supabase
+                let { data: estudianteList, error } = await supabase
                     .from('estudiante')
-                    .select('nombres, correo')
+                    .select('id_estudiante, nombres, apellidos, correo, archivo_url')
                     .eq('id_cedula', idCedula)
                     .order('id_estudiante', { ascending: false })
-                    .limit(1)
-                    .maybeSingle();
-                if (estudianteData) {
-                    nombre = estudianteData.nombres || '';
-                    correo = estudianteData.correo || '';
+                    .limit(1);
+
+                if (error) {
+                    console.error('Error al consultar estudiante:', error);
+                }
+
+                if (estudianteList && estudianteList.length > 0) {
+                    const estudiante = estudianteList[0];
+                    nombres = estudiante.nombres || '';
+                    apellidos = estudiante.apellidos || '';
+                    correo = estudiante.correo || '';
+                    foto = estudiante.archivo_url || '';
                 }
             }
-        } catch {}
+        } catch (e) {
+            console.error('Error inesperado al cargar datos del usuario:', e);
+        }
         datosDiv.innerHTML = `
-            <p><strong>Nombre:</strong> ${nombre || '(No registrado)'}</p>
-            <p><strong>Usuario (cédula):</strong> ${cedula}</p>
+            <p><strong>Nombres:</strong> ${nombres || '(No registrado)'}</p>
+            <p><strong>Apellidos:</strong> ${apellidos || '(No registrado)'}</p>
+            <p><strong>Usuario (cédula):</strong> ${usuarioActivo}</p>
             <p><strong>Correo:</strong> ${correo || '(No registrado)'}</p>
         `;
+        if (foto && foto !== 'null' && foto !== 'undefined') {
+            fotoPerfil.onerror = function() {
+                this.onerror = null;
+                this.src = "user-profile.png";
+            };
+            fotoPerfil.src = foto;
+        } else {
+            fotoPerfil.src = "user-profile.png";
+        }
     }
     cargarDatosUsuario();
 
@@ -332,8 +355,7 @@
 
     // --- Actualizar inscripción ---
     document.getElementById('btn-actualizar-inscripcion').addEventListener('click', function() {
-        // Redirigir a la página de inscripción o abrir un modal
-        window.location.href = 'matricularse.html';
+        window.location.href = 'actualizar-inscripcion.html';
     });
 
     // --- Scroll header ---
