@@ -236,3 +236,48 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+async function borrarEstudiantePorCedula(cedula) {
+    // 1. Buscar id_cedula
+    const { data: cedulaRow } = await supabase
+        .from('cedulas')
+        .select('id_cedula')
+        .eq('cedula', cedula)
+        .maybeSingle();
+    if (!cedulaRow) return alert('No se encontró la cédula.');
+
+    const id_cedula = cedulaRow.id_cedula;
+
+    // 2. Buscar estudiante(s) por id_cedula
+    const { data: estudiantes } = await supabase
+        .from('estudiante')
+        .select('id_estudiante, id_inscripcion')
+        .eq('id_cedula', id_cedula);
+
+    for (const est of estudiantes) {
+        // 3. Eliminar datos relacionados
+        await supabase.from('contacto_emergencia_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+        await supabase.from('representante_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+        await supabase.from('madre_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+        await supabase.from('padre_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+        await supabase.from('direccion_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+        await supabase.from('solicitud_matriculacion').delete().eq('id_estudiante', est.id_estudiante);
+        // 4. Eliminar inscripción si existe
+        if (est.id_inscripcion) {
+            await supabase.from('solicitud_inscripcion').delete().eq('id', est.id_inscripcion);
+        }
+        // 5. Eliminar estudiante
+        await supabase.from('estudiante').delete().eq('id_estudiante', est.id_estudiante);
+    }
+
+    // 6. Eliminar la cédula
+    await supabase.from('cedulas').delete().eq('id_cedula', id_cedula);
+
+    // 7. Eliminar usuario (si el email es la cédula)
+    await supabase.from('usuarios').delete().eq('email', cedula);
+
+    alert('Estudiante y todos sus datos eliminados correctamente.');
+}
+
+// Uso:
+// await borrarEstudiantePorCedula('1234567890');

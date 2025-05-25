@@ -204,23 +204,68 @@
                 alert('Solo puedes eliminar usuarios con el rol "usuario" o "estudiante".');
                 return;
             }
-            if (confirm(`¿Estás seguro de que deseas eliminar al usuario con correo "${email}"?`)) {
+            if (confirm(`¿Estás seguro de que deseas eliminar al usuario con correo "${email}"? Se eliminarán todos sus datos relacionados.`)) {
                 try {
-                    console.log(`Intentando eliminar usuario con email: ${email}`); // Depuración
-
-                    // Eliminar usuario de la tabla "usuarios"
-                    const { error } = await supabase
+                    // 1. Buscar el usuario en la tabla usuarios
+                    const { data: usuarioData } = await supabase
                         .from('usuarios')
-                        .delete()
-                        .eq('email', email.trim()); // Asegurar que no haya espacios en blanco
+                        .select('*')
+                        .eq('email', email)
+                        .maybeSingle();
 
-                    if (error) {
-                        console.error('Error al eliminar usuario de Supabase:', error.message);
-                        alert('Error al eliminar usuario: ' + error.message);
-                        return;
+                    // 2. Buscar la cédula en la tabla cedulas
+                    let cedula = email;
+                    let idCedula = null;
+                    if (cedula) {
+                        const { data: cedulaRow } = await supabase
+                            .from('cedulas')
+                            .select('id_cedula')
+                            .eq('cedula', cedula)
+                            .maybeSingle();
+                        if (cedulaRow) idCedula = cedulaRow.id_cedula;
                     }
 
-                    alert('Usuario eliminado exitosamente.');
+                    // 3. Buscar estudiantes por id_cedula
+                    let estudiantes = [];
+                    if (idCedula) {
+                        const { data: ests } = await supabase
+                            .from('estudiante')
+                            .select('id_estudiante, id_inscripcion')
+                            .eq('id_cedula', idCedula);
+                        if (ests) estudiantes = ests;
+                    }
+
+                    // 4. Eliminar datos relacionados de cada estudiante
+                    for (const est of estudiantes) {
+                        // Eliminar contactos de emergencia
+                        await supabase.from('contacto_emergencia_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+                        // Eliminar representante
+                        await supabase.from('representante_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+                        // Eliminar madre
+                        await supabase.from('madre_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+                        // Eliminar padre
+                        await supabase.from('padre_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+                        // Eliminar dirección
+                        await supabase.from('direccion_estudiante').delete().eq('id_estudiante', est.id_estudiante);
+                        // Eliminar solicitud_matriculacion
+                        await supabase.from('solicitud_matriculacion').delete().eq('id_estudiante', est.id_estudiante);
+                        // Eliminar estudiante
+                        await supabase.from('estudiante').delete().eq('id_estudiante', est.id_estudiante);
+                        // Eliminar inscripción si existe
+                        if (est.id_inscripcion) {
+                            await supabase.from('solicitud_inscripcion').delete().eq('id', est.id_inscripcion);
+                        }
+                    }
+
+                    // 5. Eliminar la cédula
+                    if (idCedula) {
+                        await supabase.from('cedulas').delete().eq('id_cedula', idCedula);
+                    }
+
+                    // 6. Eliminar el usuario
+                    await supabase.from('usuarios').delete().eq('email', email.trim());
+
+                    alert('Usuario y todos sus datos eliminados exitosamente.');
                     cargarUsuarios(); // Recargar la tabla
                 } catch (err) {
                     console.error('Error inesperado al eliminar usuario:', err);

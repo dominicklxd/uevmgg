@@ -895,16 +895,69 @@
         };
 
         window.eliminarSolicitud = async function(id) {
-            if (!confirm('¿Está seguro de eliminar esta solicitud? Esta acción no se puede deshacer.')) return;
-            const { error } = await supabase
-                .from('solicitud_matriculacion')
-                .delete()
-                .eq('id', id);
-            if (error) {
-                alert('Error al eliminar: ' + error.message);
-            } else {
-                alert('Solicitud eliminada correctamente.');
+            if (!confirm('¿Está seguro de eliminar esta solicitud? Esta acción no se puede deshacer y eliminará todos los datos relacionados del estudiante.')) return;
+
+            try {
+                // 1. Buscar la solicitud para obtener el id_estudiante
+                const { data: solicitud } = await supabase
+                    .from('solicitud_matriculacion')
+                    .select('id_estudiante')
+                    .eq('id', id)
+                    .maybeSingle();
+
+                if (solicitud && solicitud.id_estudiante) {
+                    const idEstudiante = solicitud.id_estudiante;
+
+                    // 2. Buscar el estudiante para obtener id_cedula e id_inscripcion
+                    const { data: estudiante } = await supabase
+                        .from('estudiante')
+                        .select('id_cedula, id_inscripcion')
+                        .eq('id_estudiante', idEstudiante)
+                        .maybeSingle();
+
+                    let idInscripcion = estudiante && estudiante.id_inscripcion ? estudiante.id_inscripcion : null;
+                    let idCedula = estudiante && estudiante.id_cedula ? estudiante.id_cedula : null;
+                    let cedula = null;
+                    if (idCedula) {
+                        const { data: cedulaRow } = await supabase
+                            .from('cedulas')
+                            .select('cedula')
+                            .eq('id_cedula', idCedula)
+                            .maybeSingle();
+                        if (cedulaRow) cedula = cedulaRow.cedula;
+                    }
+
+                    // -- 1. Elimina datos relacionados
+                    await supabase.from('contacto_emergencia_estudiante').delete().eq('id_estudiante', idEstudiante);
+                    await supabase.from('representante_estudiante').delete().eq('id_estudiante', idEstudiante);
+                    await supabase.from('madre_estudiante').delete().eq('id_estudiante', idEstudiante);
+                    await supabase.from('padre_estudiante').delete().eq('id_estudiante', idEstudiante);
+                    await supabase.from('direccion_estudiante').delete().eq('id_estudiante', idEstudiante);
+                    await supabase.from('solicitud_matriculacion').delete().eq('id_estudiante', idEstudiante);
+
+                    // -- 2. Elimina el estudiante
+                    await supabase.from('estudiante').delete().eq('id_estudiante', idEstudiante);
+
+                    // -- 3. Elimina la inscripción asociada
+                    if (idInscripcion) {
+                        await supabase.from('solicitud_inscripcion').delete().eq('id', idInscripcion);
+                    }
+
+                    // -- 4. Elimina la cédula asociada
+                    if (idCedula) {
+                        await supabase.from('cedulas').delete().eq('id_cedula', idCedula);
+                    }
+
+                    // -- 5. Elimina el usuario cuyo email es la cédula
+                    if (cedula) {
+                        await supabase.from('usuarios').delete().eq('email', cedula);
+                    }
+                }
+
+                alert('Solicitud y todos los datos relacionados eliminados correctamente.');
                 cargarSolicitudes();
+            } catch (error) {
+                alert('Error al eliminar: ' + (error.message || error));
             }
         };
 
