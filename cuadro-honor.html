@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cuadro de Honor - Unidad Educativa Víctor Manuel Guzmán</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        .cuadro-honor-section {
+            max-width: 1200px;
+            margin: 2.5rem auto 2rem auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.10);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            padding: 2.5rem 2rem 2.5rem 2rem;
+            gap: 2.5rem;
+        }
+        .cuadro-honor-list {
+            flex: 1 1 340px;
+            min-width: 280px;
+            max-width: 420px;
+            padding-right: 1.5rem;
+        }
+        .cuadro-honor-list h2 {
+            font-size: 2.3rem;
+            color: #000000;
+            font-family: 'Roboto Slab', serif;
+            margin-bottom: 2rem;
+            text-align: left;
+            letter-spacing: 1px;
+        }
+        .cuadro-honor-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .cuadro-honor-list li {
+            margin-bottom: 1.5rem;
+            font-size: 1.08rem;
+            color: #000000;
+            line-height: 1.3;
+        }
+        .cuadro-honor-list li b {
+            display: block;
+            color: #000103;
+            font-size: 1.08rem;
+            margin-top: 0.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .cuadro-honor-imgbox {
+            flex: 1 1 420px;
+            min-width: 320px;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .cuadro-honor-imgbox img {
+            width: 100%;
+            max-width: 480px;
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(44,130,201,0.13);
+            margin-bottom: 1.2rem;
+        }
+        .cuadro-honor-imgbox .img-caption {
+            font-size: 1.15rem;
+            color: #2f5597;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        @media (max-width: 900px) {
+            .cuadro-honor-section {
+                flex-direction: column;
+                padding: 1.5rem 0.5rem;
+                gap: 1.5rem;
+            }
+            .cuadro-honor-list, .cuadro-honor-imgbox {
+                max-width: 100%;
+                min-width: 0;
+                padding-right: 0;
+            }
+            .cuadro-honor-imgbox img {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links"></div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+            <section class="banner-section" style="margin-top: 100px;"> <!-- Reducir el margen superior -->
+            <div class="banner-overlay">
+                <h1>Cuadro de Honor</h1>
+                <p><a href="index.html">Inicio</a> > Estudiantes > Cuadro de Honor</p>
+            </div>
+        </section>
+    <!-- Burbujas flotantes para auth-links (fuera del header) -->
+    <div class="floating-bubbles" style="display:none;">
+        <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+            <img src="icon-matricularse.png" alt="Matricularse">
+            <span class="floating-bubble-label">Matricularse</span>
+        </a>
+        <a href="perfil.html" class="floating-bubble" title="Perfil">
+            <img src="icon-perfil.png" alt="Perfil">
+            <span class="floating-bubble-label">Perfil</span>
+        </a>
+        <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+            <img src="icon-cerrar.png" alt="Cerrar sesión">
+            <span class="floating-bubble-label">Cerrar sesión</span>
+        </a>
+    </div>
+    <main style="margin-top: 120px;">
+        <section class="cuadro-honor-section">
+            <div class="cuadro-honor-list">
+                
+                <ul>
+                    <li>
+                        Chuma Tupiza Paulina Elizabeth
+                        <b>Abanderada del Pabellón Nacional Gómez</b>
+                    </li>
+                    <li>
+                        Valles Lia Dannae
+                        <b>Porteestandarte del Pabellón de la Ciudad</b>
+                    </li>
+                    <li>
+                        Farinango Ipiales Valeria Nicole
+                        <b>Porteestandarte del Pabellón Institucional</b>
+                    </li>
+                    <li>
+                        Padilla Vargas Briana Jamileth
+                        <b>1ra Escolta del Pabellón Nacional</b>
+                    </li>
+                    <li>
+                        Olmedo Melo Elian David
+                        <b>2do Escolta del Pabellón Nacional</b>
+                    </li>
+                    <li>
+                        Morán Morillo Dayana Sayde
+                        <b>1ra Escolta del Pabellón de la Ciudad</b>
+                    </li>
+                    <li>
+                        Alba Barrionuevo Juan David
+                        <b>2da Escolta del Pabellón de la Ciudad</b>
+                    </li>
+                    <li>
+                        Tapia Ortiz Natajy Jezabel
+                        <b>1ra Escolta del Pabellón de la Institución</b>
+                    </li>
+                    <li>
+                        Cortez Pozo Anahí Alejandra
+                        <b>2da Escolta del Pabellón de la Institución</b>
+                    </li>
+                </ul>
+            </div>
+            <div class="cuadro-honor-imgbox">
+                <img src="cuadro-honor.jpg" alt="Cuadro de Honor - Unidad Educativa Víctor Manuel Guzmán">
+                <div class="img-caption">
+
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p>uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // Mostrar burbujas al hacer scroll
+        const header = document.querySelector('header');
+        const bubbles = document.querySelector('.floating-bubbles');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+                if (bubbles) bubbles.style.display = 'flex';
+            } else {
+                header.classList.remove('scrolled');
+                if (bubbles) bubbles.style.display = 'none';
+            }
+        });
+        // Cerrar sesión desde la burbuja
+        document.getElementById('cerrar-sesion-bubble').onclick = function(e) {
+            e.preventDefault();
+            localStorage.removeItem('usuarioActivo');
+            window.location.href = "login.html";
+        };
+    </script>
+</body>
+</html>

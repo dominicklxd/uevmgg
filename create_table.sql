@@ -24,6 +24,10 @@ CREATE TABLE IF NOT EXISTS solicitud_inscripcion (
 ALTER TABLE solicitud_inscripcion
 ADD COLUMN IF NOT EXISTS institucion_procedencia VARCHAR(255);
 
+-- Añadir columna id_estudiante a solicitud_inscripcion si no existe
+ALTER TABLE solicitud_inscripcion
+ADD COLUMN IF NOT EXISTS id_estudiante INTEGER REFERENCES estudiante(id_estudiante);
+
 -- Tabla para manejar las cédulas como ID principal
 CREATE TABLE IF NOT EXISTS cedulas (
     id_cedula SERIAL PRIMARY KEY,
@@ -141,3 +145,11 @@ CREATE INDEX IF NOT EXISTS idx_solicitud_matriculacion_estado ON solicitud_matri
 CREATE INDEX IF NOT EXISTS idx_estudiante_cedula ON estudiante(id_cedula);
 CREATE INDEX IF NOT EXISTS idx_estudiante_nombres ON estudiante(nombres);
 CREATE INDEX IF NOT EXISTS idx_estudiante_apellidos ON estudiante(apellidos);
+-- Crear índice para búsquedas rápidas por id_estudiante en solicitud_inscripcion
+CREATE INDEX IF NOT EXISTS idx_solicitud_inscripcion_id_estudiante ON solicitud_inscripcion(id_estudiante);
+
+-- Asegúrate de que la relación entre estudiante y solicitud_inscripcion sea correcta:
+-- El campo id_inscripcion en estudiante debe ser FOREIGN KEY a solicitud_inscripcion(id)
+ALTER TABLE estudiante
+ADD CONSTRAINT fk_estudiante_id_inscripcion
+FOREIGN KEY (id_inscripcion) REFERENCES solicitud_inscripcion(id);

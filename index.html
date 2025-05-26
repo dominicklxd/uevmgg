@@ -67,8 +67,8 @@
                         <a href="#">Estudiantes</a>
                         <ul class="submenu">
                             <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
-                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
-                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="horario-clases.html">Horario de Clases</a></li>
                             <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
                         </ul>
                     </li>
@@ -91,6 +91,10 @@
             </nav>
         </div>
     </header>
+    <!-- Burbujas flotantes para auth-links (fuera del header) -->
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
     <main style="margin-top: 120px;"> <!-- Ajustar el contenido para evitar que quede detrás del encabezado -->
         <section id="inicio" class="centered-section">
             <!-- Título animado -->
@@ -404,16 +408,77 @@
             }
         });
 
-        const header = document.querySelector('header');
+        // Burbujas flotantes dinámicas según sesión
+        function renderFloatingBubbles() {
+            const bubbles = document.querySelector('.floating-bubbles');
+            if (!bubbles) return;
+            bubbles.innerHTML = '';
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            if (usuarioActivo) {
+                // Usuario autenticado
+                bubbles.innerHTML = `
+                    <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                        <img src="icon-matricularse.png" alt="Matricularse">
+                        <span class="floating-bubble-label">Matricularse</span>
+                    </a>
+                    <a href="perfil.html" class="floating-bubble" title="Perfil">
+                        <img src="icon-perfil.png" alt="Perfil">
+                        <span class="floating-bubble-label">Perfil</span>
+                    </a>
+                    <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                        <img src="icon-cerrar.png" alt="Cerrar sesión">
+                        <span class="floating-bubble-label">Cerrar sesión</span>
+                    </a>
+                `;
+                // Cerrar sesión desde la burbuja
+                setTimeout(() => {
+                    const cerrar = document.getElementById('cerrar-sesion-bubble');
+                    if (cerrar) {
+                        cerrar.onclick = function(e) {
+                            e.preventDefault();
+                            localStorage.removeItem('usuarioActivo');
+                            window.location.href = "login.html";
+                        };
+                    }
+                }, 50);
+            } else {
+                // Usuario NO autenticado
+                bubbles.innerHTML = `
+                    <a href="registro.html" class="floating-bubble" title="Registrarse">
+                        <img src="icon-registrarse.png" alt="Registrarse">
+                        <span class="floating-bubble-label">Registrarse</span>
+                    </a>
+                    <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                        <img src="  .png" alt="Iniciar sesión">
+                        <span class="floating-bubble-label">Iniciar sesión</span>
+                    </a>
+                `;
+            }
+        }
 
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
+        // Mostrar burbujas al hacer scroll y al cargar/cambiar sesión
+        const header = document.querySelector('header');
+        const bubbles = document.querySelector('.floating-bubbles');
+        function toggleBubbles() {
+            if (window.scrollY > 30) {
                 header.classList.add('scrolled');
+                if (bubbles) bubbles.style.display = 'flex';
             } else {
                 header.classList.remove('scrolled');
+                if (bubbles) bubbles.style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', toggleBubbles);
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioActivo') {
+                renderFloatingBubbles();
             }
         });
-        
+        // Inicializar burbujas al cargar
+        renderFloatingBubbles();
+        toggleBubbles();
+
+        // ...resto de tu script...
     </script>
      
 </body>
