@@ -5,22 +5,172 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autoridades</title>
     <link rel="stylesheet" href="css.css">
+    <style>
+        body {
+            background: #f6f6fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #222;
+        }
+        .autoridades-section {
+            max-width: 1200px;
+            margin: 3.5rem auto 2.5rem auto;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 10px 40px rgba(93,141,60,0.13), 0 1.5px 8px rgba(0,0,0,0.04);
+            padding: 2.8rem 2.2rem 2.8rem 2.2rem;
+            transition: box-shadow 0.2s;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            color: #3e6627;
+            font-family: Arial, sans-serif;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+        .section-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7em;
+            margin-bottom: 2.5em;
+        }
+        .section-divider .line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #5d8d3c 0%, #a5d68a 100%);
+            border-radius: 2px;
+        }
+        .section-divider .icon img {
+            width: 38px;
+            height: 38px;
+            filter: drop-shadow(0 2px 8px #5d8d3c30);
+        }
+        .autoridades-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            justify-content: center;
+            align-items: stretch;
+        }
+        .autoridad-card {
+            background: linear-gradient(120deg, #f7fff7 60%, #eafbe7 100%);
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(93,141,60,0.10);
+            padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+            flex: 1 1 280px;
+            max-width: 340px;
+            min-width: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.18s, box-shadow 0.18s;
+            position: relative;
+            perspective: 1000px;
+        }
+        .autoridad-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 10px 32px rgba(93,141,60,0.18);
+        }
+        .autoridad-header {
+            font-size: 1.15em;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 1em;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+        .autoridad-img-flipbox {
+            width: 360px;
+            height: 360px;
+            margin-bottom: 1.5em;
+            position: relative;
+            perspective: 1000px;
+        }
+        .autoridad-img-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.7s cubic-bezier(.4,2,.6,1);
+            transform-style: preserve-3d;
+        }
+        .autoridad-card.flipped .autoridad-img-inner {
+            transform: rotateY(180deg);
+        }
+        .autoridad-img-front, .autoridad-img-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .autoridad-img-front img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 6px solid #a5d68a;
+            box-shadow: 0 2px 16px #5d8d3c30;
+            background: #fff;
+            transition: box-shadow 0.18s;
+        }
+        .autoridad-card:hover .autoridad-img-front img {
+            box-shadow: 0 6px 32px #5d8d3c40;
+        }
+        .autoridad-img-back {
+            background: #3e6627;
+            color: #fff;
+            transform: rotateY(180deg);
+            border: 6px solid #a5d68a;
+            box-shadow: 0 2px 16px #5d8d3c30;
+            padding: 2em 1.5em;
+            font-size: 1.08em;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @media (max-width: 900px) {
+            .autoridades-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            .autoridad-card {
+                max-width: 100%;
+                min-width: 0;
+            }
+            .autoridad-img-flipbox {
+                width: 140px;
+                height: 140px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="top-info-bar">
-        <p> Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador | uevmg@gmail.com</p>
+    <!-- Encabezado igual que index.html -->
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
     </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
     <header>
         <div class="header-top">
-            
             <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
             <div class="header-text">
                 <h1>Unidad Educativa </h1>
-                <h1>"Victor Manuel Guzman"</h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
                 <p>50 años de Educación Estudiantil</p>
             </div>
             <div class="auth-links">
                 <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
+                <!-- Aquí se mostrará el saludo -->
             </div>
             <nav>
                 <ul class="menu">
@@ -81,30 +231,71 @@
         </div>
     </header>
     <main>
+            <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1>Autoridades</h1>
+            <p><a href="index.html">Inicio</a> &gt; Nosotros &gt; Autoridades</p>
+        </div>
+    </section>
         <section class="autoridades-section centered-section">
-            <h2 class="section-title" style="color: black; margin-top: 10rem;">Autoridades</h2>
+            <h2 class="section-title" style="margin-top: 4rem;">Autoridades</h2>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
             <div class="autoridades-container">
-                <div class="autoridad-card">
+                <div class="autoridad-card" data-mensaje="El liderazgo es servir con humildad y compromiso. ¡Siempre adelante, comunidad educativa!">
                     <div class="autoridad-header">Rector</div>
-                    <img src="rector.png" alt="Rector" class="autoridad-img">
+                    <div class="autoridad-img-flipbox">
+                        <div class="autoridad-img-inner">
+                            <div class="autoridad-img-front">
+                                <img src="rector.png" alt="Rector">
+                            </div>
+                            <div class="autoridad-img-back">
+                                El liderazgo es servir con humildad y compromiso.<br>¡Siempre adelante, comunidad educativa!
+                            </div>
+                        </div>
+                    </div>
                     <p>Msc. Giovany Garzón</p>
                     <p>Rector</p>
                 </div>
-                <div class="autoridad-card">
+                <div class="autoridad-card" data-mensaje="La educación transforma vidas. Trabajemos juntos por el futuro de nuestros estudiantes.">
                     <div class="autoridad-header">Vicerrectora</div>
-                    <img src="vicerrectora.png" alt="Vicerrectora" class="autoridad-img">
+                    <div class="autoridad-img-flipbox">
+                        <div class="autoridad-img-inner">
+                            <div class="autoridad-img-front">
+                                <img src="vicerrectora.png" alt="Vicerrectora">
+                            </div>
+                            <div class="autoridad-img-back">
+                                La educación transforma vidas.<br>Trabajemos juntos por el futuro de nuestros estudiantes.
+                            </div>
+                        </div>
+                    </div>
                     <p>MSc. Mercedes Campués</p>
                     <p>Vicerrectora</p>
                 </div>
-                <div class="autoridad-card">
+                <div class="autoridad-card" data-mensaje="La disciplina y el respeto son la base del éxito. ¡Sigamos creciendo como familia educativa!">
                     <div class="autoridad-header">Vicerrector Vespertina</div>
-                    <img src="vicerrector-vespertina.png" alt="Vicerrector Vespertina" class="autoridad-img">
+                    <div class="autoridad-img-flipbox">
+                        <div class="autoridad-img-inner">
+                            <div class="autoridad-img-front">
+                                <img src="vicerrector-vespertina.png" alt="Vicerrector Vespertina">
+                            </div>
+                            <div class="autoridad-img-back">
+                                La disciplina y el respeto son la base del éxito.<br>¡Sigamos creciendo como familia educativa!
+                            </div>
+                        </div>
+                    </div>
                     <p>MSc. Marco Salas</p>
                     <p>Vicerrector Vespertina</p>
                 </div>
             </div>
         </section>
     </main>
+    <!-- Pie de página igual que index.html -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -118,17 +309,29 @@
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="registro.html">Registro</a></li>
-                    <li><a href="autoridades.html">Autoridades</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h3>CONTACTOS</h3>
                 <div class="footer-line"></div>
-                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
         </div>
     </footer>
     <script>
@@ -163,6 +366,14 @@
                 }
             }
         }
+
+        // Animación flip para las fotos de autoridades
+        document.querySelectorAll('.autoridad-img-flipbox').forEach(function(flipbox) {
+            flipbox.addEventListener('click', function(e) {
+                const card = flipbox.closest('.autoridad-card');
+                card.classList.toggle('flipped');
+            });
+        });
     </script>
     <script src="script.js" defer></script>
 </body>

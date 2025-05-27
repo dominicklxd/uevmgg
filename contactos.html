@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Contactos - Unidad Educativa Víctor Manuel Guzmán</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        body {
+            background: #f6f6fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #222;
+        }
+        .contactos-section {
+            max-width: 1200px;
+            margin: 2.5rem auto 2rem auto;
+            background: #fff;
+            border-radius: 22px;
+            box-shadow: 0 10px 40px rgba(93,141,60,0.13), 0 1.5px 8px rgba(0,0,0,0.04);
+            padding: 2.8rem 2.2rem 2.8rem 2.2rem;
+            transition: box-shadow 0.2s;
+        }
+        .contactos-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .contactos-header h1 {
+            font-size: 2.7rem;
+            color: #3e6627;
+            font-family: Arial, sans-serif;
+            margin-bottom: 0.5em;
+            letter-spacing: 1.5px;
+            font-weight: 800;
+        }
+        .section-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7em;
+        }
+        .section-divider .line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, #5d8d3c 0%, #a5d68a 100%);
+            border-radius: 2px;
+        }
+        .section-divider .icon img {
+            width: 38px;
+            height: 38px;
+            filter: drop-shadow(0 2px 8px #5d8d3c30);
+        }
+        .contactos-section h2,
+        .ambientes-section h2,
+        #ubicacion h2 {
+            font-family: Arial, sans-serif !important;
+            text-align: center !important;
+            font-size: 2.1rem;
+            color: #3e6627;
+            font-weight: 700;
+            margin-bottom: 0.7em;
+            letter-spacing: 1px;
+        }
+        .contactos-info-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: stretch;
+            gap: 1.5rem;
+            margin-bottom: 2.7rem;
+        }
+        .contactos-info-bar > div {
+            background: linear-gradient(90deg, #5d8d3c 60%, #a5d68a 100%);
+            color: #fff;
+            border-radius: 12px;
+            padding: 1.1em 2em;
+            font-size: 1.13rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7em;
+            min-width: 220px;
+            box-shadow: 0 2px 12px rgba(93,141,60,0.08);
+            font-weight: 500;
+            transition: transform 0.15s;
+        }
+        .contactos-info-bar > div:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 6px 24px rgba(93,141,60,0.13);
+        }
+        .contactos-info-bar .icon {
+            font-size: 1.5em;
+            background: #fff;
+            color: #5d8d3c;
+            border-radius: 50%;
+            width: 2.2em;
+            height: 2.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 4px #5d8d3c30;
+        }
+        .contactos-info-bar a {
+            color: #fff;
+            text-decoration: underline;
+        }
+        .contactos-info-bar .label {
+            font-weight: bold;
+            margin-right: 0.5em;
+        }
+        .contactos-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2.7rem;
+            justify-content: center;
+        }
+        .contactos-card {
+            flex: 1 1 260px;
+            min-width: 240px;
+            max-width: 340px;
+            background: #222;
+            color: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 250px;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 18px rgba(93,141,60,0.10);
+            transition: transform 0.18s, box-shadow 0.18s;
+        }
+        .contactos-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 10px 32px rgba(93,141,60,0.18);
+        }
+        .contactos-card .overlay {
+            background: linear-gradient(180deg,rgba(93,141,60,0.13) 0%,rgba(0,0,0,0.55) 100%);
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+        .contactos-card-content {
+            position: relative;
+            z-index: 2;
+            padding: 1.5em 1.1em 1.5em 1.1em;
+            text-align: center;
+        }
+        .contactos-card .icon {
+            font-size: 2.3em;
+            margin-bottom: 0.5em;
+            display: block;
+            color: #a5d68a;
+            text-shadow: 0 2px 8px #5d8d3c30;
+        }
+        .contactos-card h3 {
+            font-size: 1.18em;
+            margin-bottom: 0.4em;
+            font-weight: bold;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+        .contactos-card p {
+            font-size: 1.01em;
+            margin: 0;
+            color: #eaf6fb;
+        }
+        /* Sede y ambientes estilo acordeón */
+        .ambientes-section {
+            margin-top: 2.5rem;
+        }
+        .ambientes-section h2 {
+            font-size: 2rem;
+            font-family: Arial, sans-serif !important;
+            margin-bottom: 1.2em;
+            color: #3e6627;
+        }
+        .acordeon {
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .acordeon-item {
+            background: linear-gradient(90deg, #5d8d3c 60%, #a5d68a 100%);
+            color: #fff;
+            border-radius: 10px;
+            margin-bottom: 0.7em;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(93,141,60,0.09);
+            transition: box-shadow 0.15s;
+        }
+        .acordeon-item.active {
+            box-shadow: 0 6px 24px rgba(93,141,60,0.13);
+        }
+        .acordeon-title {
+            padding: 1.1em 1.4em;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.13em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.07);
+            transition: background 0.15s;
+        }
+        .acordeon-item.active .acordeon-title {
+            background: rgba(255,255,255,0.17);
+        }
+        .acordeon-content {
+            padding: 0 1.4em 1.1em 1.4em;
+            display: none;
+            font-size: 1.01em;
+            background: rgba(255,255,255,0.09);
+            color: #f0f8ff;
+        }
+        .acordeon-item.active .acordeon-content {
+            display: block;
+        }
+        .acordeon-item .plus {
+            font-size: 1.3em;
+            transition: transform 0.2s;
+        }
+        .acordeon-item.active .plus {
+            transform: rotate(45deg);
+        }
+        /* Google Maps */
+        .map-container {
+            margin: 0 auto;
+            max-width: 700px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(93,141,60,0.10);
+        }
+        #ubicacion h2 {
+            margin-bottom: 0.7em;
+        }
+        @media (max-width: 900px) {
+            .contactos-section {
+                padding: 1.2rem 0.3rem;
+            }
+            .contactos-cards {
+                flex-direction: column;
+            }
+            .contactos-card {
+                max-width: 100%;
+                min-width: 0;
+            }
+            .acordeon {
+                max-width: 100%;
+            }
+            .map-container iframe {
+                width: 100% !important;
+                height: 300px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
+                <!-- Aquí se mostrará el saludo -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="#quienes-somos">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="sede-ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="#simbolos">Símbolos Institucionales</a></li>
+                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="#cronograma">Cronograma de Actividades</a></li>
+                            <li><a href="#ministerio">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#documentos">Documentos Institucionales</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="#comite-padres">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="#consejo-estudiantil">Consejo Estudiantil</a></li>
+                            <li><a href="#cuadro-honor">Cuadro de Honor</a></li>
+                            <li><a href="#horario-clases">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="#dece">DECE</a></li>
+                            <li><a href="#docente-especial">Docente Especial</a></li>
+                            <li><a href="#inclusion">Apoyo a la Inclusión</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#escuela-futbol">Escuela de Fútbol</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="ubicacion.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1 style="font-family: Arial, sans-serif;">Contactos</h1>
+            <p><a href="index.html">Inicio</a> &gt; Contactos</p>
+        </div>
+    </section>
+    <div class="floating-bubbles" style="display:none;">
+        <!-- ...existing code... -->
+    </div>
+    <main style="margin-top: 120px;">
+        <section class="contactos-section">
+            <div class="contactos-header">
+                <h1 style="font-family: Arial, sans-serif;">Contactos</h1>
+                <div class="section-divider" style="justify-content:center;margin-bottom:2em;">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+            </div>
+            <div class="contactos-info-bar">
+                <div>
+                    <span class="icon">📞</span>
+                    <span class="label">Teléfono:</span>
+                    +593 0963053811
+                </div>
+                <div>
+                    <span class="icon">✉️</span>
+                    <a href="mailto:uevmg2023@gmail.com">uevmg2023@gmail.com</a>
+                </div>
+                <div>
+                    <span class="icon">🏆</span>
+                    Educación<br>
+                    <span style="font-size:0.95em;">Víctor Manuel Guzmán cuna de campeones.</span>
+                </div>
+                <div>
+                    <span class="icon">📍</span>
+                    Av. El Retorno 5-130 y Ricardo Sánchez Ibarra - Ecuador
+                </div>
+            </div>
+            <div class="contactos-cards">
+                <div class="contactos-card" style="background-image:url('contacto1.jpg');">
+                    <div class="overlay"></div>
+                    <div class="contactos-card-content">
+                        <span class="icon">🏛️</span>
+                        <h3>50 Años al Servicio de la Educación</h3>
+                        <p>Ofreciendo actualmente la Educación inicial desde 3 años hasta el Nivel de Bachillerato en Ciencias y Técnica.</p>
+                    </div>
+                </div>
+                <div class="contactos-card" style="background-image:url('contacto2.jpg');">
+                    <div class="overlay"></div>
+                    <div class="contactos-card-content">
+                        <span class="icon">🎧</span>
+                        <h3>Atención amable</h3>
+                        <p>Sabemos que usted es muy importante y procuramos darle el trato que usted se merece.</p>
+                    </div>
+                </div>
+                <div class="contactos-card" style="background-image:url('contacto3.jpg');">
+                    <div class="overlay"></div>
+                    <div class="contactos-card-content">
+                        <span class="icon">🏗️</span>
+                        <h3>Una de las Unidades Educativas más grandes de Ibarra</h3>
+                        <p>Con cerca de 1800 estudiantes</p>
+                    </div>
+                </div>
+                <div class="contactos-card" style="background-image:url('contacto4.jpg');">
+                    <div class="overlay"></div>
+                    <div class="contactos-card-content">
+                        <span class="icon">👥</span>
+                        <h3>Equipo docente calificado</h3>
+                        <p>Docentes con un alto grado de profesionalismo en cada una de sus acciones.</p>
+                    </div>
+                </div>
+            </div>
+            <section class="ambientes-section">
+                <h2>Sede y Ambientes</h2>
+                <div class="section-divider" style="justify-content:center;margin-bottom:2em;">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+                <div class="acordeon">
+                    <div class="acordeon-item">
+                        <div class="acordeon-title">Ambiente Sede (Matriz) <span class="plus">+</span></div>
+                        <div class="acordeon-content">
+                            Dirección: Av. El Retorno 5-130 y Ricardo Sánchez, Ibarra, Ecuador.<br>
+                            Horario de atención: Lunes a Viernes 07:00 - 17:00  <br>
+                            <br>
+                            El Ambiente principal denominado Sede - se encuentra ubicado en la Avenida El Retorno 5-130 y Ricardo Sánchez.
+
+                            <div class="map-container" style="margin-top:1.2em;">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                                    width="700" 
+                                    height="400" 
+                                    style="border:0;" 
+                                    allowfullscreen="" 
+                                    loading="lazy" 
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="acordeon-item">
+                        <div class="acordeon-title">Ambiente Nro. 1 (Antigua Escuela Rafael Larrea) <span class="plus">+</span></div>
+                        <div class="acordeon-content">
+                            Dirección: Calle Rafael Larrea, Ibarra, Ecuador.<br>
+                            Horario de atención: Lunes a Viernes 07:00 - 17:00<br>
+                            <br>
+                            El Ambiente 1 se encuentra ubicado en la Calle Juan Francisco Bonilla y Pedro Vicente Maldonado (Esquina)
+
+
+                            <div class="map-container" style="margin-top:1.2em;">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d703.5099279478774!2d-78.1177762271408!3d0.33803435513510377!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd1ecf8a143%3A0x7d377a5027fbfdfc!2sMaldonado%201227%2C%20Ibarra!5e1!3m2!1ses-419!2sec!4v1748314339002!5m2!1ses-419!2sec" 
+                                    width="700" 
+                                    height="400" 
+                                    style="border:0;" 
+                                    allowfullscreen="" 
+                                    loading="lazy" 
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="acordeon-item">
+                        <div class="acordeon-title">Ambiente Nro. 2 (Antigua Escuela Guillermina García) <span class="plus">+</span></div>
+                        <div class="acordeon-content">
+                            Dirección: Calle Guillermina García, Ibarra, Ecuador.<br>
+                            Horario de atención: Lunes a Viernes 07:00 - 17:00<br>
+                            <br>
+                            El Ambiente Nro. 2 se encuentra ubicado en el barrio La Campiña, en la vía al Tejar.
+                                                        <div class="map-container" style="margin-top:1.2em;">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d249.3594587778012!2d-78.11116685351638!3d0.3319968168151649!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3df43524df3d%3A0xcb5d91296fb39078!2sVictor%20Manuel%20Guzman%20Ambiente%202!5e0!3m2!1ses-419!2sec!4v1748314626087!5m2!1ses-419!2sec" 
+                                    width="700" 
+                                    height="400" 
+                                    style="border:0;" 
+                                    allowfullscreen="" 
+                                    loading="lazy" 
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="acordeon-item">
+                        <div class="acordeon-title">Ambiente Nro. 3 (Antiguo Jardín Lucila Yepez) <span class="plus">+</span></div>
+                        <div class="acordeon-content">
+                            Dirección: Calle Lucila Yepez, Ibarra, Ecuador.<br>
+                            Horario de atención: Lunes a Viernes 07:00 - 17:00
+                            <br>
+                            <br>
+                            El Ambiente Nro. 3, se encuentra localizado cerca al Ambiente Nro. 2, en la Calle La Primavera, también en el Barrio de la Campiña.
+
+
+                                                        <div class="map-container" style="margin-top:1.2em;">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m8!1m3!1d249.35946894578572!2d-78.11094661211774!3d0.33159337633992764!3m2!1i1024!2i768!4f13.1!4m6!3e6!4m0!4m3!3m2!1d0.33152!2d-78.1108916!5e0!3m2!1ses-419!2sec!4v1748315071765!5m2!1ses-419!2sec" 
+                                    width="700" 
+                                    height="400" 
+                                    style="border:0;" 
+                                    allowfullscreen="" 
+                                    loading="lazy" 
+                                    referrerpolicy="no-referrer-when-downgrade">
+                                </iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- SECCIÓN DE UBICACIÓN GOOGLE MAPS -->
+            <!-- Elimina o comenta la sección de ubicación general si ya está dentro del acordeón -->
+            <!--
+            <section id="ubicacion" class="centered-section">
+                <h2>Encuéntranos en Google Maps</h2>
+                <div class="section-divider" style="justify-content:center;margin-bottom:2em;">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="700" 
+                        height="400" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </section>
+            -->
+        </section>
+    </main>
+    <footer>
+           <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+                        <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                
+                <!-- Mapa pequeño, fijo, debajo del texto -->
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo
+                +-
+            </p>
+        </div>
+        
+    </footer>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // ...existing code...
+        function renderFloatingBubbles() {
+            const bubbles = document.querySelector('.floating-bubbles');
+            if (!bubbles) return;
+            bubbles.innerHTML = '';
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            if (usuarioActivo) {
+                bubbles.innerHTML = `
+                    <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                        <img src="icon-matricularse.png" alt="Matricularse">
+                        <span class="floating-bubble-label">Matricularse</span>
+                    </a>
+                    <a href="perfil.html" class="floating-bubble" title="Perfil">
+                        <img src="icon-perfil.png" alt="Perfil">
+                        <span class="floating-bubble-label">Perfil</span>
+                    </a>
+                    <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                        <img src="icon-cerrar.png" alt="Cerrar sesión">
+                        <span class="floating-bubble-label">Cerrar sesión</span>
+                    </a>
+                `;
+                setTimeout(() => {
+                    const cerrar = document.getElementById('cerrar-sesion-bubble');
+                    if (cerrar) {
+                        cerrar.onclick = function(e) {
+                            e.preventDefault();
+                            localStorage.removeItem('usuarioActivo');
+                            window.location.href = "login.html";
+                        };
+                    }
+                }, 50);
+            } else {
+                bubbles.innerHTML = `
+                    <a href="registro.html" class="floating-bubble" title="Registrarse">
+                        <img src="icon-registrarse.png" alt="Registrarse">
+                        <span class="floating-bubble-label">Registrarse</span>
+                    </a>
+                    <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                        <img src="icon-login.png" alt="Iniciar sesión">
+                        <span class="floating-bubble-label">Iniciar sesión</span>
+                    </a>
+                `;
+            }
+        }
+        const header = document.querySelector('header');
+        const bubbles = document.querySelector('.floating-bubbles');
+        function toggleBubbles() {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+                if (bubbles) bubbles.style.display = 'flex';
+            } else {
+                header.classList.remove('scrolled');
+                if (bubbles) bubbles.style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', toggleBubbles);
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioActivo') {
+                renderFloatingBubbles();
+            }
+        });
+        renderFloatingBubbles();
+        toggleBubbles();
+
+        // Acordeón ambientes
+        document.querySelectorAll('.acordeon-title').forEach(function(title) {
+            title.addEventListener('click', function() {
+                const item = this.parentElement;
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
