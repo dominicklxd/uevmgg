@@ -821,6 +821,8 @@
             let estudiante = null;
             let cedula = null;
             let fechaNacimiento = null;
+            let idEstudiante = null;
+            let idCedula = null;
             try {
                 // Buscar la solicitud
                 const { data: solicitud } = await supabase
@@ -837,6 +839,8 @@
                         .maybeSingle();
                     if (est) {
                         estudiante = est;
+                        idEstudiante = est.id_estudiante;
+                        idCedula = est.id_cedula;
                         // Buscar cédula
                         if (est.id_cedula) {
                             const { data: ced } = await supabase
@@ -853,7 +857,7 @@
 
             // 2. Crear usuario si no existe y si hay cédula y fecha de nacimiento
             let usuarioCreado = false;
-            if (cedula && fechaNacimiento) {
+            if (cedula && fechaNacimiento && idCedula && idEstudiante) {
                 // Formato de contraseña: fechaNacimiento sin guiones ni slash
                 const pass = fechaNacimiento.replace(/[-\/]/g, '');
                 // Verificar si ya existe el usuario
@@ -863,16 +867,27 @@
                     .eq('email', cedula)
                     .maybeSingle();
                 if (!existe) {
-                    // Insertar usuario con rol "estudiante"
+                    // Insertar usuario con relación a id_cedula e id_estudiante
                     await supabase
                         .from('usuarios')
                         .insert([{
                             usuario: estudiante ? (estudiante.nombres + ' ' + estudiante.apellidos) : cedula,
                             email: cedula,
                             password: pass,
-                            rol: 'estudiante'
+                            rol: 'estudiante',
+                            id_cedula: idCedula,
+                            id_estudiante: idEstudiante
                         }]);
                     usuarioCreado = true;
+                } else {
+                    // Si ya existe, actualizar para asegurar que tenga los campos relacionados
+                    await supabase
+                        .from('usuarios')
+                        .update({
+                            id_cedula: idCedula,
+                            id_estudiante: idEstudiante
+                        })
+                        .eq('email', cedula);
                 }
             }
 

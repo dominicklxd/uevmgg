@@ -44,7 +44,8 @@
                             <li><a href="historia.html">Historia</a></li>
                             <li><a href="ambientes.html">Sede y Ambientes</a></li>
                             <li><a href="simbolos.html">Símbolos Institucionales</a></li>
-                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                            <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
+                            <li><a href="especialidades.html">Especialidades</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -172,6 +173,11 @@
                         <h3>Consulta de Cupo</h3>
                         <p>Consultar datos para obtener un nuevo cupo.</p>
                     </a>
+                    <a href="https://www.facebook.com/uevictormanuelguzman/photos" class="service-button">
+                        <img src="camara.png" alt="Actualización de Datos">
+                        <h3>Galería de Fotos</h3>
+                        <p>Recuerdos estudiantiles de la institución.</p>
+                    </a>
                 </div>
             <section id="redes-sociales" class="centered-section">
                 <h2 class="section-title">REDES SOCIALES</h2>
@@ -200,28 +206,7 @@
                 </div>
             </section>
             <!-- Nuevo recuadro para otro subtema -->
-            <section id="oferta-bachillerato" class="centered-section">
-                <h2 class="section-title">OFERTA DE BACHILLERATO</h2>
-                <div class="section-divider">
-                    <span class="line"></span>
-                    <span class="icon">
-                        <img src="graduation-icon.png" alt="Icono de graduación">
-                    </span>
-                    <span class="line"></span>
-                </div>
-                <div class="bachillerato-container">
-                    <div class="bachillerato-card">
-                        <h3>Bachillerato Técnico en Informática</h3>
-                        <img src="informatica.jpg" alt="Informática">
-                        <p>Especialización en desarrollo de software, redes y sistemas informáticos.</p>
-                    </div>
-                    <div class="bachillerato-card">
-                        <h3>Bachillerato Técnico en Contabilidad</h3>
-                        <img src="contabilidad.jpg" alt="Contabilidad">
-                        <p>Especialización en gestión contable, tributaria y financiera.</p>
-                    </div>
-                </div>
-            </section>
+
             <section class="fifty-years-section centered-section">
                 <h2 class="section-title">50 Años de la Institución</h2>
                 <p class="section-subtitle">Celebramos medio siglo de excelencia educativa</p>
@@ -234,6 +219,30 @@
                     </a>
                     <!-- Imagen normal -->
                     <img src="50years2.jpg" alt="Celebración 50 años - Imagen 2">
+                </div>
+            </section>
+            <!-- NUEVA SECCIÓN: Últimas Noticias -->
+            <section id="noticias" class="centered-section" style="margin-top:3rem; background: #fff; border-radius: 18px; box-shadow: 0 8px 32px rgba(44,130,201,0.10); max-width: 1200px; margin-left:auto; margin-right:auto; padding:2.5rem 2rem;">
+                <h2 class="section-title">Últimas Noticias</h2>
+                <div class="section-divider">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+                <div id="noticias-lista" style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center;">
+                    <!-- Aquí se mostrarán las noticias dinámicamente -->
+                </div>
+                <div style="text-align:center; margin-top:2rem;">
+                    <a href="crear-noticia.html" id="btn-publicar-noticia" class="btn-descargar publicar-noticia-btn">
+                        <span style="display:inline-flex;align-items:center;gap:0.5em;">
+                            <svg width="22" height="22" fill="none" viewBox="0 0 24 24" style="vertical-align:middle;">
+                                <path d="M12 4v16m8-8H4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Publicar Noticia <span style="font-size:0.95em;opacity:0.7;">(solo anunciadores)</span>
+                        </span>
+                    </a>
                 </div>
             </section>
         </section>
@@ -478,8 +487,213 @@
         renderFloatingBubbles();
         toggleBubbles();
 
-        // ...resto de tu script...
+        // --- Mostrar noticias desde Supabase ---
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function cargarNoticias() {
+            const noticiasDiv = document.getElementById('noticias-lista');
+            noticiasDiv.innerHTML = '<p style="width:100%;text-align:center;">Cargando noticias...</p>';
+
+            let { data: noticias, error } = await supabase
+                .from('noticias')
+                .select('*')
+                .order('fecha', { ascending: false })
+                .limit(20);
+
+            if (error || !noticias || noticias.length === 0) {
+                noticiasDiv.innerHTML = '<p style="width:100%;text-align:center;">No hay noticias publicadas.</p>';
+                return;
+            }
+
+            // Obtener nombres de estudiantes/autores si quieres mostrar el nombre real
+            const estudiantesNombres = {};
+            for (const noticia of noticias) {
+                if (noticia.id_estudiante && !estudiantesNombres[noticia.id_estudiante]) {
+                    let { data: estudiante } = await supabase
+                        .from('estudiante')
+                        .select('nombres')
+                        .eq('id_estudiante', noticia.id_estudiante)
+                        .maybeSingle();
+                    estudiantesNombres[noticia.id_estudiante] = estudiante ? estudiante.nombres : '';
+                }
+            }
+
+            noticiasDiv.innerHTML = '';
+
+            // Noticia principal
+            const noticiaPrincipal = noticias[0];
+            let fechaPrincipal = noticiaPrincipal.fecha ? new Date(noticiaPrincipal.fecha).toLocaleString('es-EC', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+            let nombreAutorPrincipal = estudiantesNombres[noticiaPrincipal.id_estudiante] || noticiaPrincipal.autor || 'Anónimo';
+            let archivoHtmlPrincipal = '';
+            if (noticiaPrincipal.archivo_url) {
+                const ext = noticiaPrincipal.archivo_url.split('.').pop().toLowerCase();
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+                    archivoHtmlPrincipal = `<div style="margin:1em 0;text-align:center;">
+                        <img src="${noticiaPrincipal.archivo_url}" alt="Imagen de la noticia" style="max-width:100%;max-height:420px;border-radius:18px;box-shadow:0 4px 24px rgba(44,130,201,0.18);object-fit:cover;">
+                    </div>`;
+                } else {
+                    archivoHtmlPrincipal = `<div><a href="${noticiaPrincipal.archivo_url}" target="_blank" style="color:#2f5597;font-weight:bold;">Descargar archivo</a></div>`;
+                }
+            }
+            noticiasDiv.innerHTML += `
+                <div class="noticia-principal" style="background:linear-gradient(120deg,#eaf2fb 70%,#d4e6f7 100%); border-radius:22px; box-shadow:0 6px 32px rgba(44,130,201,0.13); padding:2.5rem 2rem 2rem 2rem; margin-bottom:2.5rem; width:100%; max-width:900px; margin-left:auto; margin-right:auto; position:relative;">
+                    <span style="position:absolute;top:18px;right:28px;background:#548235;color:#fff;padding:0.3em 1em;border-radius:8px;font-size:1rem;font-weight:bold;box-shadow:0 2px 8px rgba(44,130,201,0.10);letter-spacing:1px;">Noticia principal</span>
+                    <h2 style="color:#2f5597; font-size:2.2rem; margin-bottom:0.7em; font-family:'Roboto Slab',serif;">${noticiaPrincipal.titulo}</h2>
+                    ${archivoHtmlPrincipal}
+                    <div style="font-size:1.15rem; color:#222; margin-bottom:1.1em; line-height:1.6; font-family:'Raleway',sans-serif;">${noticiaPrincipal.contenido}</div>
+                    <div style="font-size:1rem; color:#548235; margin-bottom:0.4em;"><b>Autor:</b> ${nombreAutorPrincipal}</div>
+                    <div style="font-size:0.95rem; color:#888; margin-bottom:0.4em;"><b>Fecha:</b> ${fechaPrincipal}</div>
+                </div>
+            `;
+
+            // Noticias secundarias en carrusel
+            if (noticias.length > 1) {
+                noticiasDiv.innerHTML += `
+                    <div class="noticias-secundarias-carrusel" style="position:relative; width:100%; max-width:1100px; margin:0 auto;">
+                        <button id="carrusel-prev" class="carrusel-flecha" style="left:-30px;">&#8249;</button>
+                        <div id="carrusel-contenedor" style="display:flex; gap:2rem; justify-content:center; align-items:stretch; min-height:360px; transition:all 0.3s;"></div>
+                        <button id="carrusel-next" class="carrusel-flecha" style="right:-30px;">&#8250;</button>
+                    </div>
+                `;
+
+                // Carrusel lógica
+                const secundarias = noticias.slice(1);
+                let carruselIndex = 0;
+                const mostrarNoticiasCarrusel = () => {
+                    const cont = document.getElementById('carrusel-contenedor');
+                    cont.innerHTML = '';
+                    for (let i = carruselIndex; i < Math.min(carruselIndex + 3, secundarias.length); i++) {
+                        const noticia = secundarias[i];
+                        let fecha = noticia.fecha ? new Date(noticia.fecha).toLocaleString('es-EC', { dateStyle: 'medium', timeStyle: 'short' }) : '';
+                        let nombreAutor = estudiantesNombres[noticia.id_estudiante] || noticia.autor || 'Anónimo';
+                        let archivoHtml = '';
+                        if (noticia.archivo_url) {
+                            const ext = noticia.archivo_url.split('.').pop().toLowerCase();
+                            if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(ext)) {
+                                archivoHtml = `<div style="margin:1em 0;text-align:center;">
+                                    <img src="${noticia.archivo_url}" alt="Imagen de la noticia" style="max-width:100%;max-height:160px;border-radius:10px;box-shadow:0 2px 8px rgba(44,130,201,0.10);object-fit:cover;">
+                                </div>`;
+                            } else {
+                                archivoHtml = `<div><a href="${noticia.archivo_url}" target="_blank" style="color:#2f5597;font-weight:bold;">Descargar archivo</a></div>`;
+                            }
+                        }
+                        cont.innerHTML += `
+                            <div class="noticia-card" style="background:linear-gradient(120deg,#f8fafd 70%,#eaf2fb 100%); border-radius:14px; box-shadow:0 2px 12px rgba(44,130,201,0.10); padding:1.2rem; max-width:320px; min-width:220px; display:flex; flex-direction:column; justify-content:space-between; transition:box-shadow 0.2s;">
+                                <h3 style="color:#2f5597; font-size:1.25rem; margin-bottom:0.5em; font-family:'Roboto Slab',serif;">${noticia.titulo}</h3>
+                                ${archivoHtml}
+                                <div style="font-size:0.98rem; color:#444; margin-bottom:0.7em; line-height:1.5; font-family:'Raleway',sans-serif;">${noticia.contenido}</div>
+                                <div style="font-size:0.93rem; color:#548235; margin-bottom:0.4em;"><b>Autor:</b> ${nombreAutor}</div>
+                                <div style="font-size:0.85rem; color:#888; margin-bottom:0.4em;"><b>Fecha:</b> ${fecha}</div>
+                            </div>
+                        `;
+                    }
+                    // Ocultar flechas si no hay más noticias
+                    document.getElementById('carrusel-prev').style.visibility = carruselIndex > 0 ? 'visible' : 'hidden';
+                    document.getElementById('carrusel-next').style.visibility = (carruselIndex + 3 < secundarias.length) ? 'visible' : 'hidden';
+                };
+
+                // Inicializar carrusel
+                setTimeout(() => {
+                    mostrarNoticiasCarrusel();
+                    document.getElementById('carrusel-prev').onclick = () => {
+                        if (carruselIndex > 0) {
+                            carruselIndex -= 3;
+                            mostrarNoticiasCarrusel();
+                        }
+                    };
+                    document.getElementById('carrusel-next').onclick = () => {
+                        if (carruselIndex + 3 < secundarias.length) {
+                            carruselIndex += 3;
+                            mostrarNoticiasCarrusel();
+                        }
+                    };
+                }, 50);
+            }
+        }
+
+        // Cargar noticias al cargar la página
+        document.addEventListener('DOMContentLoaded', cargarNoticias);
     </script>
-     
+    <!-- Agrega estilos para el carrusel y tarjetas de noticias -->
+    <script>
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .noticia-card:hover {
+                box-shadow: 0 6px 24px rgba(44,130,201,0.18);
+                transform: translateY(-4px) scale(1.025);
+                transition: box-shadow 0.2s, transform 0.2s;
+            }
+            .carrusel-flecha {
+                position: absolute;
+                top: 40%;
+                z-index: 2;
+                background: linear-gradient(120deg,#2f5597 60%,#548235 100%);
+                color: #fff;
+                border: none;
+                border-radius: 50%;
+                width: 44px;
+                height: 44px;
+                font-size: 2rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 2px 8px rgba(44,130,201,0.13);
+                transition: background 0.2s, transform 0.2s;
+            }
+            .carrusel-flecha:hover {
+                background: linear-gradient(120deg,#548235 60%,#2f5597 100%);
+                transform: scale(1.12);
+            }
+            @media (max-width: 900px) {
+                .noticia-principal { padding: 1.2rem !important; }
+                .noticias-secundarias-carrusel { max-width: 98vw !important; }
+                #carrusel-contenedor { gap: 1rem !important; }
+            }
+            @media (max-width: 700px) {
+                .noticia-principal { font-size: 1rem !important; }
+                #carrusel-contenedor { flex-direction: column !important; align-items: center !important; }
+                .noticia-card { max-width: 98vw !important; min-width: 0 !important; }
+                .carrusel-flecha { top: unset !important; bottom: -30px !important; left: 30% !important; right: 30% !important; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+    <script>
+        // Agrega estilos para el botón de publicar noticia
+        const styleBtn = document.createElement('style');
+        styleBtn.innerHTML = `
+            .publicar-noticia-btn {
+                background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+                color: #fff !important;
+                font-weight: bold;
+                font-size: 1.18rem;
+                border: none;
+                border-radius: 12px;
+                padding: 0.85em 2.5em;
+                box-shadow: 0 4px 18px rgba(44,130,201,0.13);
+                cursor: pointer;
+                transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+                text-decoration: none !important;
+                letter-spacing: 0.5px;
+                display: inline-block;
+                margin: 0 auto;
+            }
+            .publicar-noticia-btn:hover, .publicar-noticia-btn:focus {
+                background: linear-gradient(90deg, #548235 60%, #2f5597 100%);
+                color: #fff !important;
+                transform: translateY(-2px) scale(1.04);
+                box-shadow: 0 8px 28px rgba(44,130,201,0.18);
+                text-decoration: none !important;
+            }
+            .publicar-noticia-btn svg {
+                margin-right: 0.2em;
+                margin-bottom: 2px;
+            }
+        `;
+        document.head.appendChild(styleBtn);
+    </script>
 </body>
 </html>

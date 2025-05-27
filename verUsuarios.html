@@ -2,9 +2,62 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios Registrados</title>
+    <title>Administrar Usuarios - Unidad Educativa Víctor Manuel Guzmán</title>
     <link rel="stylesheet" href="css.css">
+    <style>
+        .usuarios-section {
+            max-width: 1100px;
+            margin: 3rem auto 2rem auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.10);
+            padding: 2.5rem 2rem;
+        }
+        .usuarios-section h2 {
+            color: #2f5597;
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        th, td {
+            padding: 0.7rem 0.5rem;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        th {
+            background: #e8f5e9;
+            color: #2f5597;
+        }
+        tr:hover {
+            background: #f6f6fa;
+        }
+        select {
+            padding: 0.3rem 0.7rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        .btn-rol {
+            background: #548235;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.4em 1.2em;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-rol:hover {
+            background: #2f5597;
+            transform: scale(1.05);
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
     <div class="top-info-bar">
@@ -83,32 +136,24 @@
             </nav>
         </div>
     </header>
-    <main>
-        <h1 class="centered-title">Usuarios Registrados</h1>
-        <div class="table-container">
-            <table class="styled-table">
+    <main style="margin-top: 120px;">
+        <section class="usuarios-section">
+            <h2>Administrar Roles de Usuarios</h2>
+            <table id="tabla-usuarios">
                 <thead>
                     <tr>
                         <th>Usuario</th>
-                        <th>Correo Electrónico</th>
-                        <th>Contraseña</th> <!-- Mostrar contraseñas -->
-                        <th>Rol</th>
-                        <th>Acciones</th>
+                        <th>Email</th>
+                        <th>Rol Actual</th>
+                        <th>Nuevo Rol</th>
+                        <th>Acción</th>
                     </tr>
                 </thead>
-                <tbody id="usuarios-table">
-                    <!-- Los usuarios se cargarán aquí -->
+                <tbody>
+                    <!-- Usuarios se llenan dinámicamente -->
                 </tbody>
             </table>
-        </div>
-        <div id="asignar-admin-container" style="display: none; margin-top: 1rem;">
-            <h3>Asignar Administrador</h3>
-            <form id="asignar-admin-form">
-                <label for="email-admin">Correo Electrónico del Usuario:</label>
-                <input type="email" id="email-admin" name="email-admin" required>
-                <button type="submit">Asignar</button>
-            </form>
-        </div>
+        </section>
     </main>
     <footer>
         <div class="footer-content">
@@ -123,292 +168,97 @@
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="registro.html">Registro</a></li>
-                    <li><a href="#autoridades">Autoridades</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h3>CONTACTOS</h3>
                 <div class="footer-line"></div>
-                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
         </div>
     </footer>
-    <script type="module">
-        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
+    <script>
         // Configuración de Supabase
         const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
         const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
-        const supabase = createClient(supabaseUrl, supabaseKey);
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        const tableBody = document.getElementById('usuarios-table');
-        const asignarAdminContainer = document.getElementById('asignar-admin-container');
-        const asignarAdminForm = document.getElementById('asignar-admin-form');
-        const usuarioActivo = localStorage.getItem('usuarioActivo');
-        const superAdminEmail = "dominicklopezxd12@gmail.com"; // Usuario especial con permisos para asignar roles
-        let usuarios = [];
-        let usuarioActivoRol = null;
+        // Lista de roles posibles
+        const roles = [
+            "estudiante",
+            "profesor",
+            "rector",
+            "vicerrector",
+            "administrador",
+            "anunciador"
+        ];
 
-        // Mostrar el formulario para asignar administrador solo al superadministrador
-        if (usuarioActivo === superAdminEmail) {
-            asignarAdminContainer.style.display = 'block';
-        }
-
+        // Cargar usuarios y mostrar tabla
         async function cargarUsuarios() {
-            try {
-                usuarioActivoRol = await obtenerRolUsuarioActivo(); // Obtener el rol del usuario activo
-
-                const { data, error } = await supabase
-                    .from('usuarios')
-                    .select('*');
-
-                if (error) {
-                    console.error('Error al cargar usuarios:', error.message);
-                    alert('Error al cargar usuarios: ' + error.message);
-                    return;
-                }
-
-                usuarios = data || [];
-                actualizarTabla();
-            } catch (err) {
-                console.error('Error inesperado al cargar usuarios:', err);
-                alert('Ocurrió un error inesperado al cargar usuarios.');
-            }
-        }
-
-        async function asignarAdministrador(email) {
-            try {
-                const { data, error } = await supabase
-                    .from('usuarios')
-                    .update({ rol: 'administrador' }) // Actualizar el rol del usuario
-                    .eq('email', email);
-
-                if (error) {
-                    console.error('Error al asignar rol de administrador:', error.message);
-                    alert('Error al asignar rol de administrador: ' + error.message);
-                } else if (!data || data.length === 0) { // Verificar si data es null o está vacío
-                    alert('No se encontró un usuario con ese correo electrónico.');
-                } else {
-                    alert('Rol de administrador asignado exitosamente.');
-                    cargarUsuarios(); // Recargar la tabla
-                }
-            } catch (err) {
-                console.error('Error inesperado al asignar rol de administrador:', err);
-                alert('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
-            }
-        }
-
-        async function eliminarUsuario(email, rol) {
-            // Permitir eliminar solo si el rol es usuario o estudiante
-            if (rol !== 'usuario' && rol !== 'estudiante') {
-                alert('Solo puedes eliminar usuarios con el rol "usuario" o "estudiante".');
+            // Cambia 'usuarios' y los campos según tu estructura real
+            let { data: usuarios, error } = await supabase
+                .from('usuarios')
+                .select('id, usuario, email, rol');
+            if (error) {
+                alert("Error al cargar usuarios");
                 return;
             }
-            if (confirm(`¿Estás seguro de que deseas eliminar al usuario con correo "${email}"? Se eliminarán todos sus datos relacionados.`)) {
-                try {
-                    // 1. Buscar el usuario en la tabla usuarios
-                    const { data: usuarioData } = await supabase
+            const tbody = document.querySelector("#tabla-usuarios tbody");
+            tbody.innerHTML = "";
+            usuarios.forEach(u => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${u.usuario || ''}</td>
+                    <td>${u.email || ''}</td>
+                    <td>${u.rol || ''}</td>
+                    <td>
+                        <select>
+                            ${roles.map(r => `<option value="${r}" ${u.rol === r ? 'selected' : ''}>${r.charAt(0).toUpperCase() + r.slice(1)}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <button class="btn-rol" data-id="${u.id}">Actualizar Rol</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Asignar eventos a los botones
+            document.querySelectorAll('.btn-rol').forEach(btn => {
+                btn.onclick = async function() {
+                    const id = this.getAttribute('data-id');
+                    const select = this.parentElement.parentElement.querySelector('select');
+                    const nuevoRol = select.value;
+                    const { error } = await supabase
                         .from('usuarios')
-                        .select('*')
-                        .eq('email', email)
-                        .maybeSingle();
-
-                    // 2. Buscar la cédula en la tabla cedulas
-                    let cedula = email;
-                    let idCedula = null;
-                    if (cedula) {
-                        const { data: cedulaRow } = await supabase
-                            .from('cedulas')
-                            .select('id_cedula')
-                            .eq('cedula', cedula)
-                            .maybeSingle();
-                        if (cedulaRow) idCedula = cedulaRow.id_cedula;
+                        .update({ rol: nuevoRol })
+                        .eq('id', id);
+                    if (!error) {
+                        alert('Rol actualizado correctamente');
+                        cargarUsuarios();
+                    } else {
+                        alert('Error al actualizar el rol');
                     }
-
-                    // 3. Buscar estudiantes por id_cedula
-                    let estudiantes = [];
-                    if (idCedula) {
-                        const { data: ests } = await supabase
-                            .from('estudiante')
-                            .select('id_estudiante, id_inscripcion')
-                            .eq('id_cedula', idCedula);
-                        if (ests) estudiantes = ests;
-                    }
-
-                    // 4. Eliminar datos relacionados de cada estudiante
-                    for (const est of estudiantes) {
-                        // Eliminar contactos de emergencia
-                        await supabase.from('contacto_emergencia_estudiante').delete().eq('id_estudiante', est.id_estudiante);
-                        // Eliminar representante
-                        await supabase.from('representante_estudiante').delete().eq('id_estudiante', est.id_estudiante);
-                        // Eliminar madre
-                        await supabase.from('madre_estudiante').delete().eq('id_estudiante', est.id_estudiante);
-                        // Eliminar padre
-                        await supabase.from('padre_estudiante').delete().eq('id_estudiante', est.id_estudiante);
-                        // Eliminar dirección
-                        await supabase.from('direccion_estudiante').delete().eq('id_estudiante', est.id_estudiante);
-                        // Eliminar solicitud_matriculacion
-                        await supabase.from('solicitud_matriculacion').delete().eq('id_estudiante', est.id_estudiante);
-                        // Eliminar estudiante
-                        await supabase.from('estudiante').delete().eq('id_estudiante', est.id_estudiante);
-                        // Eliminar inscripción si existe
-                        if (est.id_inscripcion) {
-                            await supabase.from('solicitud_inscripcion').delete().eq('id', est.id_inscripcion);
-                        }
-                    }
-
-                    // 5. Eliminar la cédula
-                    if (idCedula) {
-                        await supabase.from('cedulas').delete().eq('id_cedula', idCedula);
-                    }
-
-                    // 6. Eliminar el usuario
-                    await supabase.from('usuarios').delete().eq('email', email.trim());
-
-                    alert('Usuario y todos sus datos eliminados exitosamente.');
-                    cargarUsuarios(); // Recargar la tabla
-                } catch (err) {
-                    console.error('Error inesperado al eliminar usuario:', err);
-                    alert('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
-                }
-            }
-        }
-
-        function actualizarTabla() {
-            tableBody.innerHTML = '';
-            if (usuarios.length === 0) {
-                const row = document.createElement('tr');
-                const cell = document.createElement('td');
-                cell.colSpan = 5;
-                cell.textContent = 'No hay usuarios registrados.';
-                row.appendChild(cell);
-                tableBody.appendChild(row);
-            } else {
-                usuarios.forEach((usuario) => {
-                    // Asignar rol "usuario" por defecto si el rol es null o vacío
-                    let rol = usuario.rol;
-                    if (!rol || rol === null || rol === "") {
-                        rol = 'usuario';
-                    }
-                    // Permitir eliminar si el usuario activo es admin o administrador y el usuario tiene rol usuario o estudiante
-                    let mostrarEliminar = (usuarioActivoRol === 'admin' || usuarioActivoRol === 'administrador')
-                        && (rol === 'usuario' || rol === 'estudiante');
-
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${usuario.usuario}</td>
-                        <td>${usuario.email}</td>
-                        <td>${usuario.password}</td>
-                        <td>
-                            ${
-                                usuarioActivoRol === 'admin'
-                                    ? `<select class="rol-select" data-email="${usuario.email}">
-                                        <option value="usuario" ${rol === 'usuario' ? 'selected' : ''}>Usuario</option>
-                                        <option value="estudiante" ${rol === 'estudiante' ? 'selected' : ''}>Estudiante</option>
-                                        <option value="administrador" ${rol === 'administrador' ? 'selected' : ''}>Administrador</option>
-                                        <option value="admin" ${rol === 'admin' ? 'selected' : ''}>Admin</option>
-                                       </select>`
-                                    : rol
-                            }
-                        </td>
-                        <td>
-                            ${
-                                mostrarEliminar
-                                    ? `<button class="eliminar-btn" data-email="${usuario.email}" data-rol="${rol}" style="background:#548235;color:#fff;border:none;padding:0.5em 1.2em;border-radius:6px;font-weight:bold;cursor:pointer;">Eliminar</button>`
-                                    : ''
-                            }
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
-        }
-
-        // Delegación de eventos para manejar cambios en el rol
-        tableBody.addEventListener('change', async (event) => {
-            if (event.target.classList.contains('rol-select')) {
-                const email = event.target.dataset.email;
-                const nuevoRol = event.target.value;
-
-                if (confirm(`¿Estás seguro de que deseas cambiar el rol del usuario con correo "${email}" a "${nuevoRol}"?`)) {
-                    try {
-                        const { error } = await supabase
-                            .from('usuarios')
-                            .update({ rol: nuevoRol })
-                            .eq('email', email);
-
-                        if (error) {
-                            console.error('Error al cambiar el rol del usuario:', error.message);
-                            alert('Error al cambiar el rol del usuario: ' + error.message);
-                        } else {
-                            alert('Rol del usuario actualizado exitosamente.');
-                            cargarUsuarios(); // Recargar la tabla
-                        }
-                    } catch (err) {
-                        console.error('Error inesperado al cambiar el rol del usuario:', err);
-                        alert('Ocurrió un error inesperado. Por favor, intenta nuevamente.');
-                    }
-                } else {
-                    cargarUsuarios(); // Recargar la tabla para revertir cambios no confirmados
-                }
-            }
-        });
-
-        // Delegación de eventos para manejar clics en los botones de eliminar usuario
-        tableBody.addEventListener('click', (event) => {
-            if (event.target.classList.contains('eliminar-btn')) {
-                const email = event.target.dataset.email;
-                const rol = event.target.dataset.rol;
-                eliminarUsuario(email, rol);
-            }
-        });
-
-        // Obtener el rol del usuario activo desde la base de datos
-        async function obtenerRolUsuarioActivo() {
-            try {
-                const { data: usuarios, error } = await supabase
-                    .from('usuarios')
-                    .select('rol')
-                    .eq('email', usuarioActivo);
-
-                if (error) {
-                    console.error('Error al obtener el rol del usuario activo:', error.message);
-                    return null;
-                }
-
-                return usuarios && usuarios.length > 0 ? usuarios[0].rol : null;
-            } catch (err) {
-                console.error('Error inesperado al obtener el rol del usuario activo:', err);
-                return null;
-            }
-        }
-
-        // Manejar el formulario para asignar administrador
-        asignarAdminForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const email = document.getElementById('email-admin').value.trim();
-            if (email) {
-                asignarAdministrador(email);
-            }
-        });
-
-        cargarUsuarios();
-
-        const authLinks = document.querySelector('.auth-links');
-
-        // Mostrar "Cerrar Sesión" si el usuario está autenticado
-        if (usuarioActivo) {
-            authLinks.innerHTML = '<a href="#" id="logout">Cerrar Sesión</a>';
-            document.getElementById('logout').addEventListener('click', function () {
-                localStorage.removeItem('usuarioActivo');
-                alert('Sesión cerrada exitosamente.');
-                window.location.href = 'index.html';
+                };
             });
         }
+
+        window.addEventListener('DOMContentLoaded', cargarUsuarios);
     </script>
-    <script src="script.js" defer></script>
 </body>
 </html>

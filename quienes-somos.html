@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiénes Somos - Unidad Educativa Víctor Manuel Guzmán</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        .quienes-section {
+            max-width: 1200px;
+            margin: 2.5rem auto 2rem auto;
+            background: linear-gradient(135deg, #f6f6fa 60%, #e8f5e9 100%);
+            border-radius: 28px;
+            box-shadow: 0 12px 48px rgba(44,130,201,0.13), 0 2px 12px rgba(0,0,0,0.04);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            padding: 3.5rem 2.5rem 3.5rem 2.5rem;
+            gap: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .quienes-section::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #54823530 0%, transparent 80%);
+            z-index: 0;
+        }
+        .quienes-imgbox {
+            flex: 1 1 520px;
+            min-width: 320px;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+        .quienes-imgbox img {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 22px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.13);
+            margin-bottom: 1.2rem;
+            border: 4px solid #54823530;
+            background: #fff;
+        }
+        .quienes-content {
+            flex: 1 1 340px;
+            min-width: 280px;
+            max-width: 540px;
+            padding-left: 2.2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 1;
+        }
+        .quienes-content h2 {
+            font-size: 2.7rem;
+            color: #000103;
+            font-family: 'Roboto Slab', serif;
+            margin-bottom: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 8px #54823520;
+        }
+        .quienes-content p {
+            font-size: 1.18rem;
+            color: #222;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .quienes-content .btn-calameo {
+            display: inline-block;
+            background: linear-gradient(90deg, #548235 60%, #000000 100%);
+            color: #fff;
+            font-weight: bold;
+            padding: 0.8em 2.2em;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 1.2rem;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px #54823530;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+        .quienes-content .btn-calameo:hover {
+            background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+            box-shadow: 0 6px 18px #2f559730;
+            transform: scale(1.05);
+        }
+        .quienes-extra {
+            margin-top: 2.5rem;
+            background: linear-gradient(135deg, #e8f5e9 60%, #f6f6fa 100%);
+            border-radius: 18px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 4px 16px rgba(44,130,201,0.08);
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .quienes-extra h3 {
+            color: #548235;
+            font-size: 1.7rem;
+            margin-bottom: 0.7rem;
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+        }
+        .quienes-extra ul {
+            margin: 0 0 1.5rem 2.2rem;
+            padding: 0;
+            list-style: disc;
+        }
+        .quienes-extra li {
+            font-size: 1.13rem;
+            margin-bottom: 0.5rem;
+            color: #222;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .quienes-extra .icono {
+            font-size: 1.3em;
+            margin-right: 0.5em;
+            color: #2f5597;
+        }
+        .quienes-extra a {
+            color: #000000;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .quienes-extra a:hover {
+            color: #548235;
+        }
+        @media (max-width: 1100px) {
+            .quienes-section {
+                flex-direction: column;
+                padding: 2rem 1rem;
+                gap: 1.5rem;
+            }
+            .quienes-content, .quienes-imgbox {
+                max-width: 100%;
+                min-width: 0;
+                padding-left: 0;
+            }
+            .quienes-imgbox img {
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 700px) {
+            .quienes-section {
+                padding: 1rem 0.2rem;
+            }
+            .quienes-content h2 {
+                font-size: 1.5rem;
+            }
+            .quienes-content p {
+                font-size: 1rem;
+            }
+            .quienes-extra {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+        .section-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        .section-divider .line {
+            flex: 1;
+            height: 2px;
+            background: #548235;
+        }
+        .section-divider .icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8f5e9;
+            border-radius: 50%;
+            margin: 0 1rem;
+        }
+        .section-divider img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- ...existing code for top-bars, header, nav, saludo-usuario, etc... -->
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links"></div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;"></div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="horario-clases.html">Horario de Clases</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="dece.html">DECE</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="contactos.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1>Quiénes Somos</h1>
+            <p><a href="index.html">Inicio</a> &gt; Nosotros &gt; Quiénes Somos</p>
+        </div>
+    </section>
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
+    <main style="margin-top: 120px;">
+        <section class="quienes-section">
+            <div class="quienes-imgbox">
+                <img src="50years3.jpg" alt="Historia y Comunidad UEVMG">
+                <img src="unidad-educativa-logo.png" alt="Logo UEVMG" style="max-width:180px; margin-top:1.5rem;">
+                <img src="estandarte.png" alt="Historia y Comunidad UEVMG">
+            </div>
+            <div class="quienes-content">
+                <h2>Unidad Educativa "Víctor Manuel Guzmán"</h2>
+                <div class="section-divider">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+                <p>
+                    La Unidad Educativa "Víctor Manuel Guzmán" es una institución emblemática de la ciudad de Ibarra, Ecuador, con más de 50 años de trayectoria formando generaciones de estudiantes íntegros, críticos y comprometidos con la sociedad. Nuestra historia está marcada por la excelencia académica, la innovación educativa y el desarrollo de valores humanos.
+                </p>
+                <p>
+                    Ofrecemos educación inicial, básica y bachillerato en ciencias y técnico, con modernas instalaciones, ambientes seguros y una comunidad educativa activa y participativa. Nuestro equipo directivo, docente y administrativo trabaja con pasión y profesionalismo para brindar una formación integral, fomentando el liderazgo, la creatividad y el sentido de pertenencia.
+                </p>
+                <p>
+                    Nuestra misión es formar seres humanos íntegros, indagadores, con excelencia académica y competencias científicas y técnicas, capaces de desenvolverse en la cotidianidad bajo sólidos principios éticos y morales. Aspiramos a ser una de las mejores Unidades Educativas del país, con bachillerato internacional y técnico, vinculando la teoría con la práctica y buscando la excelencia profesional y humana.
+                </p>
+                <p>
+                    La institución cuenta con una amplia oferta educativa, sistemas tecnológicos del Ministerio de Educación, cronograma de actividades, servicios de apoyo como el DECE, Comité Central de Padres de Familia, Consejo Estudiantil, Cuadro de Honor, y una red de ambientes y sedes que garantizan el acceso y la calidad educativa para todos.
+                </p>
+                <a href="https://www.calameo.com/read/0069611049c0b244a5cb8" class="btn-calameo" target="_blank" rel="noopener">Ver historia completa (Calaméo)</a>
+            </div>
+        </section>
+        <section class="quienes-extra">
+            <h3><span class="icono">🏫</span> Nuestra Identidad</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li><b>Fundación:</b> Más de 50 años de historia educativa en Ibarra.</li>
+                <li><b>Modalidad:</b> Educación inicial, básica y bachillerato en ciencias y técnico.</li>
+                <li><b>Estudiantes:</b> Más de 1800 estudiantes en diferentes niveles y especialidades.</li>
+                <li><b>Equipo:</b> Autoridades, docentes y personal administrativo altamente calificados.</li>
+                <li><b>Infraestructura:</b> Sede matriz y ambientes adicionales, laboratorios, biblioteca, banda musical, bar institucional y espacios deportivos.</li>
+                <li><b>Símbolos:</b> Escudo, estandarte e himno institucional que reflejan nuestros valores y tradiciones.</li>
+            </ul>
+            <h3><span class="icono">🎯</span> Misión y Visión</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li><b>Misión:</b> Formar seres humanos íntegros, indagadores, con excelencia académica y competencias científicas y técnicas, capaces de desenvolverse en la cotidianidad bajo sólidos principios éticos y morales.</li>
+                <li><b>Visión:</b> Ser una de las mejores Unidades Educativas con bachillerato internacional y técnico, formando personas íntegras, vinculando teoría y práctica, y buscando la excelencia académica y profesional.</li>
+            </ul>
+            <h3><span class="icono">👥</span> Comunidad y Participación</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li>Consejo Estudiantil y Cuadro de Honor que promueven el liderazgo y la excelencia.</li>
+                <li>Comité Central de Padres de Familia, fomentando la colaboración y el apoyo familiar.</li>
+                <li>Servicios de apoyo como el DECE, orientación y acompañamiento integral.</li>
+                <li>Actividades extracurriculares, cronograma anual y participación en eventos locales y nacionales.</li>
+            </ul>
+            <h3><span class="icono">🌐</span> Innovación y Tecnología</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li>Implementación de sistemas del Ministerio de Educación y plataformas virtuales.</li>
+                <li>Acceso a aulas virtuales, correo institucional y recursos digitales.</li>
+                <li>Modernización constante de la infraestructura y los procesos educativos.</li>
+            </ul>
+            <h3><span class="icono">🏆</span> Logros y Reconocimientos</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li>Reconocida como "Cuna de campeones" por sus logros académicos, deportivos y culturales.</li>
+                <li>Participación destacada en olimpiadas, concursos y actividades intercolegiales.</li>
+                <li>Generaciones de egresados que contribuyen al desarrollo local, nacional e internacional.</li>
+            </ul>
+            <h3><span class="icono">📍</span> Ubicación y Contacto</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li>Dirección: Av. El Retorno 5-130 y Ricardo Sánchez, Ibarra, Ecuador.</li>
+                <li>Teléfono: +593 0963053811</li>
+                <li>Email: uevmg2023@gmail.com</li>
+                <li><a href="contactos.html">Ver más formas de contacto</a></li>
+            </ul>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // ...script igual a dece.html para burbujas flotantes y saludo...
+        function renderFloatingBubbles() {
+            const bubbles = document.querySelector('.floating-bubbles');
+            if (!bubbles) return;
+            bubbles.innerHTML = '';
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            if (usuarioActivo) {
+                bubbles.innerHTML = `
+                    <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                        <img src="icon-matricularse.png" alt="Matricularse">
+                        <span class="floating-bubble-label">Matricularse</span>
+                    </a>
+                    <a href="perfil.html" class="floating-bubble" title="Perfil">
+                        <img src="icon-perfil.png" alt="Perfil">
+                        <span class="floating-bubble-label">Perfil</span>
+                    </a>
+                    <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                        <img src="icon-cerrar.png" alt="Cerrar sesión">
+                        <span class="floating-bubble-label">Cerrar sesión</span>
+                    </a>
+                `;
+                setTimeout(() => {
+                    const cerrar = document.getElementById('cerrar-sesion-bubble');
+                    if (cerrar) {
+                        cerrar.onclick = function(e) {
+                            e.preventDefault();
+                            localStorage.removeItem('usuarioActivo');
+                            window.location.href = "login.html";
+                        };
+                    }
+                }, 50);
+            } else {
+                bubbles.innerHTML = `
+                    <a href="registro.html" class="floating-bubble" title="Registrarse">
+                        <img src="icon-registrarse.png" alt="Registrarse">
+                        <span class="floating-bubble-label">Registrarse</span>
+                    </a>
+                    <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                        <img src="icon-login.png" alt="Iniciar sesión">
+                        <span class="floating-bubble-label">Iniciar sesión</span>
+                    </a>
+                `;
+            }
+        }
+        const header = document.querySelector('header');
+        const bubbles = document.querySelector('.floating-bubbles');
+        function toggleBubbles() {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+                if (bubbles) bubbles.style.display = 'flex';
+            } else {
+                header.classList.remove('scrolled');
+                if (bubbles) bubbles.style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', toggleBubbles);
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioActivo') {
+                renderFloatingBubbles();
+            }
+        });
+        renderFloatingBubbles();
+        toggleBubbles();
+    </script>
+</body>
+</html>

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Oferta Educativa - Unidad Educativa Víctor Manuel Guzmán</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e8f5e9 60%, #f6f6fa 100%);
+        }
+        .oferta-section {
+            max-width: 1300px;
+            margin: 2.5rem auto 2rem auto;
+            background: #fff;
+            border-radius: 28px;
+            box-shadow: 0 12px 48px rgba(44,130,201,0.13), 0 2px 12px rgba(0,0,0,0.04);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            padding: 3.5rem 2.5rem 3.5rem 2.5rem;
+            gap: 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .oferta-section::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -80px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #54823530 0%, transparent 80%);
+            z-index: 0;
+        }
+        .oferta-imgbox {
+            flex: 1 1 420px;
+            min-width: 320px;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+        .oferta-imgbox img {
+            width: 100%;
+            max-width: 420px;
+            border-radius: 18px;
+            box-shadow: 0 6px 24px rgba(93,141,60,0.13);
+            margin-bottom: 1.2rem;
+        }
+        .oferta-content {
+            flex: 2 1 480px;
+            min-width: 320px;
+            max-width: 700px;
+            padding-left: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 1;
+        }
+        .oferta-content h2 {
+            font-size: 2.7rem;
+            color: #2f5597;
+            font-family: 'Arial';
+            margin-bottom: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-shadow: 0 2px 8px #54823520;
+        }
+        .oferta-content p {
+            font-size: 1.18rem;
+            color: #222;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .oferta-content .btn-descargar {
+            display: inline-block;
+            background: linear-gradient(90deg, #548235 60%, #2f5597 100%);
+            color: #fff;
+            font-weight: bold;
+            padding: 0.8em 2.2em;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 1.2rem;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px #54823530;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+        .oferta-content .btn-descargar:hover {
+            background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+            box-shadow: 0 6px 18px #2f559730;
+            transform: scale(1.05);
+        }
+        .oferta-niveles {
+            margin-top: 2.5rem;
+            background: linear-gradient(135deg, #e8f5e9 60%, #f6f6fa 100%);
+            border-radius: 18px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 4px 16px rgba(44,130,201,0.08);
+            max-width: 1300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .oferta-niveles h3 {
+            color: #548235;
+            font-size: 1.7rem;
+            margin-bottom: 0.7rem;
+            font-family: 'Arial';
+            font-weight: 700;
+        }
+        .oferta-niveles .section-divider {
+            margin: 1rem 0 1.5rem 0;
+        }
+        .oferta-niveles .nivel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+        .nivel-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 2px 12px rgba(93,141,60,0.08);
+            padding: 1.5rem 1.2rem;
+            text-align: center;
+            transition: transform 0.18s, box-shadow 0.18s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        .nivel-card:hover {
+            transform: translateY(-6px) scale(1.03);
+            box-shadow: 0 8px 24px rgba(93,141,60,0.13);
+            z-index: 2;
+        }
+        .nivel-card img {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 1rem;
+            border-radius: 50%;
+            background: #e8f5e9;
+            box-shadow: 0 2px 8px #54823530;
+        }
+        .nivel-card h4 {
+            font-size: 1.2rem;
+            color: #2f5597;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .nivel-card ul {
+            text-align: left;
+            margin: 0.5rem 0 0 1.2rem;
+            padding: 0;
+            font-size: 1rem;
+            color: #333;
+        }
+        .nivel-card li {
+            margin-bottom: 0.4rem;
+        }
+        .nivel-card p {
+            font-size: 1rem;
+            color: #444;
+        }
+        .nivel-card .btn-info {
+            margin-top: 1rem;
+            background: #2f5597;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5em 1.2em;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .nivel-card .btn-info:hover {
+            background: #548235;
+            transform: scale(1.08);
+        }
+        .nivel-card .extra-info {
+            display: none;
+            margin-top: 1rem;
+            background: #e8f5e9;
+            border-radius: 8px;
+            padding: 1rem;
+            color: #2f5597;
+            font-size: 0.98rem;
+            box-shadow: 0 2px 8px #54823520;
+        }
+        .nivel-card.active .extra-info {
+            display: block;
+        }
+        .oferta-extras {
+            margin-top: 2.5rem;
+            background: #f6f6fa;
+            border-radius: 14px;
+            padding: 2.2rem 1.5rem;
+            box-shadow: 0 4px 16px rgba(44,130,201,0.08);
+            max-width: 1300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .oferta-extras h3 {
+            color: #2f5597;
+            font-size: 1.5rem;
+            margin-bottom: 0.7rem;
+            font-family: 'Arial';
+            font-weight: 700;
+        }
+        .oferta-extras ul {
+            margin: 0 0 1.5rem 2.2rem;
+            padding: 0;
+            list-style: disc;
+        }
+        .oferta-extras li {
+            font-size: 1.13rem;
+            margin-bottom: 0.5rem;
+            color: #222;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .oferta-extras .icono {
+            font-size: 1.3em;
+            margin-right: 0.5em;
+            color: #2f5597;
+        }
+        .oferta-extras a {
+            color: #ffffff;
+            text-decoration: underline;
+            font-weight: bold;  
+        }
+        .oferta-extras a:hover {
+            color: #548235;
+        }
+        @media (max-width: 1100px) {
+            .oferta-section {
+                flex-direction: column;
+                padding: 2rem 1rem;
+                gap: 1.5rem;
+            }
+            .oferta-content, .oferta-imgbox {
+                max-width: 100%;
+                min-width: 0;
+                padding-left: 0;
+            }
+            .oferta-imgbox img {
+                max-width: 100%;
+            }
+        }
+        @media (max-width: 700px) {
+            .oferta-section {
+                padding: 1rem 0.2rem;
+            }
+            .oferta-content h2 {
+                font-size: 1.5rem;
+            }
+            .oferta-content p {
+                font-size: 1rem;
+            }
+            .oferta-niveles, .oferta-extras {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+        .section-divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        .section-divider .line {
+            flex: 1;
+            height: 2px;
+            background: #548235;
+        }
+        .section-divider .icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e8f5e9;
+            border-radius: 50%;
+            margin: 0 1rem;
+        }
+        .section-divider img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links"></div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;"></div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="horario-clases.html">Horario de Clases</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="dece.html">DECE</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="contactos.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1>Oferta Educativa</h1>
+            <p><a href="index.html">Inicio</a> &gt; Nosotros &gt; Oferta Educativa</p>
+        </div>
+    </section>
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
+    <main style="margin-top: 120px;">
+        <section class="oferta-section">
+            <div class="oferta-imgbox">
+                <img src="oferta-educativa.png" alt="Oferta Educativa UEVMG">
+                <img src="estandarte.png" alt="Estandarte UEVMG" style="max-width:180px; margin-top:1.5rem;">
+            </div>
+            <div class="oferta-content">
+                <h2>Oferta Educativa Integral</h2>
+                <div class="section-divider">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
+                <p>
+                    La Unidad Educativa "Víctor Manuel Guzmán" ofrece una propuesta educativa sólida, moderna y de calidad, abarcando desde la Educación Inicial hasta el Bachillerato, con especialidades técnicas y científicas que preparan a nuestros estudiantes para los retos del mundo actual.
+                </p>
+                <p>
+                    Nuestra oferta educativa está diseñada para formar personas íntegras, con pensamiento crítico, habilidades tecnológicas, valores éticos y una sólida base académica. Contamos con docentes altamente capacitados, ambientes seguros y recursos innovadores para el aprendizaje.
+                </p>
+                <p>
+                    Descubre a continuación los niveles y especialidades que forman parte de nuestra institución. Además, puedes descargar nuestro folleto informativo para conocer más detalles.
+                </p>
+                <a href="https://www.calameo.com/read/0069611049c0b244a5cb8" class="btn-descargar" target="_blank" rel="noopener">Descargar Folleto PDF</a>
+            </div>
+        </section>
+        <section class="oferta-niveles">
+            <h3>Todos los Niveles y Especialidades</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <div class="nivel-grid">
+                <div class="nivel-card">
+                    <img src="inicial.png" alt="Inicial">
+                    <h4>Educación Inicial</h4>
+                    <p>
+                        Dirigido a niños y niñas desde los 3 años, promoviendo el desarrollo integral, la creatividad, el juego y la socialización en un ambiente seguro y afectivo.
+                    </p>
+                    <ul>
+                        <li>Estimulación temprana</li>
+                        <li>Desarrollo de habilidades básicas</li>
+                        <li>Aprendizaje lúdico y valores</li>
+                        <li>Atención personalizada</li>
+                    </ul>
+                    <button class="btn-info" onclick="toggleExtraInfo(this)">Ver más</button>
+                    <div class="extra-info">
+                        <b>Actividades destacadas:</b>
+                        <ul>
+                            <li>Psicomotricidad y expresión artística</li>
+                            <li>Celebraciones y eventos familiares</li>
+                            <li>Proyectos de integración</li>
+                        </ul>
+                        <a href="matricularse.html" class="btn-matricula-llamativo">¡Inscríbete aquí!</a>
+                    </div>
+                </div>
+                <div class="nivel-card">
+                    <img src="egb.png" alt="Educación General Básica">
+                    <h4>Educación General Básica (EGB)</h4>
+                    <p>
+                        Desde 1ro a 10mo de EGB, brindamos una formación académica integral, fortaleciendo competencias en ciencias, matemáticas, lenguaje, arte, tecnología y ciudadanía.
+                    </p>
+                    <ul>
+                        <li>Enseñanza personalizada</li>
+                        <li>Proyectos interdisciplinarios</li>
+                        <li>Formación en valores y ciudadanía</li>
+                        <li>Actividades extracurriculares</li>
+                    </ul>
+                    <button class="btn-info" onclick="toggleExtraInfo(this)">Ver más</button>
+                    <div class="extra-info">
+                        <b>Servicios complementarios:</b>
+                        <ul>
+                            <li>Biblioteca y laboratorio de ciencias</li>
+                            <li>Clases de inglés y computación</li>
+                            <li>Participación en olimpiadas y concursos</li>
+                        </ul>
+                        <a href="matricularse.html" class="btn-matricula-llamativo">¡Inscríbete aquí!</a>
+                    </div>
+                </div>
+                <div class="nivel-card">
+                    <img src="ciencias.png" alt="Ciencias">
+                    <h4>Bachillerato en Ciencias</h4>
+                    <p>
+                        Enfocado en el desarrollo de competencias científicas, pensamiento crítico y habilidades para la investigación, ideal para quienes desean continuar estudios universitarios en áreas científicas, médicas o tecnológicas.
+                    </p>
+                    <ul>
+                        <li>Formación científica y humanística</li>
+                        <li>Preparación para la universidad y el mundo laboral</li>
+                        <li>Orientación vocacional</li>
+                        <li>Prácticas y proyectos reales</li>
+                        <li>Biología, Química, Física y Matemáticas</li>
+                        <li>Laboratorios equipados</li>
+                        <li>Proyectos de investigación</li>
+                        <li>Participación in olimpiadas y ferias científicas</li>
+                    </ul>
+                    <button class="btn-info" onclick="toggleExtraInfo(this)">Ver más</button>
+                    <div class="extra-info">
+                        <b>Proyectos destacados:</b>
+                        <ul>
+                            <li>Simulacros de exámenes de ingreso a la universidad</li>
+                            <li>Charlas y ferias de orientación profesional</li>
+                            <li>Convenios con instituciones de educación superior</li>
+                        </ul>
+                        <a href="matricularse.html" class="btn-matricula-llamativo">¡Inscríbete aquí!</a>
+                    </div>
+                </div>
+                <div class="nivel-card">
+                    <img src="informatica.png" alt="Informática">
+                    <h4>Bachillerato Técnico en Informática</h4>
+                    <p>
+                        Especialidad orientada al desarrollo de software, redes, bases de datos y tecnologías de la información. Prepara a los estudiantes para el mundo digital y la innovación tecnológica.
+                    </p>
+                    <ul>
+                        <li>Programación y desarrollo web</li>
+                        <li>Redes y sistemas operativos</li>
+                        <li>Proyectos tecnológicos</li>
+                        <li>Prácticas en laboratorios modernos</li>
+                    </ul>
+                    <button class="btn-info" onclick="toggleExtraInfo(this)">Ver más</button>
+                    <div class="extra-info">
+                        <b>Experiencias prácticas:</b>
+                        <ul>
+                            <li>Hackatones y ferias tecnológicas</li>
+                            <li>Certificaciones en software y hardware</li>
+                            <li>Vinculación con empresas tecnológicas</li>
+                        </ul>
+                        <a href="matricularse.html" class="btn-matricula-llamativo">¡Inscríbete aquí!</a>
+                    </div>
+                </div>
+                <div class="nivel-card">
+                    <img src="contabilidad.png" alt="Contabilidad">
+                    <h4>Bachillerato Técnico en Contabilidad</h4>
+                    <p>
+                        Formación en gestión contable, tributaria y financiera, con énfasis en la práctica y el uso de herramientas digitales. Ideal para futuros profesionales en administración y finanzas.
+                    </p>
+                    <ul>
+                        <li>Contabilidad general y de costos</li>
+                        <li>Tributación y legislación</li>
+                        <li>Simulación de empresas</li>
+                        <li>Prácticas en software contable</li>
+                    </ul>
+                    <button class="btn-info" onclick="toggleExtraInfo(this)">Ver más</button>
+                    <div class="extra-info">
+                        <b>Oportunidades:</b>
+                        <ul>
+                            <li>Charlas con expertos contables</li>
+                            <li>Prácticas en empresas reales</li>
+                            <li>Proyectos de emprendimiento</li>
+                        </ul>
+                        <a href="matricularse.html" class="btn-matricula-llamativo">¡Inscríbete aquí!</a>
+                    </div>
+                </div>
+                <div class="nivel-card">
+                    <img src="gestion.png" alt="Gestión Administrativa">
+                    <h4>Bachillerato Técnico en Gestión Administrativa</h4>
+                    <p>
+                        Orientado a la administración de empresas, recursos humanos y gestión de proyectos. Desarrolla habilidades para la organización, liderazgo y emprendimiento.
+                    </p>
+                    <ul>
+                        <li>Administración y gestión empresarial</li>
+                        <li>Recursos humanos y marketing</li>
+                        <li>Emprendimiento y liderazgo</li>
+                        <li>Prácticas administrativas reales</li>
+                    </ul>
+                    <button class="btn-info" onclick="toggleExtraInfo(this)">Ver más</button>
+                    <div class="extra-info">
+                        <b>Actividades:</b>
+                        <ul>
+                            <li>Simulación de empresas y proyectos</li>
+                            <li>Visitas a empresas y talleres</li>
+                            <li>Participación en ferias de emprendimiento</li>
+                        </ul>
+                        <a href="matricularse.html" class="btn-matricula-llamativo">¡Inscríbete aquí!</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="oferta-extras">
+            <h3><span class="icono">🎓</span> Servicios Complementarios y Vida Estudiantil</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li>Departamento de Consejería Estudiantil (DECE) y orientación vocacional.</li>
+                <li>Actividades deportivas, culturales y artísticas: banda musical, grupo de bastoneras, concursos, olimpiadas y más.</li>
+                <li>Biblioteca virtual y física, laboratorios de ciencias y tecnología.</li>
+                <li>Bar institucional, servicios de salud y seguridad.</li>
+                <li>Plataformas virtuales: aula virtual, correo institucional, sistemas del Ministerio de Educación.</li>
+                <li>Participación activa de padres y estudiantes en comités y consejos.</li>
+                <li>Eventos institucionales: ferias, aniversarios, celebraciones y proyectos de integración.</li>
+            </ul>
+            <h3><span class="icono">📅</span> Proceso de Inscripción y Matrícula</h3>
+            <div class="section-divider">
+                <span class="line"></span>
+                <span class="icon">
+                    <img src="graduation-icon.png" alt="Icono de graduación">
+                </span>
+                <span class="line"></span>
+            </div>
+            <ul>
+                <li>Inscripción en línea a través del portal institucional.</li>
+                <li>Atención personalizada en secretaría y orientación para nuevos estudiantes.</li>
+                <li>Requisitos y cronograma disponibles en la sección <a href="requisitos.html">Requisitos</a>.</li>
+                <li>Soporte y acompañamiento durante todo el proceso.</li>
+            </ul>
+            <div style="text-align:center;margin-top:2rem;">
+                <a href="matricularse.html" class="btn-matricula-llamativo">Matricúlate Ahora</a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // ...script igual a dece.html para burbujas flotantes y saludo...
+        function renderFloatingBubbles() {
+            const bubbles = document.querySelector('.floating-bubbles');
+            if (!bubbles) return;
+            bubbles.innerHTML = '';
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            if (usuarioActivo) {
+                bubbles.innerHTML = `
+                    <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                        <img src="icon-matricularse.png" alt="Matricularse">
+                        <span class="floating-bubble-label">Matricularse</span>
+                    </a>
+                    <a href="perfil.html" class="floating-bubble" title="Perfil">
+                        <img src="icon-perfil.png" alt="Perfil">
+                        <span class="floating-bubble-label">Perfil</span>
+                    </a>
+                    <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                        <img src="icon-cerrar.png" alt="Cerrar sesión">
+                        <span class="floating-bubble-label">Cerrar sesión</span>
+                    </a>
+                `;
+                setTimeout(() => {
+                    const cerrar = document.getElementById('cerrar-sesion-bubble');
+                    if (cerrar) {
+                        cerrar.onclick = function(e) {
+                            e.preventDefault();
+                            localStorage.removeItem('usuarioActivo');
+                            window.location.href = "login.html";
+                        };
+                    }
+                }, 50);
+            } else {
+                bubbles.innerHTML = `
+                    <a href="registro.html" class="floating-bubble" title="Registrarse">
+                        <img src="icon-registrarse.png" alt="Registrarse">
+                        <span class="floating-bubble-label">Registrarse</span>
+                    </a>
+                    <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                        <img src="icon-login.png" alt="Iniciar sesión">
+                        <span class="floating-bubble-label">Iniciar sesión</span>
+                    </a>
+                `;
+            }
+        }
+        const header = document.querySelector('header');
+        const bubbles = document.querySelector('.floating-bubbles');
+        function toggleBubbles() {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+                if (bubbles) bubbles.style.display = 'flex';
+            } else {
+                header.classList.remove('scrolled');
+                if (bubbles) bubbles.style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', toggleBubbles);
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioActivo') {
+                renderFloatingBubbles();
+            }
+        });
+        renderFloatingBubbles();
+        toggleBubbles();
+
+        // Interactividad: mostrar/ocultar info extra en cada nivel-card
+        function toggleExtraInfo(btn) {
+            const card = btn.closest('.nivel-card');
+            card.classList.toggle('active');
+            btn.textContent = card.classList.contains('active') ? 'Ver menos' : 'Ver más';
+        }
+        // Estilos para los botones llamativos de matrícula/inscripción
+        (function() {
+            const style = document.createElement('style');
+            style.innerHTML = `
+            .btn-matricula-llamativo {
+                display: inline-block;
+                background: linear-gradient(90deg, #548235 60%, #2f5597 100%);
+                color: #fff !important;
+                font-weight: bold;
+                font-size: 1.13rem;
+                border: none;
+                border-radius: 14px;
+                padding: 0.85em 2.5em;
+                box-shadow: 0 4px 18px rgba(44,130,201,0.13);
+                cursor: pointer;
+                transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+                text-decoration: none !important;
+                letter-spacing: 0.5px;
+                margin-top: 1.2rem;
+                margin-bottom: 0.5rem;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
+            }
+            .btn-matricula-llamativo:hover, .btn-matricula-llamativo:focus {
+                background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+                color: #fff !important;
+                transform: translateY(-2px) scale(1.04);
+                box-shadow: 0 8px 28px rgba(44,130,201,0.18);
+                text-decoration: none !important;
+            }
+            `;
+            document.head.appendChild(style);
+        })();
+    </script>
+</body>
+</html>
