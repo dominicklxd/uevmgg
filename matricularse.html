@@ -1102,7 +1102,22 @@
                 document.getElementById('representante_vive_con_estudiante').value = paso5.madre_vive_con_estudiante;
                 document.getElementById('representante_horario_trabajo').value = paso5.madre_horario_trabajo;
                 document.getElementById('representante_telefono_celular').value = paso5.madre_telefono_celular;
+                // Guardar también en localStorage para que se use en la inserción a la base de datos
+                const representante = {
+                    representante_nombres: paso5.madre_nombres,
+                    representante_cedula: paso5.madre_cedula,
+                    representante_ocupacion: paso5.madre_ocupacion,
+                    representante_telefono_trabajo: paso5.madre_telefono_trabajo,
+                    representante_email: paso5.madre_email,
+                    representante_nivel_educacion: paso5.madre_nivel_educacion,
+                    representante_estado_civil: paso5.madre_estado_civil,
+                    representante_vive_con_estudiante: paso5.madre_vive_con_estudiante,
+                    representante_horario_trabajo: paso5.madre_horario_trabajo,
+                    representante_telefono_celular: paso5.madre_telefono_celular
+                };
+                localStorage.setItem('matricula_paso6', JSON.stringify(representante));
                 document.getElementById('paso5-form').style.display = 'none';
+                document.getElementById('paso6-form').style.display = 'none';
                 document.getElementById('paso7-form').style.display = 'block';
                 activarPasoWizard(7);
             } else {
@@ -1286,6 +1301,7 @@
                 barrio: valorNA('barrio'),
                 numero_casa: valorNA('numero_casa'),
                 referencia: valorNA('referencia'),
+               
                 latitud: valorNA('latitud'),
                 longitud: valorNA('longitud')
             };
