@@ -146,8 +146,7 @@
             <div class="footer-section">
                 <h3>UBICACIÓN</h3>
                 <div class="footer-line"></div>
-                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
-                <div style="margin-top:10px; text-align:right;">
+                <div style="margin-top:5px; text-align:center;">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
                         width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
@@ -156,11 +155,12 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo
-                +-
-            </p>
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
         </div>
     </footer>
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
     <script>
     // --- Encabezado dinámico y saludo ---
     const authLinks = document.querySelector('.auth-links');
@@ -249,7 +249,7 @@
             return;
         }
         const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
-        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9zZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         let nombres = '', apellidos = '', correo = '', foto = '';
@@ -311,7 +311,7 @@
         // Aquí deberías actualizar el usuario en la base de datos y en localStorage
         // Ejemplo: Actualizar en la tabla 'cedulas'
         const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
-        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9zZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
         try {
             // Actualizar cédula en la tabla 'cedulas'
@@ -337,7 +337,7 @@
         if (nueva !== confirmar) return alert('Las contraseñas no coinciden.');
         // Aquí deberías validar la contraseña actual y actualizar la nueva en la base de datos
         const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
-        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9zZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
         // Validar contraseña actual
         let { data: userData } = await supabase
@@ -372,6 +372,69 @@
             header.classList.remove('scrolled');
         }
     });
+
+    // --- Burbuja flotante ---
+    function renderFloatingBubbles() {
+        const bubbles = document.querySelector('.floating-bubbles');
+        if (!bubbles) return;
+        bubbles.innerHTML = '';
+        const usuarioActivo = localStorage.getItem('usuarioActivo');
+        if (usuarioActivo) {
+            bubbles.innerHTML = `
+                <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                    <img src="icon-matricularse.png" alt="Matricularse">
+                    <span class="floating-bubble-label">Matricularse</span>
+                </a>
+                <a href="perfil.html" class="floating-bubble" title="Perfil">
+                    <img src="icon-perfil.png" alt="Perfil">
+                    <span class="floating-bubble-label">Perfil</span>
+                </a>
+                <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                    <img src="icon-cerrar.png" alt="Cerrar sesión">
+                    <span class="floating-bubble-label">Cerrar sesión</span>
+                </a>
+            `;
+            setTimeout(() => {
+                const cerrar = document.getElementById('cerrar-sesion-bubble');
+                if (cerrar) {
+                    cerrar.onclick = function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('usuarioActivo');
+                        window.location.href = "login.html";
+                    };
+                }
+            }, 50);
+        } else {
+            bubbles.innerHTML = `
+                <a href="registro.html" class="floating-bubble" title="Registrarse">
+                    <img src="icon-registrarse.png" alt="Registrarse">
+                    <span class="floating-bubble-label">Registrarse</span>
+                </a>
+                <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                    <img src="icon-login.png" alt="Iniciar sesión">
+                    <span class="floating-bubble-label">Iniciar sesión</span>
+                </a>
+            `;
+        }
+    }
+    const bubbles = document.querySelector('.floating-bubbles');
+    function toggleBubbles() {
+        if (window.scrollY > 30) {
+            header.classList.add('scrolled');
+            if (bubbles) bubbles.style.display = 'flex';
+        } else {
+            header.classList.remove('scrolled');
+            if (bubbles) bubbles.style.display = 'none';
+        }
+    }
+    window.addEventListener('scroll', toggleBubbles);
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'usuarioActivo') {
+            renderFloatingBubbles();
+        }
+    });
+    renderFloatingBubbles();
+    toggleBubbles();
     </script>
 </body>
 </html>

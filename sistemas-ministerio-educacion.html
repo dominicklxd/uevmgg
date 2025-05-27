@@ -134,6 +134,9 @@
             </div>
         </section>
     </main>
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -147,18 +150,96 @@
                 <ul>
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="registro.html">Registro</a></li>
-                    <li><a href="autoridades.html">Autoridades</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
                 </ul>
             </div>
             <div class="footer-section">
                 <h3>CONTACTOS</h3>
                 <div class="footer-line"></div>
-                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
         </div>
     </footer>
+    <script>
+    // ...existing code...
+    function renderFloatingBubbles() {
+        const bubbles = document.querySelector('.floating-bubbles');
+        if (!bubbles) return;
+        bubbles.innerHTML = '';
+        const usuarioActivo = localStorage.getItem('usuarioActivo');
+        if (usuarioActivo) {
+            bubbles.innerHTML = `
+                <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                    <img src="icon-matricularse.png" alt="Matricularse">
+                    <span class="floating-bubble-label">Matricularse</span>
+                </a>
+                <a href="perfil.html" class="floating-bubble" title="Perfil">
+                    <img src="icon-perfil.png" alt="Perfil">
+                    <span class="floating-bubble-label">Perfil</span>
+                </a>
+                <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                    <img src="icon-cerrar.png" alt="Cerrar sesión">
+                    <span class="floating-bubble-label">Cerrar sesión</span>
+                </a>
+            `;
+            setTimeout(() => {
+                const cerrar = document.getElementById('cerrar-sesion-bubble');
+                if (cerrar) {
+                    cerrar.onclick = function(e) {
+                        e.preventDefault();
+                        localStorage.removeItem('usuarioActivo');
+                        window.location.href = "login.html";
+                    };
+                }
+            }, 50);
+        } else {
+            bubbles.innerHTML = `
+                <a href="registro.html" class="floating-bubble" title="Registrarse">
+                    <img src="icon-registrarse.png" alt="Registrarse">
+                    <span class="floating-bubble-label">Registrarse</span>
+                </a>
+                <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                    <img src="icon-login.png" alt="Iniciar sesión">
+                    <span class="floating-bubble-label">Iniciar sesión</span>
+                </a>
+            `;
+        }
+    }
+    const header = document.querySelector('header');
+    const bubbles = document.querySelector('.floating-bubbles');
+    function toggleBubbles() {
+        if (window.scrollY > 30) {
+            header.classList.add('scrolled');
+            if (bubbles) bubbles.style.display = 'flex';
+        } else {
+            header.classList.remove('scrolled');
+            if (bubbles) bubbles.style.display = 'none';
+        }
+    }
+    window.addEventListener('scroll', toggleBubbles);
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'usuarioActivo') {
+            renderFloatingBubbles();
+        }
+    });
+    renderFloatingBubbles();
+    toggleBubbles();
+    // ...existing code...
+</script>
 </body>
 </html>
