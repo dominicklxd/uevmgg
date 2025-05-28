@@ -310,6 +310,7 @@
                     <select id="periodo" name="periodo" required>
                         <option value="">-SELECCIONA-</option>
                         <option value="2025-2026">2025-2026</option>
+                        <option value="2024-2025">2024-2025</option>
                     </select>
                 </div>
                 <div class="matricula-form-group">
@@ -1311,6 +1312,19 @@
             const paso6 = JSON.parse(localStorage.getItem('matricula_paso6')) || {};
             const paso7 = contactos;
             const archivoData = window.archivoEstudiante || null;
+
+            // --- Validar que la cédula no exista ya en la tabla cedulas ---
+            if (paso2.cedula) {
+                let { data: cedulaData } = await supabase
+                    .from('cedulas')
+                    .select('id_cedula')
+                    .eq('cedula', paso2.cedula)
+                    .single();
+                if (cedulaData) {
+                    alert('La cédula ingresada ya está registrada. No se puede registrar dos veces la misma cédula de estudiante.');
+                    return;
+                }
+            }
 
             // --- Buscar id_grado y id_curso según curso, paralelo y especialidad ---
             let id_grado = null;
