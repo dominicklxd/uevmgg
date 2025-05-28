@@ -627,7 +627,8 @@
         </div>
         
     </footer>
-    <script src="script.js"></script>
+    <!-- Elimina o comenta la siguiente línea para evitar duplicidad de lógica -->
+    <!-- <script src="script.js"></script> -->
     <script>
 window.addEventListener('DOMContentLoaded', function() {
     // --- Tabs ---
@@ -658,40 +659,99 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // --- Edición y guardado campo a campo ---
+    // --- Edición y guardado campo a campo, con lógica especial para Datos Académicos ---
+    // SOLO AGREGAR BOTONES UNA VEZ
     document.querySelectorAll('.matricula-form-group').forEach(group => {
+        // Evitar duplicados: solo si no existen ya los botones
+        if (group.querySelector('.editar-btn') || group.querySelector('.guardar-btn')) return;
         const input = group.querySelector('input, select');
         if (!input) return;
-        // Elimina botones previos
-        group.querySelectorAll('.editar-btn, .guardar-btn').forEach(btn => btn.remove());
+
         // Crea botón editar
         const btnEditar = document.createElement('button');
         btnEditar.type = 'button';
         btnEditar.className = 'editar-btn';
         btnEditar.textContent = 'Editar';
+
         // Crea botón guardar
         const btnGuardar = document.createElement('button');
         btnGuardar.type = 'button';
         btnGuardar.className = 'guardar-btn';
         btnGuardar.textContent = 'Guardar';
         btnGuardar.style.display = 'none';
-        // Añade botones
+
         group.appendChild(btnEditar);
         group.appendChild(btnGuardar);
 
-        btnEditar.addEventListener('click', function() {
-            input.disabled = false;
-            btnEditar.style.display = 'none';
-            btnGuardar.style.display = 'inline-block';
-            input.focus();
-        });
-        btnGuardar.addEventListener('click', async function() {
-            input.disabled = true;
-            btnEditar.style.display = 'inline-block';
-            btnGuardar.style.display = 'none';
-            // Guardar campo en la base de datos
-            await guardarCampoEnBD(input);
-        });
+        // --- Lógica especial para Datos Académicos ---
+        if (
+            group.contains(document.getElementById('periodo')) ||
+            group.contains(document.getElementById('curso')) ||
+            group.contains(document.getElementById('paralelo')) ||
+            group.contains(document.getElementById('especialidad')) ||
+            group.contains(document.getElementById('institucion_procedencia'))
+        ) {
+            btnEditar.addEventListener('click', function() {
+                document.getElementById('periodo').disabled = false;
+                document.getElementById('curso').disabled = false;
+                document.getElementById('paralelo').disabled = false;
+                document.getElementById('institucion_procedencia').disabled = false;
+                const especialidadEl = document.getElementById('especialidad');
+                if (especialidadEl) especialidadEl.disabled = false;
+                // Solo mostrar el botón guardar de este grupo
+                document.querySelectorAll('#tab-academicos .guardar-btn').forEach(b => b.style.display = 'none');
+                btnGuardar.style.display = 'inline-block';
+                btnEditar.style.display = 'none';
+            });
+            btnGuardar.addEventListener('click', async function() {
+                await guardarDatosAcademicos();
+                btnGuardar.style.display = 'none';
+                btnEditar.style.display = 'inline-block';
+            });
+        } else {
+            btnEditar.addEventListener('click', function() {
+                input.disabled = false;
+                btnEditar.style.display = 'none';
+                btnGuardar.style.display = 'inline-block';
+                input.focus();
+            });
+            btnGuardar.addEventListener('click', async function() {
+                input.disabled = true;
+                btnEditar.style.display = 'inline-block';
+                btnGuardar.style.display = 'none';
+                await guardarCampoEnBD(input);
+            });
+        }
+    });
+
+    // --- Guardar todos los datos académicos (para botón guardar de sección y submit del form) ---
+    async function guardarDatosAcademicos() {
+        // Deshabilita todos los campos de Datos Académicos
+        document.getElementById('periodo').disabled = true;
+        document.getElementById('curso').disabled = true;
+        document.getElementById('paralelo').disabled = true;
+        document.getElementById('institucion_procedencia').disabled = true;
+        const especialidadEl = document.getElementById('especialidad');
+        if (especialidadEl) especialidadEl.disabled = true;
+        document.querySelectorAll('#tab-academicos .guardar-btn').forEach(b => b.style.display = 'none');
+        document.querySelectorAll('#tab-academicos .editar-btn').forEach(b => b.style.display = 'inline-block');
+        // 1. Actualizar id_grado según curso, paralelo y especialidad
+        await actualizarIdGradoEnInscripcion();
+        // 2. Guardar los demás campos académicos
+        const periodo = document.getElementById('periodo').value;
+        const institucion_procedencia = document.getElementById('institucion_procedencia').value;
+        await supabase.from('solicitud_inscripcion').update({
+            periodo,
+            institucion_procedencia
+        }).eq('id', idInscripcion);
+        // 3. Recargar datos para reflejar cambios
+        await cargarDatos();
+    }
+
+    // --- Guardar todos los datos académicos al hacer submit ---
+    document.getElementById('form-actualizar-inscripcion').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        await guardarDatosAcademicos();
     });
 
     // --- Listeners para botones PDF y resumen ---
@@ -1230,13 +1290,13 @@ window.addEventListener('DOMContentLoaded', function() {
                 <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('representante_nivel_educacion')?.value || ''}</td></tr>
                 <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('representante_estado_civil')?.value || ''}</td></tr>
                 <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('representante_vive_con_estudiante')?.value === "true" ? "Sí" : (document.getElementById('representante_vive_con_estudiante')?.value === "false" ? "No" : '')}</td></tr>
-                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('representante_horario_trabajo')?.value || ''}</td></tr>
+                <tr><td><b>Horario de Trabajo:</b</td><td>${document.getElementById('representante_horario_trabajo')?.value || ''}</td></tr>
                 <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('representante_telefono_celular')?.value || ''}</td></tr>
             </table>
         `;
     }
     
     </script>
-    <script src="script.js"></script>
+    
 </body>
 </html>
