@@ -629,6 +629,7 @@
     </footer>
     <script src="script.js"></script>
     <script>
+window.addEventListener('DOMContentLoaded', function() {
     // --- Tabs ---
     document.querySelectorAll('.actualizar-tab-btn').forEach(btn => {
         btn.addEventListener('click', function() {
@@ -640,16 +641,103 @@
     });
 
     // --- Mostrar/ocultar especialidad según curso seleccionado ---
-    document.getElementById('curso').addEventListener('change', function() {
-        const value = this.value;
-        const especialidadGroup = document.getElementById('especialidad-group');
-        if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
-            especialidadGroup.style.display = 'block';
-        } else {
-            especialidadGroup.style.display = 'none';
-            document.getElementById('especialidad').value = '';
-        }
+    const cursoEl = document.getElementById('curso');
+    if (cursoEl) {
+        cursoEl.addEventListener('change', function() {
+            const value = this.value;
+            const especialidadGroup = document.getElementById('especialidad-group');
+            if (especialidadGroup) {
+                if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
+                    especialidadGroup.style.display = 'block';
+                } else {
+                    especialidadGroup.style.display = 'none';
+                    const especialidadEl = document.getElementById('especialidad');
+                    if (especialidadEl) especialidadEl.value = '';
+                }
+            }
+        });
+    }
+
+    // --- Edición y guardado campo a campo ---
+    document.querySelectorAll('.matricula-form-group').forEach(group => {
+        const input = group.querySelector('input, select');
+        if (!input) return;
+        // Elimina botones previos
+        group.querySelectorAll('.editar-btn, .guardar-btn').forEach(btn => btn.remove());
+        // Crea botón editar
+        const btnEditar = document.createElement('button');
+        btnEditar.type = 'button';
+        btnEditar.className = 'editar-btn';
+        btnEditar.textContent = 'Editar';
+        // Crea botón guardar
+        const btnGuardar = document.createElement('button');
+        btnGuardar.type = 'button';
+        btnGuardar.className = 'guardar-btn';
+        btnGuardar.textContent = 'Guardar';
+        btnGuardar.style.display = 'none';
+        // Añade botones
+        group.appendChild(btnEditar);
+        group.appendChild(btnGuardar);
+
+        btnEditar.addEventListener('click', function() {
+            input.disabled = false;
+            btnEditar.style.display = 'none';
+            btnGuardar.style.display = 'inline-block';
+            input.focus();
+        });
+        btnGuardar.addEventListener('click', async function() {
+            input.disabled = true;
+            btnEditar.style.display = 'inline-block';
+            btnGuardar.style.display = 'none';
+            // Guardar campo en la base de datos
+            await guardarCampoEnBD(input);
+        });
     });
+
+    // --- Listeners para botones PDF y resumen ---
+    const btnImprimirPdf = document.getElementById('btn-imprimir-pdf');
+    if (btnImprimirPdf) {
+        btnImprimirPdf.addEventListener('click', function() {
+            alert('Funcionalidad de impresión PDF: reutiliza la lógica de matricularse.html aquí.');
+        });
+    }
+    const btnIrResumen = document.getElementById('btn-ir-resumen');
+    if (btnIrResumen) {
+        btnIrResumen.addEventListener('click', function() {
+            mostrarResumenActualizacion();
+            document.getElementById('panel-edicion').style.display = 'none';
+            document.getElementById('panel-resumen').style.display = 'block';
+        });
+    }
+    const btnVolverEditar = document.getElementById('btn-volver-editar');
+    if (btnVolverEditar) {
+        btnVolverEditar.addEventListener('click', function() {
+            document.getElementById('panel-resumen').style.display = 'none';
+            document.getElementById('panel-edicion').style.display = 'block';
+        });
+    }
+    const btnDescargarPdf = document.getElementById('btn-descargar-pdf');
+    if (btnDescargarPdf) {
+        btnDescargarPdf.onclick = function() {
+            const resumen = document.getElementById('resumen-actualizacion');
+            const doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            doc.setFontSize(12);
+            doc.text('Resumen de Actualización de Inscripción', 15, 15);
+            let y = 25;
+            resumen.querySelectorAll('tr').forEach(tr => {
+                const tds = tr.querySelectorAll('td');
+                if (tds.length === 2) {
+                    doc.text(`${tds[0].innerText}: ${tds[1].innerText}`, 15, y);
+                    y += 8;
+                }
+            });
+            doc.save('actualizacion_inscripcion.pdf');
+        };
+    }
+
+    // --- Cargar datos principales ---
+    cargarDatos();
+});
 
     // --- Supabase setup ---
     const usuarioActivo = localStorage.getItem('usuarioActivo');
@@ -663,6 +751,8 @@
     // --- Cargar datos desde la base de datos ---
     async function cargarDatos() {
         if (!usuarioActivo) return;
+
+        // 1. Buscar id_cedula por la cédula del usuario activo
         let { data: cedulaData } = await supabase
             .from('cedulas')
             .select('id_cedula, cedula')
@@ -671,142 +761,122 @@
         let idCedula = cedulaData && cedulaData.id_cedula ? cedulaData.id_cedula : null;
         if (!idCedula) return;
 
-        let { data: estudianteList } = await supabase
+        // 2. Buscar estudiante por id_cedula
+        let { data: estudiante } = await supabase
             .from('estudiante')
-            .select('id_estudiante, nombres, apellidos, correo, tipo_sangre, fecha_nacimiento, sexo, telefono, telefono_convencional, etnia, nacionalidad, id_inscripcion')
+            .select('id_estudiante, id_inscripcion, nombres, apellidos, correo, tipo_sangre, fecha_nacimiento, sexo, telefono, telefono_convencional, etnia, nacionalidad')
             .eq('id_cedula', idCedula)
-            .order('id_estudiante', { ascending: false })
-            .limit(1);
-
-        if (!estudianteList || estudianteList.length === 0) return;
-        const estudiante = estudianteList[0];
+            .maybeSingle();
+        if (!estudiante) return;
         idEstudiante = estudiante.id_estudiante;
 
-        // --- OBTENER O CREAR idInscripcion ---
-        // Si el estudiante ya tiene id_inscripcion, úsalo
-        if (estudiante.id_inscripcion) {
-            idInscripcion = estudiante.id_inscripcion;
-        } else {
-            // Buscar si ya existe una solicitud_inscripcion para este estudiante
-            let { data: inscList } = await supabase
+        // 3. Buscar solicitud_inscripcion por id_inscripcion
+        let idInscripcionEst = estudiante.id_inscripcion;
+        let inscData = null;
+        if (idInscripcionEst) {
+            let { data: insc } = await supabase
                 .from('solicitud_inscripcion')
-                .select('id')
-                .eq('id_estudiante', idEstudiante)
-                .order('id', { ascending: false })
-                .limit(1);
-            if (inscList && inscList.length > 0) {
-                idInscripcion = inscList[0].id;
-                // Actualizar estudiante con el id_inscripcion encontrado
-                await supabase.from('estudiante').update({ id_inscripcion: idInscripcion }).eq('id_estudiante', idEstudiante);
-            } else {
-                // Si no existe, crear una nueva solicitud_inscripcion y asociarla
-                // BUSCAR id_curso por nombre
-let idCurso = null;
-let { data: cursoData } = await supabase
-    .from('curso_nivel')
-    .select('id_curso')
-    .eq('nombre_curso', "1ro EGB")
-    .maybeSingle();
-if (cursoData) idCurso = cursoData.id_curso;
-
-// Si quieres también id_nivel, puedes buscarlo igual
-let idNivel = null;
-if (idCurso) {
-    let { data: cursoNivelData } = await supabase
-        .from('curso_nivel')
-        .select('id_nivel')
-        .eq('id_curso', idCurso)
-        .maybeSingle();
-    if (cursoNivelData) idNivel = cursoNivelData.id_nivel;
-}
-
-let { data: nuevaInscripcion } = await supabase
-    .from('solicitud_inscripcion')
-    .insert([{
-        periodo: "2024-2025",
-        id_curso: idCurso,
-        id_nivel: idNivel,
-        paralelo: "A",
-        especialidad: "",
-        institucion_procedencia: "Victor Manuel Guzman",
-        id_estudiante: idEstudiante
-    }])
-    .select('id')
-    .single();
-                if (nuevaInscripcion) {
-                    idInscripcion = nuevaInscripcion.id;
-                    await supabase.from('estudiante').update({ id_inscripcion: idInscripcion }).eq('id_estudiante', idEstudiante);
-                }
-            }
+                .select('id, periodo, institucion_procedencia, id_grado')
+                .eq('id', idInscripcionEst)
+                .maybeSingle();
+            inscData = insc;
+            idInscripcion = insc ? insc.id : null;
+        } else {
+            // ...existing code para crear solicitud_inscripcion si no existe...
+            return; // Si no hay inscripción, no continuar (evita selects vacíos)
         }
 
-        // DATOS ACADÉMICOS DESDE LA BASE DE DATOS
-        if (idInscripcion && typeof idInscripcion !== "undefined" && idInscripcion !== null) {
-            // Traer la inscripción y hacer JOIN para obtener nombre del curso y nivel
-            let { data: inscData, error: inscError } = await supabase
-                .from('solicitud_inscripcion')
-                .select(`
-                    periodo,
-                    especialidad,
-                    institucion_procedencia,
-                    paralelo,
-                    id_curso,
-                    id_nivel,
-                    curso_nivel (
-                        nombre_curso
-                    ),
-                    nivel_grado (
-                        nombre_nivel
-                    )
-                `)
-                .eq('id', idInscripcion)
+        // 4. Buscar curso_grado por id_grado
+        let cursoGradoData = null;
+        if (inscData && inscData.id_grado) {
+            let { data: grado } = await supabase
+                .from('curso_grado')
+                .select('nombre_nivel, grado, paralelo, especialidad')
+                .eq('id_grado', inscData.id_grado)
                 .maybeSingle();
+            cursoGradoData = grado;
 
-            if (inscError) {
-                console.error('Error al consultar solicitud_inscripcion:', inscError);
-                alert('Error al consultar datos académicos. Contacte al administrador.');
-                return;
+            // --- DEBUG: Mostrar en consola el resultado de cursoGradoData ---
+            console.log('cursoGradoData:', cursoGradoData);
+            console.log('id_grado usado:', inscData.id_grado);
+        }
+
+        // 5. Asignar valores a los campos del formulario
+        // --- Datos académicos ---
+        if (inscData && inscData.periodo) document.getElementById('periodo').value = inscData.periodo.trim();
+        if (inscData && inscData.institucion_procedencia) document.getElementById('institucion_procedencia').value = inscData.institucion_procedencia.trim();
+
+        // --- Curso, paralelo, especialidad desde curso_grado ---
+        if (cursoGradoData) {
+            let grado = cursoGradoData.grado ? cursoGradoData.grado.trim() : "";
+            let nombre_nivel = cursoGradoData.nombre_nivel ? cursoGradoData.nombre_nivel.trim() : "";
+            let paralelo = cursoGradoData.paralelo ? cursoGradoData.paralelo.trim() : "";
+            let especialidad = cursoGradoData.especialidad ? cursoGradoData.especialidad.trim() : "";
+
+            // Construir el nombre del curso para el select
+            let cursoNombre = "";
+            if (nombre_nivel === "EGB") {
+                cursoNombre = `${grado} EGB`;
+            } else if (nombre_nivel === "Bachillerato") {
+                cursoNombre = `${grado} Bachillerato`;
             }
 
-            if (inscData) {
-                // Asignar valores usando los nombres traídos por el JOIN
-                if (inscData.periodo) document.getElementById('periodo').value = inscData.periodo.trim();
-                // Asignar el nombre del curso desde el JOIN
-                if (inscData.curso_nivel && inscData.curso_nivel.nombre_curso) {
-                    document.getElementById('curso').value = inscData.curso_nivel.nombre_curso.trim();
-                } else {
-                    document.getElementById('curso').value = '';
+            // Seleccionar el valor correcto en el select de curso
+            const cursoSelect = document.getElementById('curso');
+            if (cursoSelect) {
+                let found = false;
+                for (let i = 0; i < cursoSelect.options.length; i++) {
+                    if (cursoSelect.options[i].value.trim().toLowerCase() === cursoNombre.trim().toLowerCase()) {
+                        cursoSelect.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
                 }
-                if (inscData.paralelo) document.getElementById('paralelo').value = inscData.paralelo.trim();
-                if (inscData.especialidad) document.getElementById('especialidad').value = inscData.especialidad.trim();
-                if (inscData.institucion_procedencia) document.getElementById('institucion_procedencia').value = inscData.institucion_procedencia.trim();
-                // Mostrar especialidad solo si es bachillerato
-                if (inscData.curso_nivel && inscData.curso_nivel.nombre_curso && inscData.curso_nivel.nombre_curso.includes('Bachillerato')) {
-                    document.getElementById('especialidad-group').style.display = 'block';
-                } else {
-                    document.getElementById('especialidad-group').style.display = 'none';
-                    document.getElementById('especialidad').value = '';
+                if (!found) cursoSelect.selectedIndex = 0;
+            }
+
+            // Paralelo
+            const paraleloSelect = document.getElementById('paralelo');
+            if (paraleloSelect) {
+                let found = false;
+                for (let i = 0; i < paraleloSelect.options.length; i++) {
+                    if (paraleloSelect.options[i].value.trim().toUpperCase() === paralelo.toUpperCase()) {
+                        paraleloSelect.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) paraleloSelect.selectedIndex = 0;
+            }
+
+            // Especialidad (si aplica)
+            if (nombre_nivel === "Bachillerato") {
+                document.getElementById('especialidad-group').style.display = 'block';
+                const especialidadSelect = document.getElementById('especialidad');
+                if (especialidadSelect) {
+                    let found = false;
+                    for (let i = 0; i < especialidadSelect.options.length; i++) {
+                        if (especialidadSelect.options[i].value.trim().toLowerCase() === (especialidad || "").trim().toLowerCase()) {
+                            especialidadSelect.selectedIndex = i;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) especialidadSelect.selectedIndex = 0;
                 }
             } else {
-                // Si no hay datos, limpia los campos
-                document.getElementById('periodo').value = '';
-                document.getElementById('curso').value = '';
-                document.getElementById('paralelo').value = '';
-                document.getElementById('especialidad').value = '';
-                document.getElementById('institucion_procedencia').value = '';
                 document.getElementById('especialidad-group').style.display = 'none';
+                document.getElementById('especialidad').selectedIndex = 0;
             }
         } else {
-            // Si idInscripcion es inválido, limpia los campos
-            document.getElementById('periodo').value = '';
-            document.getElementById('curso').value = '';
-            document.getElementById('paralelo').value = '';
-            document.getElementById('especialidad').value = '';
-            document.getElementById('institucion_procedencia').value = '';
+            // Limpiar selects si no hay datos
+            document.getElementById('curso').selectedIndex = 0;
+            document.getElementById('paralelo').selectedIndex = 0;
+            document.getElementById('especialidad').selectedIndex = 0;
             document.getElementById('especialidad-group').style.display = 'none';
         }
 
-        // Estudiante
+        // --- Datos del estudiante ---
         document.getElementById('apellidos').value = estudiante.apellidos || '';
         document.getElementById('nombres').value = estudiante.nombres || '';
         document.getElementById('correo').value = estudiante.correo || '';
@@ -937,8 +1007,6 @@ let { data: nuevaInscripcion } = await supabase
 
     }
 
-    window.addEventListener('DOMContentLoaded', cargarDatos);
-
     // --- Edición y guardado campo a campo ---
     document.querySelectorAll('.matricula-form-group').forEach(group => {
         const input = group.querySelector('input, select');
@@ -985,27 +1053,6 @@ let { data: nuevaInscripcion } = await supabase
         return data ? data.id_curso : null;
     }
 
-    // 1. Función para obtener el id_grado por curso, paralelo y especialidad
-    async function getIdGradoPorDatos(curso, paralelo, especialidad) {
-        let query = supabase.from('curso_grado').select('id_grado').eq('paralelo', paralelo);
-
-        let grado = "";
-        let nombre_nivel = "";
-        if (curso.includes("Bachillerato")) {
-            nombre_nivel = "Bachillerato";
-            grado = curso.replace("ro Bachillerato", "").replace("do Bachillerato", "").replace("3ro Bachillerato", "3").replace("1ro", "1").replace("2do", "2").replace("3ro", "3").trim();
-            query = query.eq('nombre_nivel', nombre_nivel).eq('grado', grado);
-            if (especialidad) query = query.eq('especialidad', especialidad);
-        } else {
-            nombre_nivel = "EGB";
-            grado = curso.replace("ro EGB", "").replace("do EGB", "").replace("to EGB", "").replace("mo EGB", "").replace("no EGB", "").trim();
-            query = query.eq('nombre_nivel', nombre_nivel).eq('grado', grado);
-        }
-
-        const { data, error } = await query.maybeSingle();
-        return data ? data.id_grado : null;
-    }
-
     // --- Guardar campo individual en la base de datos ---
     async function guardarCampoEnBD(input) {
         const name = input.name;
@@ -1015,12 +1062,13 @@ let { data: nuevaInscripcion } = await supabase
             await supabase.from('estudiante').update({ [name]: value }).eq('id_estudiante', idEstudiante);
         } else if (["periodo", "especialidad", "institucion_procedencia", "paralelo"].includes(name)) {
             await supabase.from('solicitud_inscripcion').update({ [name]: value }).eq('id', idInscripcion);
-        } else if (name === "curso") {
-            // Buscar el id_curso por el nombre seleccionado
-            const idCurso = await getIdCursoPorNombre(value);
-            if (idCurso) {
-                await supabase.from('solicitud_inscripcion').update({ id_curso: idCurso }).eq('id', idInscripcion);
+            // Si es paralelo o especialidad, actualizar id_grado
+            if (name === "paralelo" || name === "especialidad") {
+                await actualizarIdGradoEnInscripcion();
             }
+        } else if (name === "curso") {
+            // Al cambiar curso, recalcular id_grado
+            await actualizarIdGradoEnInscripcion();
             return;
         } else if (["calle_principal", "calle_secundaria", "provincia", "canton", "parroquia", "barrio", "numero_casa", "referencia"].includes(name)) {
             await supabase.from('direccion_estudiante').update({ [name]: value }).eq('id_estudiante', idEstudiante);
@@ -1049,128 +1097,47 @@ let { data: nuevaInscripcion } = await supabase
         }
     }
 
-    // --- Guardar cambios (formulario completo) ---
-    document.getElementById('form-actualizar-inscripcion').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const datos = Object.fromEntries(new FormData(e.target).entries());
-
-        // Buscar id_grado por datos seleccionados
-        const id_grado = await getIdGradoPorDatos(datos.curso, datos.paralelo, datos.especialidad);
-
-        // Actualizar inscripción con id_grado
-        await supabase
-            .from('solicitud_inscripcion')
-            .update({
-                periodo: datos.periodo,
-                id_grado: id_grado,
-                especialidad: datos.especialidad,
-                institucion_procedencia: datos.institucion_procedencia,
-                paralelo: datos.paralelo
-            })
-            .eq('id', idInscripcion);
-        // Actualizar estudiante
-        await supabase
-            .from('estudiante')
-            .update({
-                telefono: datos.telefono,
-                nombres: datos.nombres,
-                apellidos: datos.apellidos,
-                correo: datos.correo,
-                tipo_sangre: datos.tipo_sangre,
-                fecha_nacimiento: datos.fecha_nacimiento,
-                sexo: datos.sexo,
-                telefono: datos.telefono,
-                telefono_convencional: datos.telefono_convencional,
-                etnia: datos.etnia,
-                nacionalidad: datos.nacionalidad
-            })
-            .eq('id_estudiante', idEstudiante);
-        // Actualizar vivienda
-        await supabase
-            .from('direccion_estudiante')
-            .update({
-                calle_principal: datos.calle_principal,
-                calle_secundaria: datos.calle_secundaria,
-                provincia: datos.provincia,
-                canton: datos.canton,
-                parroquia: datos.parroquia,
-                barrio: datos.barrio,
-                numero_casa: datos.numero_casa,
-                referencia: datos.referencia
-            })
-            .eq('id_estudiante', idEstudiante);
-        // Actualizar padre
-        await supabase
-            .from('padre_estudiante')
-            .update({
-                nombres: datos.padre_nombres,
-                cedula: datos.padre_cedula,
-                ocupacion: datos.padre_ocupacion,
-                telefono_trabajo: datos.padre_telefono_trabajo,
-                email: datos.padre_email,
-                nivel_educacion: datos.padre_nivel_educacion,
-                estado_civil: datos.padre_estado_civil,
-                vive_con_estudiante: datos.padre_vive_con_estudiante === "true",
-                horario_trabajo: datos.padre_horario_trabajo,
-                telefono_celular: datos.padre_telefono_celular
-            })
-            .eq('id_estudiante', idEstudiante);
-        // Actualizar madre
-        await supabase
-            .from('madre_estudiante')
-            .update({
-                nombres: datos.madre_nombres,
-                cedula: datos.madre_cedula,
-                ocupacion: datos.madre_ocupacion,
-                telefono_trabajo: datos.madre_telefono_trabajo,
-                email: datos.madre_email,
-                nivel_educacion: datos.madre_nivel_educacion,
-                estado_civil: datos.madre_estado_civil,
-                vive_con_estudiante: datos.madre_vive_con_estudiante === "true",
-                horario_trabajo: datos.madre_horario_trabajo,
-                telefono_celular: datos.madre_telefono_celular
-            })
-            .eq('id_estudiante', idEstudiante);
-        // Actualizar representante
-        await supabase
-            .from('representante_estudiante')
-            .update({
-                nombres: datos.representante_nombres,
-                cedula: datos.representante_cedula,
-                ocupacion: datos.representante_ocupacion,
-                telefono_trabajo: datos.representante_telefono_trabajo,
-                email: datos.representante_email,
-                nivel_educacion: datos.representante_nivel_educacion,
-                estado_civil: datos.representante_estado_civil,
-                vive_con_estudiante: datos.representante_vive_con_estudiante === "true",
-                horario_trabajo: datos.representante_horario_trabajo,
-                telefono_celular: datos.representante_telefono_celular
-            })
-            .eq('id_estudiante', idEstudiante);
-        // Emergencia 1 y 2
-        if (window.emergenciaIds && window.emergenciaIds[0]) {
-            await supabase
-                .from('contacto_emergencia_estudiante')
-                .update({
-                    nombre: datos.emergencia1_nombre,
-                    telefono: datos.emergencia1_telefono,
-                    parentesco: datos.emergencia1_parentesco
-                })
-                .eq('id_contacto', window.emergenciaIds[0]);
+    // --- Actualizar id_grado automáticamente al editar curso, paralelo o especialidad ---
+    async function actualizarIdGradoEnInscripcion() {
+        const curso = document.getElementById('curso').value;
+        const paralelo = document.getElementById('paralelo').value;
+        const especialidad = document.getElementById('especialidad').value;
+        if (!curso || !paralelo) return;
+        const id_grado = await getIdGradoPorDatos(curso, paralelo, especialidad);
+        if (id_grado && idInscripcion) {
+            await supabase.from('solicitud_inscripcion').update({ id_grado }).eq('id', idInscripcion);
+            // Refrescar campos para mostrar los datos correctos
+            await cargarDatos();
         }
-        if (window.emergenciaIds && window.emergenciaIds[1]) {
-            await supabase
-                .from('contacto_emergencia_estudiante')
-                .update({
-                    nombre: datos.emergencia2_nombre,
-                    telefono: datos.emergencia2_telefono,
-                    parentesco: datos.emergencia2_parentesco
-                })
-                .eq('id_contacto', window.emergenciaIds[1]);
+    }
+
+    // --- Buscar id_grado por datos seleccionados ---
+    async function getIdGradoPorDatos(curso, paralelo, especialidad) {
+        if (!curso || !paralelo) return null;
+        let query = supabase.from('curso_grado').select('id_grado').eq('paralelo', paralelo);
+
+        let grado = "";
+        let nombre_nivel = "";
+        if (curso && curso.includes("Bachillerato")) {
+            nombre_nivel = "Bachillerato";
+            grado = curso.replace("ro Bachillerato", "").replace("do Bachillerato", "").replace("3ro Bachillerato", "3").replace("1ro", "1").replace("2do", "2").replace("3ro", "3").trim();
+            query = query.eq('nombre_nivel', nombre_nivel).eq('grado', grado);
+            if (especialidad) {
+                query = query.eq('especialidad', especialidad);
+            } else {
+                query = query.is('especialidad', null);
+            }
+        } else if (curso) {
+            nombre_nivel = "EGB";
+            grado = curso.replace("ro EGB", "").replace("do EGB", "").replace("to EGB", "").replace("mo EGB", "").replace("no EGB", "").trim();
+            query = query.eq('nombre_nivel', nombre_nivel).eq('grado', grado).is('especialidad', null);
+        } else {
+            return null;
         }
-        alert('Datos actualizados correctamente.');
-        window.location.reload();
-    });
+
+        const { data, error } = await query.maybeSingle();
+        return data ? data.id_grado : null;
+    }
 
     // --- Imprimir PDF (estructura similar a matricularse) ---
     document.getElementById('btn-imprimir-pdf').addEventListener('click', function() {
@@ -1178,33 +1145,39 @@ let { data: nuevaInscripcion } = await supabase
     });
 
     // --- Botón "Ir a imprimir" muestra el resumen ---
-    document.getElementById('btn-ir-resumen').addEventListener('click', function() {
-        mostrarResumenActualizacion();
-        document.getElementById('panel-edicion').style.display = 'none';
-        document.getElementById('panel-resumen').style.display = 'block';
-    });
-    // --- Botón "Volver a editar" ---
-    document.getElementById('btn-volver-editar').addEventListener('click', function() {
-        document.getElementById('panel-resumen').style.display = 'none';
-        document.getElementById('panel-edicion').style.display = 'block';
-    });
-
-    // --- Descargar PDF igual que matricularse.html ---
-    document.getElementById('btn-descargar-pdf').onclick = function() {
-        const resumen = document.getElementById('resumen-actualizacion');
-        const doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-        doc.setFontSize(12);
-        doc.text('Resumen de Actualización de Inscripción', 15, 15);
-        let y = 25;
-        resumen.querySelectorAll('tr').forEach(tr => {
-            const tds = tr.querySelectorAll('td');
-            if (tds.length === 2) {
-                doc.text(`${tds[0].innerText}: ${tds[1].innerText}`, 15, y);
-                y += 8;
-            }
+    const btnIrResumen = document.getElementById('btn-ir-resumen');
+    if (btnIrResumen) {
+        btnIrResumen.addEventListener('click', function() {
+            mostrarResumenActualizacion();
+            document.getElementById('panel-edicion').style.display = 'none';
+            document.getElementById('panel-resumen').style.display = 'block';
         });
-        doc.save('actualizacion_inscripcion.pdf');
-    };
+    }
+    const btnVolverEditar = document.getElementById('btn-volver-editar');
+    if (btnVolverEditar) {
+        btnVolverEditar.addEventListener('click', function() {
+            document.getElementById('panel-resumen').style.display = 'none';
+            document.getElementById('panel-edicion').style.display = 'block';
+        });
+    }
+    const btnDescargarPdf = document.getElementById('btn-descargar-pdf');
+    if (btnDescargarPdf) {
+        btnDescargarPdf.onclick = function() {
+            const resumen = document.getElementById('resumen-actualizacion');
+            const doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            doc.setFontSize(12);
+            doc.text('Resumen de Actualización de Inscripción', 15, 15);
+            let y = 25;
+            resumen.querySelectorAll('tr').forEach(tr => {
+                const tds = tr.querySelectorAll('td');
+                if (tds.length === 2) {
+                    doc.text(`${tds[0].innerText}: ${tds[1].innerText}`, 15, y);
+                    y += 8;
+                }
+            });
+            doc.save('actualizacion_inscripcion.pdf');
+        };
+    }
 
     // --- Resumen igual a matricularse.html ---
     function mostrarResumenActualizacion() {
@@ -1213,52 +1186,52 @@ let { data: nuevaInscripcion } = await supabase
             <h2 style="text-align:center;color:#2f5597;">Resumen de Actualización</h2>
             <table style="width:100%;border-collapse:collapse;">
                 <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Datos Académicos</th></tr>
-                <tr><td><b>Periodo:</b></td><td>${document.getElementById('periodo').value || ''}</td></tr>
-                <tr><td><b>Curso:</b></td><td>${document.getElementById('curso').value || ''}</td></tr>
-                <tr><td><b>Paralelo:</b></td><td>${document.getElementById('paralelo').value || ''}</td></tr>
-                <tr><td><b>Especialidad:</b></td><td>${document.getElementById('especialidad').value || ''}</td></tr>
-                <tr><td><b>Institución de Procedencia:</b></td><td>${document.getElementById('institucion_procedencia').value || ''}</td></tr>
+                <tr><td><b>Periodo:</b></td><td>${document.getElementById('periodo')?.value || ''}</td></tr>
+                <tr><td><b>Curso:</b></td><td>${document.getElementById('curso')?.value || ''}</td></tr>
+                <tr><td><b>Paralelo:</b></td><td>${document.getElementById('paralelo')?.value || ''}</td></tr>
+                <tr><td><b>Especialidad:</b></td><td>${document.getElementById('especialidad')?.value || ''}</td></tr>
+                <tr><td><b>Institución de Procedencia:</b></td><td>${document.getElementById('institucion_procedencia')?.value || ''}</td></tr>
                 <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Datos del Estudiante</th></tr>
-                <tr><td><b>Apellidos:</b></td><td>${document.getElementById('apellidos').value || ''}</td></tr>
-                <tr><td><b>Nombres:</b></td><td>${document.getElementById('nombres').value || ''}</td></tr>
-                <tr><td><b>Cédula:</b></td><td>${document.getElementById('cedula').value || ''}</td></tr>
-                <tr><td><b>Etnia:</b></td><td>${document.getElementById('etnia').value || ''}</td></tr>
-                <tr><td><b>Nacionalidad:</b></td><td>${document.getElementById('nacionalidad').value || ''}</td></tr>
-                <tr><td><b>Tipo de Sangre:</b></td><td>${document.getElementById('tipo_sangre').value || ''}</td></tr>
-                <tr><td><b>Fecha de Nacimiento:</b></td><td>${document.getElementById('fecha_nacimiento').value || ''}</td></tr>
-                <tr><td><b>Sexo:</b></td><td>${document.getElementById('sexo').value || ''}</td></tr>
-                <tr><td><b>Teléfono:</b></td><td>${document.getElementById('telefono').value || ''}</td></tr>
-                <tr><td><b>Correo:</b></td><td>${document.getElementById('correo').value || ''}</td></tr>
+                <tr><td><b>Apellidos:</b></td><td>${document.getElementById('apellidos')?.value || ''}</td></tr>
+                <tr><td><b>Nombres:</b></td><td>${document.getElementById('nombres')?.value || ''}</td></tr>
+                <tr><td><b>Cédula:</b></td><td>${document.getElementById('cedula')?.value || ''}</td></tr>
+                <tr><td><b>Etnia:</b></td><td>${document.getElementById('etnia')?.value || ''}</td></tr>
+                <tr><td><b>Nacionalidad:</b></td><td>${document.getElementById('nacionalidad')?.value || ''}</td></tr>
+                <tr><td><b>Tipo de Sangre:</b></td><td>${document.getElementById('tipo_sangre')?.value || ''}</td></tr>
+                <tr><td><b>Fecha de Nacimiento:</b></td><td>${document.getElementById('fecha_nacimiento')?.value || ''}</td></tr>
+                <tr><td><b>Sexo:</b></td><td>${document.getElementById('sexo')?.value || ''}</td></tr>
+                <tr><td><b>Teléfono:</b></td><td>${document.getElementById('telefono')?.value || ''}</td></tr>
+                <tr><td><b>Correo:</b></td><td>${document.getElementById('correo')?.value || ''}</td></tr>
                 <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Padre</th></tr>
-                <tr><td><b>Nombre:</b></td><td>${document.getElementById('padre_nombres').value || ''}</td></tr>
-                <tr><td><b>Cédula:</b></td><td>${document.getElementById('padre_cedula').value || ''}</td></tr>
-                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('padre_ocupacion').value || ''}</td></tr>
-                <tr><td><b>Email:</b></td><td>${document.getElementById('padre_email').value || ''}</td></tr>
-                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('padre_nivel_educacion').value || ''}</td></tr>
-                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('padre_estado_civil').value || ''}</td></tr>
-                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('padre_vive_con_estudiante').value === "true" ? "Sí" : (document.getElementById('padre_vive_con_estudiante').value === "false" ? "No" : '')}</td></tr>
-                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('padre_horario_trabajo').value || ''}</td></tr>
-                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('padre_telefono_celular').value || ''}</td></tr>
+                <tr><td><b>Nombre:</b></td><td>${document.getElementById('padre_nombres')?.value || ''}</td></tr>
+                <tr><td><b>Cédula:</b></td><td>${document.getElementById('padre_cedula')?.value || ''}</td></tr>
+                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('padre_ocupacion')?.value || ''}</td></tr>
+                <tr><td><b>Email:</b></td><td>${document.getElementById('padre_email')?.value || ''}</td></tr>
+                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('padre_nivel_educacion')?.value || ''}</td></tr>
+                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('padre_estado_civil')?.value || ''}</td></tr>
+                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('padre_vive_con_estudiante')?.value === "true" ? "Sí" : (document.getElementById('padre_vive_con_estudiante')?.value === "false" ? "No" : '')}</td></tr>
+                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('padre_horario_trabajo')?.value || ''}</td></tr>
+                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('padre_telefono_celular')?.value || ''}</td></tr>
                 <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Madre</th></tr>
-                <tr><td><b>Nombre:</b></td><td>${document.getElementById('madre_nombres').value || ''}</td></tr>
-                <tr><td><b>Cédula:</b></td><td>${document.getElementById('madre_cedula').value || ''}</td></tr>
-                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('madre_ocupacion').value || ''}</td></tr>
-                <tr><td><b>Email:</b></td><td>${document.getElementById('madre_email').value || ''}</td></tr>
-                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('madre_nivel_educacion').value || ''}</td></tr>
-                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('madre_estado_civil').value || ''}</td></tr>
-                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('madre_vive_con_estudiante').value === "true" ? "Sí" : (document.getElementById('madre_vive_con_estudiante').value === "false" ? "No" : '')}</td></tr>
-                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('madre_horario_trabajo').value || ''}</td></tr>
-                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('madre_telefono_celular').value || ''}</td></tr>
+                <tr><td><b>Nombre:</b></td><td>${document.getElementById('madre_nombres')?.value || ''}</td></tr>
+                <tr><td><b>Cédula:</b></td><td>${document.getElementById('madre_cedula')?.value || ''}</td></tr>
+                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('madre_ocupacion')?.value || ''}</td></tr>
+                <tr><td><b>Email:</b></td><td>${document.getElementById('madre_email')?.value || ''}</td></tr>
+                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('madre_nivel_educacion')?.value || ''}</td></tr>
+                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('madre_estado_civil')?.value || ''}</td></tr>
+                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('madre_vive_con_estudiante')?.value === "true" ? "Sí" : (document.getElementById('madre_vive_con_estudiante')?.value === "false" ? "No" : '')}</td></tr>
+                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('madre_horario_trabajo')?.value || ''}</td></tr>
+                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('madre_telefono_celular')?.value || ''}</td></tr>
                 <tr><th colspan="2" style="background:#2f5597;color:#fff;font-size:1.1rem;">Representante</th></tr>
-                <tr><td><b>Nombre:</b></td><td>${document.getElementById('representante_nombres').value || ''}</td></tr>
-                <tr><td><b>Cédula:</b></td><td>${document.getElementById('representante_cedula').value || ''}</td></tr>
-                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('representante_ocupacion').value || ''}</td></tr>
-                <tr><td><b>Email:</b></td><td>${document.getElementById('representante_email').value || ''}</td></tr>
-                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('representante_nivel_educacion').value || ''}</td></tr>
-                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('representante_estado_civil').value || ''}</td></tr>
-                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('representante_vive_con_estudiante').value === "true" ? "Sí" : (document.getElementById('representante_vive_con_estudiante').value === "false" ? "No" : '')}</td></tr>
-                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('representante_horario_trabajo').value || ''}</td></tr>
-                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('representante_telefono_celular').value || ''}</td></tr>
+                <tr><td><b>Nombre:</b></td><td>${document.getElementById('representante_nombres')?.value || ''}</td></tr>
+                <tr><td><b>Cédula:</b></td><td>${document.getElementById('representante_cedula')?.value || ''}</td></tr>
+                <tr><td><b>Ocupación:</b></td><td>${document.getElementById('representante_ocupacion')?.value || ''}</td></tr>
+                <tr><td><b>Email:</b></td><td>${document.getElementById('representante_email')?.value || ''}</td></tr>
+                <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('representante_nivel_educacion')?.value || ''}</td></tr>
+                <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('representante_estado_civil')?.value || ''}</td></tr>
+                <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('representante_vive_con_estudiante')?.value === "true" ? "Sí" : (document.getElementById('representante_vive_con_estudiante')?.value === "false" ? "No" : '')}</td></tr>
+                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('representante_horario_trabajo')?.value || ''}</td></tr>
+                <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('representante_telefono_celular')?.value || ''}</td></tr>
             </table>
         `;
     }
