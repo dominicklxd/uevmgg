@@ -177,6 +177,9 @@
             }
         }
     </style>
+    <!-- Agrega esto en el <head> para cargar Google Maps API antes de cualquier uso de google.maps -->
+    <!-- Reemplaza TU_API_KEY por tu clave real de Google Maps si usas mapas interactivos -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE"></script>
 </head>
 <body>
     <!-- Encabezado igual que en index.html -->
@@ -732,8 +735,7 @@
     <!-- Las burbujas se llenan dinámicamente por JS -->
 </div>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
     <script src="https://static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
     <script>
     window.addEventListener('DOMContentLoaded', function() {
@@ -923,6 +925,24 @@
                 alert('Por favor, complete todos los campos requeridos de dirección.');
                 return;
             }
+            // Guardar datos de paso 3 en localStorage
+            function valorNA(id) {
+                const el = document.getElementById(id);
+                return (el && el.value && el.value.trim() !== "") ? el.value : "N/A";
+            }
+            const paso3 = {
+                calle_principal: valorNA('calle_principal'),
+                calle_secundaria: valorNA('calle_secundaria'),
+                provincia: valorNA('provincia'),
+                canton: valorNA('canton'),
+                parroquia: valorNA('parroquia'),
+                barrio: valorNA('barrio'),
+                numero_casa: valorNA('numero_casa'),
+                referencia: valorNA('referencia'),
+                latitud: valorNA('latitud'),
+                longitud: valorNA('longitud')
+            };
+            localStorage.setItem('matricula_paso3', JSON.stringify(paso3));
             document.getElementById('paso3-form').style.display = 'none';
             document.getElementById('paso4-form').style.display = 'block';
             activarPasoWizard(4);
@@ -1285,77 +1305,53 @@
             // Recuperar todos los datos de localStorage
             const paso1 = JSON.parse(localStorage.getItem('matricula_paso1')) || {};
             const paso2 = JSON.parse(localStorage.getItem('matricula_paso2')) || {};
+            const paso3 = JSON.parse(localStorage.getItem('matricula_paso3')) || {};
             const paso4 = JSON.parse(localStorage.getItem('matricula_paso4')) || {};
             const paso5 = JSON.parse(localStorage.getItem('matricula_paso5')) || {};
             const paso6 = JSON.parse(localStorage.getItem('matricula_paso6')) || {};
             const paso7 = contactos;
             const archivoData = window.archivoEstudiante || null;
 
-            // Paso 3 (dirección) se obtiene directo del DOM porque no se guardó en localStorage
-            const paso3 = {
-                calle_principal: valorNA('calle_principal'),
-                calle_secundaria: valorNA('calle_secundaria'),
-                provincia: valorNA('provincia'),
-                canton: valorNA('canton'),
-                parroquia: valorNA('parroquia'),
-                barrio: valorNA('barrio'),
-                numero_casa: valorNA('numero_casa'),
-                referencia: valorNA('referencia'),
-               
-                latitud: valorNA('latitud'),
-                longitud: valorNA('longitud')
-            };
-
-            // 1. Buscar o crear nivel
-            let id_nivel = null;
-            let nivel_nombre = obtenerNivelPorCurso(paso1.curso);
-            if (nivel_nombre) {
-                let { data: nivelData } = await supabase
-                    .from('nivel_grado')
-                    .select('id_nivel')
-                    .eq('nombre_nivel', nivel_nombre)
-                    .single();
-                if (!nivelData) {
-                    let { data: nuevoNivel } = await supabase
-                        .from('nivel_grado')
-                        .insert([{ nombre_nivel: nivel_nombre }])
-                        .select('id_nivel')
-                        .single();
-                    id_nivel = nuevoNivel ? nuevoNivel.id_nivel : null;
-                } else {
-                    id_nivel = nivelData.id_nivel;
-                }
-            }
-
-            // 2. Buscar o crear curso
+            // --- Buscar id_grado y id_curso según curso, paralelo y especialidad ---
+            let id_grado = null;
             let id_curso = null;
-            if (paso1.curso && id_nivel) {
-                let { data: cursoData } = await supabase
-                    .from('curso_nivel')
-                    .select('id_curso')
-                    .eq('nombre_curso', paso1.curso)
-                    .eq('id_nivel', id_nivel)
-                    .single();
-                if (!cursoData) {
-                    let { data: nuevoCurso } = await supabase
-                        .from('curso_nivel')
-                        .insert([{ nombre_curso: paso1.curso, id_nivel }])
-                        .select('id_curso')
-                        .single();
-                    id_curso = nuevoCurso ? nuevoCurso.id_curso : null;
+            if (paso1.curso && paso1.paralelo) {
+                let nombre_nivel = "";
+                let grado = "";
+                let especialidad = paso1.especialidad && paso1.especialidad !== "N/A" ? paso1.especialidad : null;
+                if (paso1.curso.includes("Bachillerato")) {
+                    nombre_nivel = "Bachillerato";
+                    grado = paso1.curso.split(" ")[0]; // "1ro", "2do", "3ro"
                 } else {
-                    id_curso = cursoData.id_curso;
+                    nombre_nivel = "EGB";
+                    grado = paso1.curso.split(" ")[0]; // "1ro", "2do", ..., "10mo"
                 }
+                let query = supabase
+                    .from('curso_grado')
+                    .select('id_grado, id_curso')
+                    .eq('nombre_nivel', nombre_nivel)
+                    .eq('grado', grado)
+                    .eq('paralelo', paso1.paralelo);
+                if (nombre_nivel === "Bachillerato" && especialidad) {
+                    query = query.eq('especialidad', especialidad);
+                }
+                const { data: gradoData, error: gradoError } = await query.maybeSingle();
+                if (gradoError || !gradoData) {
+                    alert("No se encontró el curso seleccionado en la base de datos. Verifique los datos.");
+                    return;
+                }
+                id_grado = gradoData.id_grado;
+                id_curso = gradoData.id_curso;
             }
 
-            // 3. Insertar solicitud_inscripcion
+            // 3. Insertar solicitud_inscripcion con id_grado y id_curso
             let id_inscripcion = null;
             const { data: inscData, error: inscError } = await supabase
                 .from('solicitud_inscripcion')
                 .insert([{
                     periodo: paso1.periodo,
-                    id_nivel,
-                    id_curso,
+                    id_grado: id_grado,
+                    id_curso: id_curso, // <-- RELACIONA TAMBIÉN EL id_curso
                     paralelo: paso1.paralelo,
                     especialidad: paso1.especialidad,
                     institucion_procedencia: paso1.institucion_procedencia
@@ -1521,6 +1517,7 @@
             // Limpiar localStorage y mostrar mensaje final
             localStorage.removeItem('matricula_paso1');
             localStorage.removeItem('matricula_paso2');
+            localStorage.removeItem('matricula_paso3');
             localStorage.removeItem('matricula_paso4');
             localStorage.removeItem('matricula_paso5');
             localStorage.removeItem('matricula_paso6');
@@ -1634,13 +1631,13 @@
             }
         }
 
-        // Botón imprimir
-        document.getElementById('btn-imprimir').onclick = function() {
-            window.print();
-        };
-
         // Botón descargar PDF con diseño profesional en recuadro
         document.getElementById('btn-descargar-pdf').onclick = async function() {
+            // Verifica que jsPDF esté disponible
+            if (!window.jspdf || !window.jspdf.jsPDF) {
+                alert('jsPDF no está cargado correctamente.');
+                return;
+            }
             const resumen = document.getElementById('resumen-matricula');
             const doc = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
@@ -1860,9 +1857,9 @@
             cell(col2, y, cellW, cellH, safeText(25));
             cell(col3, y, cellW, cellH, 'Correo:', {section:true});
             cell(col4, y, cellW, cellH, safeText(27));
-
-            // Dirección
             y += cellH;
+
+            // Datos de dirección
             cell(col1, y, 180, cellH, 'DIRECCIÓN', {header:true});
             y += cellH;
             cell(col1, y, cellW, cellH, 'Calle Principal:', {section:true});
@@ -1884,9 +1881,9 @@
             cell(col2, y, cellW, cellH, safeText(43));
             cell(col3, y, cellW, cellH, 'Referencia:', {section:true});
             cell(col4, y, cellW, cellH, safeText(45));
+            y += cellH;
 
             // Padre
-            y += cellH;
             cell(col1, y, 180, cellH, 'PADRE', {header:true});
             y += cellH;
             cell(col1, y, cellW, cellH, 'Nombre:', {section:true});
@@ -2016,7 +2013,7 @@
             }, 100);
 
             // 2. Subir el PDF a Filestack
-            const filestackClient = filestack.init('AzEI80Y42TJO0FG49T4rtz');
+            const filestackClient = window.filestack.init('AzEI80Y42TJO0FG49T4rtz');
             const pdfFile = new File([pdfBlob], 'ficha_inscripcion.pdf', { type: 'application/pdf' });
             let pdfUrl = null;
             try {
@@ -2125,6 +2122,8 @@
             document.getElementById('madre_es_representante').disabled = false;
             document.getElementById('madre_es_representante').checked = false;
             document.getElementById('padre_es_representante').checked = false;
+            // Inicializa el mapa si el paso 3 está visible (por si acaso)
+            // inicializarMapaDireccion(); // Solo inicializar cuando se muestre el paso 3
         };
 
         // Inicializar Google Maps pequeño y arrastrable
@@ -2156,76 +2155,83 @@
             });
         }
 
-        // --- AUTOLLENADO DE REPRESENTANTE SEGUN CHECKBOX ---
-        function copiarDatosPadreARepresentante() {
-            document.getElementById('representante_nombres').value = document.getElementById('padre_nombres').value;
-            document.getElementById('representante_cedula').value = document.getElementById('padre_cedula').value;
-            document.getElementById('representante_ocupacion').value = document.getElementById('padre_ocupacion').value;
-            document.getElementById('representante_telefono_trabajo').value = document.getElementById('padre_telefono_trabajo').value;
-            document.getElementById('representante_email').value = document.getElementById('padre_email').value;
-            document.getElementById('representante_nivel_educacion').value = document.getElementById('padre_nivel_educacion').value;
-            document.getElementById('representante_estado_civil').value = document.getElementById('padre_estado_civil').value;
-            document.getElementById('representante_vive_con_estudiante').value = document.getElementById('padre_vive_con_estudiante').value;
-            document.getElementById('representante_horario_trabajo').value = document.getElementById('padre_horario_trabajo').value;
-            document.getElementById('representante_telefono_celular').value = document.getElementById('padre_telefono_celular').value;
-        }
-        function copiarDatosMadreARepresentante() {
-            document.getElementById('representante_nombres').value = document.getElementById('madre_nombres').value;
-            document.getElementById('representante_cedula').value = document.getElementById('madre_cedula').value;
-            document.getElementById('representante_ocupacion').value = document.getElementById('madre_ocupacion').value;
-            document.getElementById('representante_telefono_trabajo').value = document.getElementById('madre_telefono_trabajo').value;
-            document.getElementById('representante_email').value = document.getElementById('madre_email').value;
-            document.getElementById('representante_nivel_educacion').value = document.getElementById('madre_nivel_educacion').value;
-            document.getElementById('representante_estado_civil').value = document.getElementById('madre_estado_civil').value;
-            document.getElementById('representante_vive_con_estudiante').value = document.getElementById('madre_vive_con_estudiante').value;
-            document.getElementById('representante_horario_trabajo').value = document.getElementById('madre_horario_trabajo').value;
-            document.getElementById('representante_telefono_celular').value = document.getElementById('madre_telefono_celular').value;
+        // Función para obtener el id_grado según los datos académicos seleccionados
+        async function obtenerIdGradoSeleccionado({ curso, paralelo, especialidad }) {
+            // Normaliza los valores para buscar en la tabla curso_grado
+            let nombre_nivel = "EGB";
+            let grado = "";
+            let especialidadFinal = especialidad || null;
+
+            // Determinar si es Bachillerato o EGB
+            if (curso.includes("Bachillerato")) {
+                nombre_nivel = "Bachillerato";
+                grado = curso.replace("ro Bachillerato", "").replace("do Bachillerato", "").replace("3ro Bachillerato", "3").replace("1ro", "1").replace("2do", "2").replace("3ro", "3").trim();
+            } else {
+                // EGB: "1ro EGB", "2do EGB", etc.
+                grado = curso.replace("ro EGB", "").replace("do EGB", "").replace("to EGB", "").replace("mo EGB", "").replace("no EGB", "").trim();
+                especialidadFinal = null;
+            }
+
+            // Buscar el id_grado en la tabla curso_grado
+            let query = supabase.from('curso_grado')
+                .select('id_grado')
+                .eq('nombre_nivel', nombre_nivel)
+                .eq('grado', grado)
+                .eq('paralelo', paralelo);
+
+            if (nombre_nivel === "Bachillerato" && especialidadFinal) {
+                query = query.eq('especialidad', especialidadFinal);
+            }
+
+            const { data, error } = await query.maybeSingle();
+            if (error || !data) return null;
+            return data.id_grado;
         }
 
-        // Escuchar cambios en los campos del padre si el checkbox está marcado
-        function activarAutoPadre() {
-            if (document.getElementById('padre_es_representante').checked) {
-                copiarDatosPadreARepresentante();
-            }
-        }
-        document.getElementById('padre_es_representante').addEventListener('change', function() {
-            if (this.checked) {
-                copiarDatosPadreARepresentante();
-            }
-        });
-        [
-            'padre_nombres','padre_cedula','padre_ocupacion','padre_telefono_trabajo','padre_email',
-            'padre_nivel_educacion','padre_estado_civil','padre_vive_con_estudiante','padre_horario_trabajo','padre_telefono_celular'
-        ].forEach(id => {
-            document.getElementById(id).addEventListener('input', function() {
-                if (document.getElementById('padre_es_representante').checked) {
-                    copiarDatosPadreARepresentante();
-                }
-            });
-        });
+        // En el paso 1 (datos académicos), al guardar los datos:
+        async function guardarDatosAcademicos() {
+            // ...obtén los valores seleccionados del formulario...
+            const curso = document.getElementById('curso').value;
+            const paralelo = document.getElementById('paralelo').value;
+            const especialidad = document.getElementById('especialidad') ? document.getElementById('especialidad').value : null;
 
-        // Escuchar cambios en los campos de la madre si el checkbox está marcado
-        function activarAutoMadre() {
-            if (document.getElementById('madre_es_representante').checked) {
-                copiarDatosMadreARepresentante();
-            }
-        }
-        document.getElementById('madre_es_representante').addEventListener('change', function() {
-            if (this.checked) {
-                copiarDatosMadreARepresentante();
-            }
-        });
-        [
-            'madre_nombres','madre_cedula','madre_ocupacion','madre_telefono_trabajo','madre_email',
-            'madre_nivel_educacion','madre_estado_civil','madre_vive_con_estudiante','madre_horario_trabajo','madre_telefono_celular'
-        ].forEach(id => {
-            document.getElementById(id).addEventListener('input', function() {
-                if (document.getElementById('madre_es_representante').checked) {
-                    copiarDatosMadreARepresentante();
-                }
-            });
-        });
+            // Buscar el id_grado correspondiente
+            const id_grado = await obtenerIdGradoSeleccionado({ curso, paralelo, especialidad });
 
+            if (!id_grado) {
+                alert("No se encontró el curso seleccionado en la base de datos. Verifique los datos.");
+                return false;
+            }
+
+            // Al insertar o actualizar la inscripción, guarda el id_grado
+            await supabase
+                .from('solicitud_inscripcion')
+                .upsert([{
+                    // ...otros campos...
+                    id_grado,
+                    // ...otros campos...
+                }], { onConflict: ['id_estudiante'] });
+
+            // ...continúa con el flujo normal...
+            return true;
+        }
+
+        // Solución para el error "Cannot set properties of null (setting 'onclick')"
+        // Asegúrate de que el elemento existe antes de asignar el evento
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ejemplo para un botón con id="btnSiguientePaso2"
+            var btnSiguientePaso2 = document.getElementById('btnSiguientePaso2');
+            if (btnSiguientePaso2) {
+                btnSiguientePaso2.onclick = function() {
+                    // ...tu lógica aquí...
+                };
+            }
+
+            // Si usas Google Maps, asegúrate de que la API esté cargada antes de llamar a google.maps
+            // if (typeof google !== "undefined" && google.maps) {
+            //     inicializarMapaDireccion();
+            // }
+        });
     });
     </script>
 </body>

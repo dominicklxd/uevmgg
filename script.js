@@ -111,9 +111,205 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateCarousel(); // Inicializar el carrusel
     startAutoSlide(); // Iniciar el cambio automático
 
-    const adminOption = menu.querySelector('a[href="verUsuarios.html"]');
-    if (adminOption) {
-        adminOption.parentElement.remove();
+    // --- BURBUJA DE ADMINISTRACIÓN FLOTANTE IZQUIERDA (tipo floating-bubbles, pero a la izquierda) ---
+    async function renderAdminBubble() {
+        const container = document.getElementById('admin-bubble-container');
+        if (!container) return;
+
+        container.innerHTML = '';
+        // Cambia el left para separar más del margen
+        container.style.position = 'fixed';
+        container.style.top = '180px';
+        container.style.left = '60px'; // Antes: 18px
+        container.style.zIndex = '1002';
+        container.style.display = 'none';
+
+        const usuarioActivo = localStorage.getItem('usuarioActivo');
+        if (!usuarioActivo) return;
+
+        // Consulta a la base de datos para obtener el rol real del usuario activo
+        let rol = null;
+        try {
+            // Buscar el id_cedula correspondiente a la cédula string
+            const { data: cedulaObj } = await supabase
+                .from('cedulas')
+                .select('id_cedula')
+                .eq('cedula', usuarioActivo)
+                .maybeSingle();
+
+            if (!cedulaObj) return;
+
+            // Buscar usuario por id_cedula (campo cedula en usuarios)
+            const { data: usuario } = await supabase
+                .from('usuarios')
+                .select('rol')
+                .eq('cedula', cedulaObj.id_cedula)
+                .maybeSingle();
+
+            if (!usuario || !usuario.rol) return;
+            rol = usuario.rol.toLowerCase();
+        } catch (e) {
+            return;
+        }
+
+        if (!['rector', 'vicerrector', 'administrador'].includes(rol)) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'flex';
+        container.innerHTML = `
+            <div class="floating-bubble admin-bubble" title="Administración" tabindex="0" style="margin-bottom: 0;">
+                <img src="icon-admin.png" alt="Administración">
+                <span class="floating-bubble-label">Administración</span>
+                <div class="admin-bubble-menu">
+                    <a href="verUsuarios.html">Usuarios</a>
+                    <a href="solicitudMatriculacion.html">Solicitudes de Matriculación</a>
+                </div>
+            </div>
+        `;
+
+        // Mostrar menú al pasar mouse o enfocar
+        const bubble = container.querySelector('.admin-bubble');
+        const menu = container.querySelector('.admin-bubble-menu');
+        bubble.addEventListener('mouseenter', () => { menu.style.display = 'flex'; });
+        bubble.addEventListener('mouseleave', () => { setTimeout(()=>{menu.style.display='none'}, 200); });
+        menu.addEventListener('mouseenter', () => { menu.style.display = 'flex'; });
+        menu.addEventListener('mouseleave', () => { menu.style.display = 'none'; });
+        bubble.addEventListener('focus', () => { menu.style.display = 'flex'; });
+        bubble.addEventListener('blur', () => { menu.style.display = 'none'; });
+    }
+
+    // Llama a la función al cargar y cuando cambie el usuario
+    window.addEventListener('DOMContentLoaded', function() {
+        renderAdminBubble();
+    });
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'usuarioActivo') {
+            renderAdminBubble();
+        }
+    });
+
+    // --- ESTILOS PARA LA BURBUJA DE ADMINISTRACIÓN (tipo floating-bubbles, pero a la izquierda) ---
+    if (!document.getElementById('admin-bubble-style')) {
+        const styleAdmin = document.createElement('style');
+        styleAdmin.id = 'admin-bubble-style';
+        styleAdmin.innerHTML = `
+            #admin-bubble-container {
+                position: fixed;
+                top: 180px;
+                left: 60px; /* Antes: 18px */
+                z-index: 1002;
+                display: none;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .admin-bubble {
+                background: linear-gradient(120deg,#2f5597 60%,#548235 100%);
+                color: #fff;
+                border-radius: 50%;
+                width: 54px;
+                height: 54px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 18px rgba(44,130,201,0.13);
+                cursor: pointer;
+                margin-bottom: 0.5em;
+                position: relative;
+                transition: background 0.2s, transform 0.2s;
+                outline: none;
+                
+            }
+            @keyframes floatingBubbleAnim {
+                0% { transform: translateY(0) scale(1);}
+                50% { transform: translateY(-10px) scale(1.06);}
+                100% { transform: translateY(0) scale(1);}
+            }
+            .admin-bubble img {
+                width: 38px;
+                height: 38px;
+            }
+            .admin-bubble:hover, .admin-bubble:focus {
+                background: linear-gradient(120deg,#548235 60%,#2f5597 100%);
+                transform: scale(1.08);
+            }
+            .admin-bubble .floating-bubble-label {
+                display: none;
+                position: absolute;
+                left: 60px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: #fff;
+                color: #2f5597;
+                font-weight: bold;
+                font-size: 1.05rem;
+                border-radius: 8px;
+                padding: 0.4em 1em;
+                box-shadow: 0 2px 8px rgba(44,130,201,0.10);
+                white-space: nowrap;
+                z-index: 10;
+            }
+            .admin-bubble:hover .floating-bubble-label,
+            .admin-bubble:focus .floating-bubble-label {
+                display: block;
+            }
+            .admin-bubble-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                left: 55px;
+                top: 0;
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 4px 18px rgba(44,130,201,0.13);
+                padding: 0.7em 0.5em;
+                min-width: 180px;
+                z-index: 1003;
+                gap: 0.5em;
+                animation: adminBubbleMenuFadeIn 0.18s;
+            }
+            .admin-bubble-menu a {
+                color: #2f5597;
+                font-weight: bold;
+                font-size: 1.08rem;
+                text-decoration: none;
+                padding: 0.4em 1em;
+                border-radius: 7px;
+                transition: background 0.15s, color 0.15s;
+                display: block;
+            }
+            .admin-bubble-menu a:hover {
+                background: #eaf2fb;
+                color: #548235;
+            }
+            @keyframes adminBubbleMenuFadeIn {
+                from { opacity: 0; transform: translateY(10px);}
+                to { opacity: 1; transform: translateY(0);}
+            }
+            @media (max-width: 900px) {
+                #admin-bubble-container { left: 24px; }
+                .admin-bubble-menu { left: 58px; min-width: 120px; }
+            }
+            @media (max-width: 600px) {
+                #admin-bubble-container { left: 0; top: 120px; }
+                .admin-bubble-menu { left: 54px; }
+            }
+        `;
+        document.head.appendChild(styleAdmin);
+    }
+
+    // --- ELIMINAR OPCIÓN DE ADMINISTRACIÓN DEL MENÚ DEL ENCABEZADO ---
+    // Usa otro nombre para la variable del menú aquí para evitar el error de declaración duplicada
+    const menuHeader = document.querySelector('.menu');
+    if (menuHeader) {
+        // Busca y elimina cualquier <li> que tenga "Administración"
+        Array.from(menuHeader.querySelectorAll('li')).forEach(li => {
+            const a = li.querySelector('a');
+            if (a && a.textContent.trim().toLowerCase().includes('administración')) {
+                li.remove();
+            }
+        });
     }
 
     if (usuarioActivo) {
@@ -130,7 +326,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 // Mostrar el menú de administrador si el rol es "administrador"
                 if (!menu.querySelector('a[href="verUsuarios.html"]')) {
                     const adminMenuItem = document.createElement('li');
-                    adminMenuItem.innerHTML = '<a href="verUsuarios.html">Administración</a>';
+                    
                     menu.appendChild(adminMenuItem);
                 }
             }

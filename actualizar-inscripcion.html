@@ -985,6 +985,27 @@ let { data: nuevaInscripcion } = await supabase
         return data ? data.id_curso : null;
     }
 
+    // 1. Función para obtener el id_grado por curso, paralelo y especialidad
+    async function getIdGradoPorDatos(curso, paralelo, especialidad) {
+        let query = supabase.from('curso_grado').select('id_grado').eq('paralelo', paralelo);
+
+        let grado = "";
+        let nombre_nivel = "";
+        if (curso.includes("Bachillerato")) {
+            nombre_nivel = "Bachillerato";
+            grado = curso.replace("ro Bachillerato", "").replace("do Bachillerato", "").replace("3ro Bachillerato", "3").replace("1ro", "1").replace("2do", "2").replace("3ro", "3").trim();
+            query = query.eq('nombre_nivel', nombre_nivel).eq('grado', grado);
+            if (especialidad) query = query.eq('especialidad', especialidad);
+        } else {
+            nombre_nivel = "EGB";
+            grado = curso.replace("ro EGB", "").replace("do EGB", "").replace("to EGB", "").replace("mo EGB", "").replace("no EGB", "").trim();
+            query = query.eq('nombre_nivel', nombre_nivel).eq('grado', grado);
+        }
+
+        const { data, error } = await query.maybeSingle();
+        return data ? data.id_grado : null;
+    }
+
     // --- Guardar campo individual en la base de datos ---
     async function guardarCampoEnBD(input) {
         const name = input.name;
@@ -1032,14 +1053,16 @@ let { data: nuevaInscripcion } = await supabase
     document.getElementById('form-actualizar-inscripcion').addEventListener('submit', async function(e) {
         e.preventDefault();
         const datos = Object.fromEntries(new FormData(e.target).entries());
-        // Buscar id_curso por nombre
-        const idCurso = await getIdCursoPorNombre(datos.curso);
-        // Actualizar inscripción
+
+        // Buscar id_grado por datos seleccionados
+        const id_grado = await getIdGradoPorDatos(datos.curso, datos.paralelo, datos.especialidad);
+
+        // Actualizar inscripción con id_grado
         await supabase
             .from('solicitud_inscripcion')
             .update({
                 periodo: datos.periodo,
-                id_curso: idCurso,
+                id_grado: id_grado,
                 especialidad: datos.especialidad,
                 institucion_procedencia: datos.institucion_procedencia,
                 paralelo: datos.paralelo

@@ -1,5 +1,7 @@
 DROP TABLE IF EXISTS curso_nivel CASCADE;
 DROP TABLE IF EXISTS nivel_grado CASCADE;
+DROP TABLE IF EXISTS curso_grado CASCADE;
+DROP TABLE IF EXISTS asistencias CASCADE;
 
 CREATE TABLE nivel_grado (
     id_nivel SERIAL PRIMARY KEY,
@@ -10,6 +12,14 @@ CREATE TABLE curso_nivel (
     id_curso SERIAL PRIMARY KEY,
     nombre_curso VARCHAR(50) NOT NULL,
     id_nivel INTEGER REFERENCES nivel_grado(id_nivel)
+);
+
+CREATE TABLE IF NOT EXISTS curso_grado (
+    id_grado SERIAL PRIMARY KEY,
+    nombre_nivel VARCHAR(50) NOT NULL, -- Ej: "Bachillerato", "EGB"
+    grado VARCHAR(20) NOT NULL,        -- Ej: "3ro", "2do", "1ro", "10mo"
+    paralelo VARCHAR(2) NOT NULL,      -- "A", "B", "C"
+    especialidad VARCHAR(50)           -- Puede ser NULL para EGB
 );
 
 CREATE TABLE IF NOT EXISTS solicitud_inscripcion (
@@ -27,6 +37,9 @@ ADD COLUMN IF NOT EXISTS institucion_procedencia VARCHAR(255);
 -- Añadir columna id_estudiante a solicitud_inscripcion si no existe
 ALTER TABLE solicitud_inscripcion
 ADD COLUMN IF NOT EXISTS id_estudiante INTEGER REFERENCES estudiante(id_estudiante);
+
+ALTER TABLE solicitud_inscripcion
+ADD COLUMN IF NOT EXISTS id_grado INTEGER REFERENCES curso_grado(id_grado);
 
 -- Tabla para manejar las cédulas como ID principal
 CREATE TABLE IF NOT EXISTS cedulas (
@@ -140,6 +153,15 @@ CREATE TABLE IF NOT EXISTS solicitud_matriculacion (
     verificado_por VARCHAR(100) -- email o nombre del admin que verifica
 );
 
+-- NUEVO: Tabla para asistencias de estudiantes
+CREATE TABLE IF NOT EXISTS asistencias (
+    id SERIAL PRIMARY KEY,
+    id_estudiante INTEGER REFERENCES estudiante(id_estudiante),
+    fecha DATE NOT NULL,
+    presente BOOLEAN NOT NULL,
+    UNIQUE (id_estudiante, fecha)
+);
+
 -- Índices para filtros de búsqueda rápidos
 CREATE INDEX IF NOT EXISTS idx_solicitud_matriculacion_estado ON solicitud_matriculacion(estado);
 CREATE INDEX IF NOT EXISTS idx_estudiante_cedula ON estudiante(id_cedula);
@@ -153,3 +175,49 @@ CREATE INDEX IF NOT EXISTS idx_solicitud_inscripcion_id_estudiante ON solicitud_
 ALTER TABLE estudiante
 ADD CONSTRAINT fk_estudiante_id_inscripcion
 FOREIGN KEY (id_inscripcion) REFERENCES solicitud_inscripcion(id);
+
+-- Ejemplo de inserción en curso_grado
+INSERT INTO curso_grado (nombre_nivel, grado, paralelo, especialidad) VALUES
+('EGB', '1ro', 'A', NULL),
+('EGB', '1ro', 'B', NULL),
+('EGB', '1ro', 'C', NULL),
+('Bachillerato', '3ro', 'A', 'Informática'),
+('Bachillerato', '3ro', 'B', 'Informática'),
+('Bachillerato', '3ro', 'C', 'Informática'),
+('Bachillerato', '3ro', 'A', 'Ciencias'),
+('Bachillerato', '3ro', 'B', 'Ciencias'),
+('Bachillerato', '3ro', 'C', 'Ciencias');
+-- Inserción masiva de cursos y especialidades en curso_grado
+
+-- EGB: 1ro a 10mo, paralelos A/B/C, sin especialidad
+INSERT INTO curso_grado (nombre_nivel, grado, paralelo, especialidad) VALUES
+-- 1ro a 10mo EGB
+('EGB', '1ro', 'A', NULL), ('EGB', '1ro', 'B', NULL), ('EGB', '1ro', 'C', NULL),
+('EGB', '2do', 'A', NULL), ('EGB', '2do', 'B', NULL), ('EGB', '2do', 'C', NULL),
+('EGB', '3ro', 'A', NULL), ('EGB', '3ro', 'B', NULL), ('EGB', '3ro', 'C', NULL),
+('EGB', '4to', 'A', NULL), ('EGB', '4to', 'B', NULL), ('EGB', '4to', 'C', NULL),
+('EGB', '5to', 'A', NULL), ('EGB', '5to', 'B', NULL), ('EGB', '5to', 'C', NULL),
+('EGB', '6to', 'A', NULL), ('EGB', '6to', 'B', NULL), ('EGB', '6to', 'C', NULL),
+('EGB', '7mo', 'A', NULL), ('EGB', '7mo', 'B', NULL), ('EGB', '7mo', 'C', NULL),
+('EGB', '8vo', 'A', NULL), ('EGB', '8vo', 'B', NULL), ('EGB', '8vo', 'C', NULL),
+('EGB', '9no', 'A', NULL), ('EGB', '9no', 'B', NULL), ('EGB', '9no', 'C', NULL),
+('EGB', '10mo', 'A', NULL), ('EGB', '10mo', 'B', NULL), ('EGB', '10mo', 'C', NULL);
+
+-- Bachillerato: 1ro/2do/3ro, paralelos A/B/C, especialidades
+INSERT INTO curso_grado (nombre_nivel, grado, paralelo, especialidad) VALUES
+-- 1ro Bachillerato
+('Bachillerato', '1ro', 'A', 'Ciencias'), ('Bachillerato', '1ro', 'B', 'Ciencias'), ('Bachillerato', '1ro', 'C', 'Ciencias'),
+('Bachillerato', '1ro', 'A', 'Informática'), ('Bachillerato', '1ro', 'B', 'Informática'), ('Bachillerato', '1ro', 'C', 'Informática'),
+('Bachillerato', '1ro', 'A', 'Contabilidad'), ('Bachillerato', '1ro', 'B', 'Contabilidad'), ('Bachillerato', '1ro', 'C', 'Contabilidad'),
+('Bachillerato', '1ro', 'A', 'Gestión Administrativa'), ('Bachillerato', '1ro', 'B', 'Gestión Administrativa'), ('Bachillerato', '1ro', 'C', 'Gestión Administrativa'),
+-- 2do Bachillerato
+('Bachillerato', '2do', 'A', 'Ciencias'), ('Bachillerato', '2do', 'B', 'Ciencias'), ('Bachillerato', '2do', 'C', 'Ciencias'),
+('Bachillerato', '2do', 'A', 'Informática'), ('Bachillerato', '2do', 'B', 'Informática'), ('Bachillerato', '2do', 'C', 'Informática'),
+('Bachillerato', '2do', 'A', 'Contabilidad'), ('Bachillerato', '2do', 'B', 'Contabilidad'), ('Bachillerato', '2do', 'C', 'Contabilidad'),
+('Bachillerato', '2do', 'A', 'Gestión Administrativa'), ('Bachillerato', '2do', 'B', 'Gestión Administrativa'), ('Bachillerato', '2do', 'C', 'Gestión Administrativa'),
+-- 3ro Bachillerato
+('Bachillerato', '3ro', 'A', 'Ciencias'), ('Bachillerato', '3ro', 'B', 'Ciencias'), ('Bachillerato', '3ro', 'C', 'Ciencias'),
+('Bachillerato', '3ro', 'A', 'Informática'), ('Bachillerato', '3ro', 'B', 'Informática'), ('Bachillerato', '3ro', 'C', 'Informática'),
+('Bachillerato', '3ro', 'A', 'Contabilidad'), ('Bachillerato', '3ro', 'B', 'Contabilidad'), ('Bachillerato', '3ro', 'C', 'Contabilidad'),
+('Bachillerato', '3ro', 'A', 'Gestión Administrativa'), ('Bachillerato', '3ro', 'B', 'Gestión Administrativa'), ('Bachillerato', '3ro', 'C', 'Gestión Administrativa');
+-- ...agrega todos los cursos y especialidades necesarios

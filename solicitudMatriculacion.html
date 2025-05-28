@@ -665,6 +665,37 @@
             const paralelo = document.getElementById('filtro-paralelo').value;
             const especialidad = document.getElementById('filtro-especialidad').value;
 
+            // --- NUEVO: Obtener todos los id_grado que cumplen con los filtros de curso/paralelo/especialidad ---
+            let idsGradoFiltro = [];
+            if (curso || paralelo || especialidad) {
+                let nombre_nivel = "";
+                let grado = "";
+                let especialidadFiltro = especialidad || null;
+                if (curso) {
+                    if (curso.includes("Bachillerato")) {
+                        nombre_nivel = "Bachillerato";
+                        grado = curso.split(" ")[0]; // "1ro", "2do", "3ro"
+                    } else if (curso === "Inicial") {
+                        nombre_nivel = "Inicial";
+                        grado = "Inicial";
+                    } else {
+                        nombre_nivel = "EGB";
+                        grado = curso.split(" ")[0]; // "1ro", "2do", ..., "10mo"
+                    }
+                }
+                let query = supabase
+                    .from('curso_grado')
+                    .select('id_grado, nombre_nivel, grado, paralelo, especialidad');
+                if (nombre_nivel) query = query.eq('nombre_nivel', nombre_nivel);
+                if (grado) query = query.eq('grado', grado);
+                if (paralelo) query = query.eq('paralelo', paralelo);
+                if (nombre_nivel === "Bachillerato" && especialidadFiltro) query = query.eq('especialidad', especialidadFiltro);
+                const { data: gradosFiltro, error: errorFiltro } = await query;
+                if (!errorFiltro && gradosFiltro) {
+                    idsGradoFiltro = gradosFiltro.map(g => g.id_grado);
+                }
+            }
+
             let { data: solicitudes, error } = await supabase
                 .from('solicitud_matriculacion')
                 .select('id, estado, pdf_url, fecha_creacion, fecha_verificacion, verificado_por, id_estudiante')
@@ -705,19 +736,20 @@
             if (idsInscripciones.length > 0) {
                 const { data: inscs, error: errIns } = await supabase
                     .from('solicitud_inscripcion')
-                    .select('id, id_curso, especialidad, paralelo, periodo')
+                    .select('id, id_curso, id_grado, especialidad, paralelo, periodo')
                     .in('id', idsInscripciones);
                 if (!errIns && inscs) inscripciones = inscs;
             }
 
-            const idsCursos = inscripciones.map(i => i.id_curso).filter(Boolean);
-            let cursos = [];
-            if (idsCursos.length > 0) {
-                const { data: cursosData, error: errCursos } = await supabase
-                    .from('curso_nivel')
-                    .select('id_curso, nombre_curso')
-                    .in('id_curso', idsCursos);
-                if (!errCursos && cursosData) cursos = cursosData;
+            // --- NUEVO: Traer info de curso_grado por id_grado ---
+            const idsGrado = inscripciones.map(i => i.id_grado).filter(Boolean);
+            let grados = [];
+            if (idsGrado.length > 0) {
+                const { data: gradosData, error: errGrado } = await supabase
+                    .from('curso_grado')
+                    .select('id_grado, nombre_nivel, grado, paralelo, especialidad')
+                    .in('id_grado', idsGrado);
+                if (!errGrado && gradosData) grados = gradosData;
             }
 
             function getEstudiante(id) {
@@ -729,29 +761,30 @@
             function getInscripcion(id) {
                 return inscripciones.find(i => i.id === id) || {};
             }
-            function getCurso(id_curso) {
-                return cursos.find(c => c.id_curso === id_curso) || {};
+            // NUEVO: función para obtener info de curso_grado
+            function getGrado(id_grado) {
+                return grados.find(g => g.id_grado === id_grado) || {};
             }
 
             let filtradas = solicitudes.map(s => {
-                const est = getEstudiante(s.id_estudiante);
-                const cedulaEst = getCedula(est.id_cedula);
-                const insc = getInscripcion(est.id_inscripcion);
-                const cursoObj = getCurso(insc.id_curso);
+                // ...existing code...
                 return {
                     ...s,
-                    estudiante: est,
-                    cedula: cedulaEst,
-                    inscripcion: insc,
-                    curso: cursoObj
+                    estudiante: getEstudiante(s.id_estudiante),
+                    cedula: getCedula(getEstudiante(s.id_estudiante).id_cedula),
+                    inscripcion: getInscripcion(getEstudiante(s.id_estudiante).id_inscripcion),
+                    grado: getGrado(getInscripcion(getEstudiante(s.id_estudiante).id_inscripcion).id_grado)
                 };
             }).filter(s => {
                 let ok = true;
                 if (cedula && !(s.cedula || '').toString().toLowerCase().includes(cedula.toLowerCase())) ok = false;
                 if (nombres && !(s.estudiante.nombres || '').toLowerCase().includes(nombres.toLowerCase())) ok = false;
-                if (curso && (s.curso.nombre_curso !== curso)) ok = false;
-                if (paralelo && (s.inscripcion.paralelo !== paralelo)) ok = false;
-                if (especialidad && (s.inscripcion.especialidad !== especialidad)) ok = false;
+                // --- FILTRO POR id_grado ---
+                if ((curso || paralelo || especialidad) && idsGradoFiltro.length > 0) {
+                    if (!s.grado || !idsGradoFiltro.includes(s.grado.id_grado)) ok = false;
+                }
+                // Si hay filtro de curso/paralelo/especialidad pero no hay coincidencias, filtra todo
+                if ((curso || paralelo || especialidad) && idsGradoFiltro.length === 0) ok = false;
                 return ok;
             });
 
@@ -780,12 +813,27 @@
                 </thead>
                 <tbody>`;
             for (const s of filtradas) {
+                // --- NUEVO: Mostrar curso correctamente usando gradoObj ---
+                let cursoTexto = '';
+                if (s.grado && s.grado.nombre_nivel) {
+                    if (s.grado.nombre_nivel.toUpperCase() === "BACHILLERATO") {
+                        cursoTexto = `${s.grado.grado || ''} Bachillerato${s.grado.especialidad ? ' - ' + s.grado.especialidad : ''} "${s.grado.paralelo || ''}"`;
+                    } else if (s.grado.nombre_nivel.toUpperCase() === "EGB") {
+                        cursoTexto = `${s.grado.grado || ''}° EGB "${s.grado.paralelo || ''}"`;
+                    } else {
+                        cursoTexto = `${s.grado.nombre_nivel || ''} "${s.grado.paralelo || ''}"`;
+                    }
+                } else {
+                    cursoTexto = s.inscripcion && s.inscripcion.paralelo
+                        ? `${s.inscripcion.paralelo}`
+                        : '';
+                }
                 html += `<tr>
                     <td>${(s.fecha_creacion || '').substring(0, 10)}</td>
                     <td>${s.estudiante.apellidos || ''}</td>
                     <td>${s.estudiante.nombres || ''}</td>
                     <td>${s.cedula || ''}</td>
-                    <td>${s.curso.nombre_curso || ''}</td>
+                    <td>${cursoTexto}</td>
                     <td>${s.inscripcion.especialidad || ''}</td>
                     <td>${s.estudiante.correo || ''}</td>
                     <td>${s.pdf_url ? `<a class="pdf-link" href="${s.pdf_url}" target="_blank">Ver PDF</a>` : 'No disponible'}</td>
@@ -834,7 +882,7 @@
                     // Buscar estudiante
                     const { data: est } = await supabase
                         .from('estudiante')
-                        .select('id_estudiante, id_cedula, fecha_nacimiento, apellidos, nombres')
+                        .select('id_estudiante, id_cedula, fecha_nacimiento')
                         .eq('id_estudiante', solicitud.id_estudiante)
                         .maybeSingle();
                     if (est) {
@@ -860,31 +908,35 @@
             if (cedula && fechaNacimiento && idCedula && idEstudiante) {
                 // Formato de contraseña: fechaNacimiento sin guiones ni slash
                 const pass = fechaNacimiento.replace(/[-\/]/g, '');
-                // Verificar si ya existe el usuario
+                // Verificar si ya existe el usuario (usa email)
                 const { data: existe } = await supabase
                     .from('usuarios')
                     .select('id')
                     .eq('email', cedula)
                     .maybeSingle();
                 if (!existe) {
-                    // Insertar usuario con relación a id_cedula e id_estudiante
-                    await supabase
+                    // Insertar usuario solo con cedula y campo correcto 'password'
+                    const { error: insertError } = await supabase
                         .from('usuarios')
                         .insert([{
-                            usuario: estudiante ? (estudiante.nombres + ' ' + estudiante.apellidos) : cedula,
+                            usuario: cedula,
                             email: cedula,
                             password: pass,
                             rol: 'estudiante',
-                            id_cedula: idCedula,
+                            cedula: idCedula,
                             id_estudiante: idEstudiante
                         }]);
-                    usuarioCreado = true;
+                    if (!insertError) usuarioCreado = true;
+                    else {
+                        alert('Error al crear usuario: ' + insertError.message);
+                        return;
+                    }
                 } else {
                     // Si ya existe, actualizar para asegurar que tenga los campos relacionados
                     await supabase
                         .from('usuarios')
                         .update({
-                            id_cedula: idCedula,
+                            cedula: idCedula,
                             id_estudiante: idEstudiante
                         })
                         .eq('email', cedula);
@@ -978,6 +1030,56 @@
                 alert('Error al eliminar: ' + (error.message || error));
             }
         };
+
+        // Función para eliminar completamente un estudiante y sus datos relacionados
+        async function eliminarEstudianteYTodo(idEstudiante, cedula) {
+            // 1. Buscar y eliminar asistencias
+            await supabase
+                .from('asistencias')
+                .delete()
+                .eq('id_estudiante', idEstudiante);
+
+            // 2. Buscar y eliminar noticias
+            await supabase
+                .from('noticias')
+                .delete()
+                .eq('id_estudiante', idEstudiante);
+
+            // 3. Eliminar estudiante
+            await supabase
+                .from('estudiante')
+                .delete()
+                .eq('id_estudiante', idEstudiante);
+
+            // 4. Eliminar usuario (si existe)
+            await supabase
+                .from('usuarios')
+                .delete()
+                .eq('cedula', cedula);
+
+            // 5. Eliminar cedula
+            await supabase
+                .from('cedulas')
+                .delete()
+                .eq('cedula', cedula);
+
+            // 6. (Opcional) Eliminar solicitud_inscripcion
+            await supabase
+                .from('solicitud_inscripcion')
+                .delete()
+                .eq('id_estudiante', idEstudiante);
+
+            // ...puedes agregar más tablas relacionadas si es necesario...
+        }
+
+        // Ejemplo de uso en tu lógica de eliminación (ajusta según tu UI):
+        async function onEliminarEstudiante(estudiante) {
+            if (confirm("¿Está seguro de eliminar completamente este estudiante y todos sus datos? Esta acción no se puede deshacer.")) {
+                await eliminarEstudianteYTodo(estudiante.id_estudiante, estudiante.cedula);
+                alert("Estudiante y todos sus datos eliminados correctamente.");
+                // ...actualiza la UI...
+            }
+        }
 
         cargarSolicitudes();
     </script>

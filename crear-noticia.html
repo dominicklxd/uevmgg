@@ -227,15 +227,17 @@
             return { ...usuario, idCedula };
         }
 
-        async function verificarRolAnunciador() {
+        async function verificarRolPermitidoNoticia() {
             const usuario = await obtenerUsuarioActivo();
             if (!usuario) {
                 alert('Debes iniciar sesión para publicar noticias.');
                 window.location.href = 'login.html';
                 return false;
             }
-            if (usuario.rol !== 'anunciador') {
-                alert('Solo los usuarios con rol "anunciador" pueden publicar noticias.');
+            // Permitir solo a estos roles
+            const rolesPermitidos = ['anunciador', 'rector', 'vicerrector', 'administrador'];
+            if (!rolesPermitidos.includes(usuario.rol)) {
+                alert('Solo los usuarios con rol "anunciador", "rector", "vicerrector" o "administrador" pueden publicar noticias.');
                 window.location.href = 'index.html';
                 return false;
             }
@@ -247,15 +249,15 @@
             return true;
         }
 
-        // --- Bloquear acceso si no es anunciador ---
+        // --- Bloquear acceso si no es permitido ---
         document.addEventListener('DOMContentLoaded', async function() {
-            await verificarRolAnunciador();
+            await verificarRolPermitidoNoticia();
         });
 
         // --- Publicar noticia ---
         document.getElementById('form-noticia').onsubmit = async function(e) {
             e.preventDefault();
-            const puede = await verificarRolAnunciador();
+            const puede = await verificarRolPermitidoNoticia();
             if (!puede) return;
 
             const usuario = await obtenerUsuarioActivo();

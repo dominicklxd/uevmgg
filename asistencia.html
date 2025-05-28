@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Asistencia - Unidad Educativa Víctor Manuel Guzmán</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+        .asistencia-section {
+            max-width: 1200px;
+            margin: 3rem auto 2rem auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.10);
+            padding: 2.5rem 2rem;
+        }
+        .asistencia-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+        .curso-card {
+            background: #f8fafd;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(44,130,201,0.10);
+            padding: 1.5rem 1rem;
+            min-width: 260px;
+            max-width: 320px;
+            flex: 1 1 300px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            min-height: 60px;
+            max-height: 60px;
+            overflow: hidden;
+            justify-content: center;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .curso-card:hover {
+            background: #eaf2fb;
+            box-shadow: 0 4px 16px rgba(44,130,201,0.13);
+        }
+        .curso-card h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #2f5597;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .asistencia-list {
+            width: 100%;
+            margin-top: 1em;
+        }
+        .asistencia-list table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.98rem;
+        }
+        .asistencia-list th, .asistencia-list td {
+            padding: 0.4em 0.2em;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .asistencia-list th {
+            background: #eaf2fb;
+            color: #2f5597;
+        }
+        .asistencia-list input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+        .asistencia-btn {
+            margin-top: 1em;
+            background: linear-gradient(90deg, #548235 60%, #2f5597 100%);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5em 1.5em;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.18s;
+        }
+        .asistencia-btn:hover {
+            background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+            transform: scale(1.04);
+        }
+        .asistencia-exito {
+            color: #548235;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        #modal-asistencia {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(44,130,201,0.13);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        #modal-asistencia .modal-content {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.18);
+            padding: 2.5rem 2rem;
+            max-width: 480px;
+            width: 98vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        #modal-asistencia .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.7rem;
+            color: #2f5597;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #modal-asistencia h3 {
+            margin-top: 0;
+            color: #2f5597;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        #modal-asistencia .fecha-group {
+            margin-bottom: 1em;
+            text-align: center;
+        }
+        #modal-asistencia table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.98rem;
+        }
+        #modal-asistencia th, #modal-asistencia td {
+            padding: 0.4em 0.2em;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        #modal-asistencia th {
+            background: #eaf2fb;
+            color: #2f5597;
+        }
+        #modal-asistencia input[type="checkbox"] {
+            transform: scale(1.2);
+        }
+        #modal-asistencia .asistencia-btn {
+            margin-top: 1em;
+            background: linear-gradient(90deg, #548235 60%, #2f5597 100%);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5em 1.5em;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.18s;
+            width: 100%;
+        }
+        #modal-asistencia .asistencia-btn:hover {
+            background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+            transform: scale(1.04);
+        }
+        #modal-asistencia .asistencia-exito {
+            color: #548235;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 900px) {
+            .asistencia-grid { flex-direction: column; align-items: center; }
+            .curso-card { min-width: 90vw; max-width: 98vw; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
+                <!-- Aquí se mostrará el saludo -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
+                            <li><a href="especialidades.html">Especialidades</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="horario-clases.html">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                            <li><a href="asistencia.html">Asistencia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="dece.html">DECE</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="contactos.html">Contactos</a></li>
+                    <!-- Quitar la opción de administración del encabezado -->
+                    <!-- <li><a href="administracion.html">Administración</a></li> -->
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- Burbujas flotantes igual que index.html -->
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
+    <div id="admin-bubble-container"></div>
+    <main style="margin-top: 120px;">
+        <section class="asistencia-section">
+            <h2 class="section-title" style="text-align:center;">Registro de Asistencia</h2>
+            <div id="asistencia-exito" class="asistencia-exito" style="display:none;"></div>
+            <div class="asistencia-grid" id="asistencia-grid">
+                <!-- Aquí se generan los recuadros de cursos dinámicamente -->
+            </div>
+        </section>
+        <!-- Modal flotante para asistencia -->
+        <div id="modal-asistencia">
+            <div class="modal-content">
+                <button class="close-modal" id="cerrar-modal">&times;</button>
+                <h3 id="modal-titulo"></h3>
+                <div class="fecha-group">
+                    <label for="modal-fecha">Fecha:</label>
+                    <input type="date" id="modal-fecha">
+                </div>
+                <form id="modal-form-asistencia">
+                    <table>
+                        <thead>
+                            <tr><th>Estudiante</th><th>Asistió</th></tr>
+                        </thead>
+                        <tbody id="modal-lista-estudiantes">
+                            <!-- Lista dinámica -->
+                        </tbody>
+                    </table>
+                    <button type="submit" class="asistencia-btn">Registrar Asistencia</button>
+                </form>
+                <div class="asistencia-exito" id="modal-exito" style="display:none;"></div>
+            </div>
+        </div>
+    </main>
+    <!-- ...existing code... -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="script.js"></script>
+    <script>
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- Solo acceso a roles permitidos ---
+        const usuarioActivo = localStorage.getItem('usuarioActivo');
+        async function verificarAccesoAsistencia() {
+            if (!usuarioActivo) {
+                alert('Debe iniciar sesión.');
+                window.location.href = 'login.html';
+                return false;
+            }
+            // Buscar id_cedula
+            const { data: cedulaObj } = await supabase
+                .from('cedulas')
+                .select('id_cedula')
+                .eq('cedula', usuarioActivo)
+                .maybeSingle();
+            if (!cedulaObj) {
+                alert('No tiene permisos.');
+                window.location.href = 'index.html';
+                return false;
+            }
+            // Buscar usuario por id_cedula
+            const { data: usuario } = await supabase
+                .from('usuarios')
+                .select('rol')
+                .eq('cedula', cedulaObj.id_cedula)
+                .maybeSingle();
+            if (!usuario || !usuario.rol) {
+                alert('No tiene permisos.');
+                window.location.href = 'index.html';
+                return false;
+            }
+            const rol = usuario.rol.toLowerCase();
+            if (!['profesor', 'rector', 'vicerrector', 'administrador', 'inspector'].includes(rol)) {
+                alert('No tiene permisos para acceder a asistencia.');
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // --- Cargar cursos y mostrar recuadros colapsados ---
+        async function cargarCursosYEstudiantes() {
+            const grid = document.getElementById('asistencia-grid');
+            grid.innerHTML = '';
+
+            // Traer todos los cursos_grado de Bachillerato y EGB
+            const { data: cursosGrado, error: errorCursos } = await supabase
+                .from('curso_grado')
+                .select('id_grado, nombre_nivel, grado, paralelo, especialidad');
+            if (errorCursos) {
+                grid.innerHTML = '<div style="color:red;text-align:center;">Error al cargar cursos.</div>';
+                return;
+            }
+            // Eliminar cursos duplicados por id_grado
+            const cursosUnicos = [];
+            const idsVistos = new Set();
+            for (const curso of cursosGrado) {
+                if (!idsVistos.has(curso.id_grado)) {
+                    cursosUnicos.push(curso);
+                    idsVistos.add(curso.id_grado);
+                }
+            }
+            // --- Mostrar EGB (1ro a 10mo, paralelos A, B, C) ---
+            // El campo grado es tipo string: "1ro", "2do", ..., "10mo"
+            const egbs = cursosUnicos.filter(cg =>
+                (cg.nombre_nivel || '').trim().toUpperCase() === "EGB" &&
+                ["1ro","2do","3ro","4to","5to","6to","7mo","8vo","9no","10mo"].includes((cg.grado || '').trim().toLowerCase()) &&
+                ["A", "B", "C"].includes((cg.paralelo + "").toUpperCase())
+            );
+            // Ordenar por grado y paralelo
+            const gradoOrden = { "1ro":1, "2do":2, "3ro":3, "4to":4, "5to":5, "6to":6, "7mo":7, "8vo":8, "9no":9, "10mo":10 };
+            egbs.sort((a, b) => (gradoOrden[(a.grado||"").toLowerCase()]||0) - (gradoOrden[(b.grado||"").toLowerCase()]||0) || a.paralelo.localeCompare(b.paralelo));
+            for (const curso of egbs) {
+                grid.innerHTML += `
+                    <div class="curso-card" data-id-grado="${curso.id_grado}" data-titulo="${curso.grado}° EGB '${curso.paralelo}'">
+                        <h3>${curso.grado}° EGB "${curso.paralelo}"</h3>
+                    </div>
+                `;
+            }
+            // --- Mostrar Bachillerato ---
+            const cursosBach = cursosUnicos.filter(cg => (cg.nombre_nivel || "").trim().toUpperCase() === "BACHILLERATO");
+            for (const curso of cursosBach) {
+                grid.innerHTML += `
+                    <div class="curso-card" data-id-grado="${curso.id_grado}" data-titulo="${curso.grado} Bachillerato ${curso.especialidad || ""} '${curso.paralelo}'">
+                        <h3>${curso.grado} Bachillerato ${curso.especialidad || ""} "${curso.paralelo}"</h3>
+                    </div>
+                `;
+            }
+            // Asignar evento click a cada recuadro
+            document.querySelectorAll('.curso-card').forEach(card => {
+                card.addEventListener('click', () => abrirModalAsistencia(card.dataset.idGrado, card.dataset.titulo));
+            });
+        }
+
+        // --- Modal flotante ---
+        async function abrirModalAsistencia(idGrado, titulo) {
+            // 1. Buscar inscripciones de ese grado
+            const { data: inscripciones, error: errorIns } = await supabase
+                .from('solicitud_inscripcion')
+                .select('id')
+                .eq('id_grado', idGrado);
+
+            if (errorIns) {
+                alert("Error al consultar inscripciones: " + errorIns.message);
+                return;
+            }
+            const idsInscripcion = (inscripciones || []).map(i => i.id);
+
+            // 2. Buscar estudiantes con esos id_inscripcion
+            let estudiantes = [];
+            if (idsInscripcion.length > 0) {
+                const { data: ests, error: errorEst } = await supabase
+                    .from('estudiante')
+                    .select('id_estudiante, nombres, apellidos, id_inscripcion')
+                    .in('id_inscripcion', idsInscripcion);
+
+                if (errorEst) {
+                    alert("Error al consultar estudiantes: " + errorEst.message);
+                    return;
+                }
+
+                // 3. Filtrar solo los que tienen solicitud_matriculacion verificada
+                const idsEstudiantes = ests.map(e => e.id_estudiante);
+                let idsVerificados = [];
+                if (idsEstudiantes.length > 0) {
+                    const { data: matriculasVerificadas } = await supabase
+                        .from('solicitud_matriculacion')
+                        .select('id_estudiante')
+                        .eq('estado', 'verificada')
+                        .in('id_estudiante', idsEstudiantes);
+                    idsVerificados = (matriculasVerificadas || []).map(x => x.id_estudiante);
+                }
+                estudiantes = (ests || []).filter(e => idsVerificados.includes(e.id_estudiante));
+            }
+
+            console.log("Estudiantes encontrados:", estudiantes);
+
+            // Mostrar modal
+            document.getElementById('modal-titulo').textContent = titulo;
+            document.getElementById('modal-fecha').value = new Date().toISOString().slice(0, 10);
+            const tbody = document.getElementById('modal-lista-estudiantes');
+            tbody.innerHTML = estudiantes.length > 0
+                ? estudiantes.map(est => `
+                    <tr>
+                        <td>${est.nombres} ${est.apellidos || ""}</td>
+                        <td><input type="checkbox" name="asistencia" value="${est.id_estudiante}"></td>
+                    </tr>
+                `).join('')
+                : `<tr><td colspan="2" style="text-align:center;color:#888;">No hay estudiantes inscritos en este curso.</td></tr>`;
+            document.getElementById('modal-asistencia').style.display = 'flex';
+            document.getElementById('modal-exito').style.display = 'none';
+
+            // Evento submit
+            const form = document.getElementById('modal-form-asistencia');
+            form.onsubmit = async function(e) {
+                e.preventDefault();
+                const checkboxes = form.querySelectorAll('input[name="asistencia"]');
+                const presentes = [];
+                checkboxes.forEach(cb => {
+                    if (cb.checked) presentes.push(cb.value);
+                });
+                const fecha = document.getElementById('modal-fecha').value;
+                const registros = Array.from(checkboxes).map(cb => ({
+                    id_estudiante: cb.value,
+                    fecha,
+                    presente: cb.checked
+                }));
+                const { error } = await supabase.from('asistencias').upsert(registros, { onConflict: ['id_estudiante', 'fecha'] });
+                const exito = document.getElementById('modal-exito');
+                if (!error) {
+                    exito.textContent = '¡Asistencia registrada!';
+                    exito.style.display = 'block';
+                    setTimeout(() => { exito.style.display = 'none'; }, 2000);
+                } else {
+                    exito.textContent = 'Error al registrar asistencia.';
+                    exito.style.display = 'block';
+                }
+            };
+        }
+
+        // Cerrar modal
+        document.getElementById('cerrar-modal').onclick = function() {
+            document.getElementById('modal-asistencia').style.display = 'none';
+        };
+
+        // --- Inicialización ---
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (await verificarAccesoAsistencia()) {
+                cargarCursosYEstudiantes();
+            }
+        });
+
+        // Burbujas flotantes igual que index.html
+        function renderFloatingBubbles() {
+            const bubbles = document.querySelector('.floating-bubbles');
+            if (!bubbles) return;
+            bubbles.innerHTML = '';
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            if (usuarioActivo) {
+                bubbles.innerHTML = `
+                    <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                        <img src="icon-matricularse.png" alt="Matricularse">
+                        <span class="floating-bubble-label">Matricularse</span>
+                    </a>
+                    <a href="perfil.html" class="floating-bubble" title="Perfil">
+                        <img src="icon-perfil.png" alt="Perfil">
+                        <span class="floating-bubble-label">Perfil</span>
+                    </a>
+                    <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                        <img src="icon-cerrar.png" alt="Cerrar sesión">
+                        <span class="floating-bubble-label">Cerrar sesión</span>
+                    </a>
+                `;
+                setTimeout(() => {
+                    const cerrar = document.getElementById('cerrar-sesion-bubble');
+                    if (cerrar) {
+                        cerrar.onclick = function(e) {
+                            e.preventDefault();
+                            localStorage.removeItem('usuarioActivo');
+                            window.location.href = "login.html";
+                        };
+                    }
+                }, 50);
+            } else {
+                bubbles.innerHTML = `
+                    <a href="registro.html" class="floating-bubble" title="Registrarse">
+                        <img src="icon-registrarse.png" alt="Registrarse">
+                        <span class="floating-bubble-label">Registrarse</span>
+                    </a>
+                    <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                        <img src="icon-login.png" alt="Iniciar sesión">
+                        <span class="floating-bubble-label">Iniciar sesión</span>
+                    </a>
+                `;
+            }
+        }
+        const header = document.querySelector('header');
+        const bubbles = document.querySelector('.floating-bubbles');
+        function toggleBubbles() {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+                if (bubbles) bubbles.style.display = 'flex';
+            } else {
+                header.classList.remove('scrolled');
+                if (bubbles) bubbles.style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', toggleBubbles);
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioActivo') {
+                renderFloatingBubbles();
+            }
+        });
+        renderFloatingBubbles();
+        toggleBubbles();
+    </script>
+</body>
+</html>
