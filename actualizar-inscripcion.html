@@ -292,6 +292,16 @@
                 <!-- DATOS DEL ESTUDIANTE -->
                 <div class="actualizar-tab-content" id="tab-estudiante">
                     <div class="matricula-section-title">Datos del Estudiante</div>
+                    <!-- Foto de perfil -->
+                    <div class="matricula-form-group" id="foto-perfil-group">
+                        <label for="archivo_url">Foto de Perfil</label>
+                        <div style="display:flex;align-items:center;gap:1rem;">
+                            <img id="img-foto-perfil" src="" alt="Foto de perfil" style="width:80px;height:80px;object-fit:cover;border-radius:50%;border:1px solid #ccc;background:#eee;">
+                            <input type="file" id="archivo_url" name="archivo_url" accept="image/*" style="display:none;">
+                            <button type="button" class="editar-btn" id="btn-editar-foto" style="display:inline-block;">Subir foto</button>
+                            <button type="button" class="guardar-btn" id="btn-guardar-foto" style="display:none;">Guardar</button>
+                        </div>
+                    </div>
                     <div class="matricula-form-group">
                         <label for="apellidos">Apellidos</label>
                         <input type="text" id="apellidos" name="apellidos" disabled>
@@ -660,8 +670,10 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- Edición y guardado campo a campo, con lógica especial para Datos Académicos ---
-    // SOLO AGREGAR BOTONES UNA VEZ
+    // ARREGLADO: NO eliminar ni crear botones en el grupo de la foto de perfil
     document.querySelectorAll('.matricula-form-group').forEach(group => {
+        if (group.id === 'foto-perfil-group') return; // <-- NO tocar el grupo de la foto
+
         // Evitar duplicados: solo si no existen ya los botones
         if (group.querySelector('.editar-btn') || group.querySelector('.guardar-btn')) return;
         const input = group.querySelector('input, select');
@@ -698,13 +710,12 @@ window.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('institucion_procedencia').disabled = false;
                 const especialidadEl = document.getElementById('especialidad');
                 if (especialidadEl) especialidadEl.disabled = false;
-                // Solo mostrar el botón guardar de este grupo
                 document.querySelectorAll('#tab-academicos .guardar-btn').forEach(b => b.style.display = 'none');
                 btnGuardar.style.display = 'inline-block';
                 btnEditar.style.display = 'none';
             });
             btnGuardar.addEventListener('click', async function() {
-                await guardarDatosAcademicos();
+                await guardarDatosAcademicos(true); // Forzar actualización de id_grado
                 btnGuardar.style.display = 'none';
                 btnEditar.style.display = 'inline-block';
             });
@@ -725,8 +736,87 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     // --- Guardar todos los datos académicos (para botón guardar de sección y submit del form) ---
-    async function guardarDatosAcademicos() {
-        // Deshabilita todos los campos de Datos Académicos
+    async function guardarDatosAcademicos(forzarActualizarIdGrado = false) {
+        // 1. Obtener valores actuales
+        const periodo = document.getElementById('periodo').value;
+        const curso = document.getElementById('curso').value;
+        const paralelo = document.getElementById('paralelo').value;
+        const especialidad = document.getElementById('especialidad').value;
+        const institucion_procedencia = document.getElementById('institucion_procedencia').value;
+
+        // --- NORMALIZAR EL GRADO PARA QUE COINCIDA CON LA BASE DE DATOS ---
+        // Por ejemplo: "1ro EGB" debe dar grado = "1ro", nombre_nivel = "EGB"
+        let nombre_nivel = "";
+        let grado = "";
+        if (curso.includes("Bachillerato")) {
+            nombre_nivel = "Bachillerato";
+            // Solo "1ro", "2do", "3ro"
+            if (curso.startsWith("1ro")) grado = "1ro";
+            else if (curso.startsWith("2do")) grado = "2do";
+            else if (curso.startsWith("3ro")) grado = "3ro";
+        } else if (curso.includes("EGB")) {
+            nombre_nivel = "EGB";
+            // Solo "1ro", "2do", ..., "10mo"
+            if (curso.startsWith("1ro")) grado = "1ro";
+            else if (curso.startsWith("2do")) grado = "2do";
+            else if (curso.startsWith("3ro")) grado = "3ro";
+            else if (curso.startsWith("4to")) grado = "4to";
+            else if (curso.startsWith("5to")) grado = "5to";
+            else if (curso.startsWith("6to")) grado = "6to";
+            else if (curso.startsWith("7mo")) grado = "7mo";
+            else if (curso.startsWith("8vo")) grado = "8vo";
+            else if (curso.startsWith("9no")) grado = "9no";
+            else if (curso.startsWith("10mo")) grado = "10mo";
+        } else if (curso === "Inicial") {
+            nombre_nivel = "EGB";
+            grado = "Inicial";
+        }
+
+        // 2. Buscar el id_grado correspondiente
+        let id_grado = null;
+        if (grado && paralelo) {
+            let query = supabase.from('curso_grado').select('id_grado').eq('nombre_nivel', nombre_nivel).eq('grado', grado).eq('paralelo', paralelo);
+            if (nombre_nivel === "Bachillerato") {
+                if (especialidad) {
+                    query = query.eq('especialidad', especialidad);
+                } else {
+                    query = query.is('especialidad', null);
+                }
+            } else {
+                query = query.is('especialidad', null);
+            }
+            const { data: gradoData, error } = await query.maybeSingle();
+            if (error) {
+                alert("Error buscando id_grado: " + error.message);
+                return;
+            }
+            if (gradoData && gradoData.id_grado) {
+                id_grado = gradoData.id_grado;
+            } else {
+                alert("No se encontró un grado válido para la combinación seleccionada.\nVerifica que en la tabla curso_grado:\n- El campo 'grado' sea exactamente '" + grado + "'\n- El campo 'paralelo' sea exactamente '" + paralelo + "'\n- El campo 'nombre_nivel' sea exactamente '" + nombre_nivel + "'\n- El campo 'especialidad' sea NULL para EGB o igual a la especialidad para Bachillerato.");
+                return;
+            }
+        } else {
+            alert("Debes seleccionar curso y paralelo.");
+            return;
+        }
+
+        // 3. Actualizar solicitud_inscripcion con id_grado y otros campos
+        let updateObj = {
+            periodo,
+            institucion_procedencia,
+            id_grado
+        };
+        const { error: updateError } = await supabase.from('solicitud_inscripcion').update(updateObj).eq('id', idInscripcion);
+        if (updateError) {
+            alert("Error actualizando inscripción: " + updateError.message);
+            return;
+        }
+
+        // --- MENSAJE DE CONFIRMACIÓN ---
+        alert("¡Datos académicos actualizados con éxito!");
+
+        // 4. Deshabilita todos los campos de Datos Académicos
         document.getElementById('periodo').disabled = true;
         document.getElementById('curso').disabled = true;
         document.getElementById('paralelo').disabled = true;
@@ -735,20 +825,12 @@ window.addEventListener('DOMContentLoaded', function() {
         if (especialidadEl) especialidadEl.disabled = true;
         document.querySelectorAll('#tab-academicos .guardar-btn').forEach(b => b.style.display = 'none');
         document.querySelectorAll('#tab-academicos .editar-btn').forEach(b => b.style.display = 'inline-block');
-        // 1. Actualizar id_grado según curso, paralelo y especialidad
-        await actualizarIdGradoEnInscripcion();
-        // 2. Guardar los demás campos académicos
-        const periodo = document.getElementById('periodo').value;
-        const institucion_procedencia = document.getElementById('institucion_procedencia').value;
-        await supabase.from('solicitud_inscripcion').update({
-            periodo,
-            institucion_procedencia
-        }).eq('id', idInscripcion);
-        // 3. Recargar datos para reflejar cambios
+
+        // 5. Recargar datos para reflejar cambios
         await cargarDatos();
     }
 
-    // --- Guardar todos los datos académicos al hacer submit ---
+    // --- Guardar todos los datos académemos al hacer submit ---
     document.getElementById('form-actualizar-inscripcion').addEventListener('submit', async function(e) {
         e.preventDefault();
         await guardarDatosAcademicos();
@@ -810,25 +892,55 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // --- Cargar datos desde la base de datos ---
     async function cargarDatos() {
-        if (!usuarioActivo) return;
+        if (!usuarioActivo) {
+            alert("No hay usuario activo. Por favor, inicia sesión nuevamente.");
+            return;
+        }
 
         // 1. Buscar id_cedula por la cédula del usuario activo
-        let { data: cedulaData } = await supabase
+        let { data: cedulaData, error: cedulaError } = await supabase
             .from('cedulas')
             .select('id_cedula, cedula')
             .eq('cedula', usuarioActivo)
             .maybeSingle();
+
+        if (cedulaError) {
+            console.error("Error consultando cedulas:", cedulaError);
+            alert("Error consultando cedulas: " + cedulaError.message);
+            return;
+        }
+
         let idCedula = cedulaData && cedulaData.id_cedula ? cedulaData.id_cedula : null;
-        if (!idCedula) return;
+        if (!idCedula) {
+            alert("No se encontró la cédula del usuario activo en la base de datos.");
+            return;
+        }
 
         // 2. Buscar estudiante por id_cedula
-        let { data: estudiante } = await supabase
+        let { data: estudiante, error: estudianteError } = await supabase
             .from('estudiante')
-            .select('id_estudiante, id_inscripcion, nombres, apellidos, correo, tipo_sangre, fecha_nacimiento, sexo, telefono, telefono_convencional, etnia, nacionalidad')
+            .select('id_estudiante, id_inscripcion, nombres, apellidos, correo, tipo_sangre, fecha_nacimiento, sexo, telefono, telefono_convencional, etnia, nacionalidad, archivo_url')
             .eq('id_cedula', idCedula)
             .maybeSingle();
-        if (!estudiante) return;
+
+        if (estudianteError) {
+            console.error("Error consultando estudiante:", estudianteError);
+            alert("Error consultando estudiante: " + estudianteError.message);
+            return;
+        }
+
+        if (!estudiante) {
+            alert("No se encontró el estudiante para la cédula proporcionada.");
+            return;
+        }
         idEstudiante = estudiante.id_estudiante;
+
+        // --- Foto de perfil ---
+        urlFotoPerfil = estudiante.archivo_url || "";
+        const imgFoto = document.getElementById('img-foto-perfil');
+        if (imgFoto) {
+            imgFoto.src = urlFotoPerfil ? urlFotoPerfil : "https://via.placeholder.com/80?text=Sin+Foto";
+        }
 
         // 3. Buscar solicitud_inscripcion por id_inscripcion
         let idInscripcionEst = estudiante.id_inscripcion;
@@ -1017,6 +1129,8 @@ window.addEventListener('DOMContentLoaded', function() {
             document.getElementById('representante_telefono_trabajo').value = representanteData.telefono_trabajo || '';
             document.getElementById('representante_email').value = representanteData.email || '';
             document.getElementById('representante_nivel_educacion').value = representanteData.nivel_educacion || '';
+            document.getElementById('representante_email').value = representanteData.email || '';
+            document.getElementById('representante_nivel_educacion').value = representanteData.nivel_educacion || '';
             document.getElementById('representante_estado_civil').value = representanteData.estado_civil || '';
             document.getElementById('representante_vive_con_estudiante').value = representanteData.vive_con_estudiante === true ? "true" : representanteData.vive_con_estudiante === false ? "false" : (representanteData.vive_con_estudiante || '');
             document.getElementById('representante_horario_trabajo').value = representanteData.horario_trabajo || '';
@@ -1065,6 +1179,74 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+    }
+
+    // --- Foto de perfil: subir a imgbb y actualizar archivo_url ---
+    const btnEditarFoto = document.getElementById('btn-editar-foto');
+    const btnGuardarFoto = document.getElementById('btn-guardar-foto');
+    const inputFoto = document.getElementById('archivo_url');
+    const imgFoto = document.getElementById('img-foto-perfil');
+
+    if (btnEditarFoto && inputFoto && btnGuardarFoto && imgFoto) {
+        btnEditarFoto.style.display = 'inline-block';
+        btnEditarFoto.onclick = function() {
+            inputFoto.value = "";
+            inputFoto.click();
+        };
+        inputFoto.onchange = function() {
+            if (inputFoto.files && inputFoto.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imgFoto.src = e.target.result;
+                };
+                reader.readAsDataURL(inputFoto.files[0]);
+                btnGuardarFoto.style.display = 'inline-block';
+            }
+        };
+        btnGuardarFoto.onclick = async function() {
+            if (!inputFoto.files || !inputFoto.files[0]) {
+                alert('Seleccione una imagen primero.');
+                return;
+            }
+            btnGuardarFoto.disabled = true;
+            btnGuardarFoto.textContent = 'Guardando...';
+            const file = inputFoto.files[0];
+            const reader = new FileReader();
+            reader.onloadend = async function() {
+                try {
+                    const base64 = reader.result.split(',')[1];
+                    const apiKey = '64089dc19a53f406a3e99785d33b9465';
+                    const formData = new FormData();
+                    formData.append('key', apiKey);
+                    formData.append('image', base64);
+                    const res = await fetch('https://api.imgbb.com/1/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await res.json();
+                    if (data && data.data && data.data.url) {
+                        const { error } = await supabase.from('estudiante').update({ archivo_url: data.data.url }).eq('id_estudiante', idEstudiante);
+                        if (error) {
+                            alert('Error al guardar la URL en la base de datos: ' + error.message);
+                            btnGuardarFoto.disabled = false;
+                            btnGuardarFoto.textContent = 'Guardar';
+                            return;
+                        }
+                        imgFoto.src = data.data.url;
+                        urlFotoPerfil = data.data.url;
+                        alert('Foto actualizada correctamente.');
+                        btnGuardarFoto.style.display = 'none';
+                    } else {
+                        alert('No se pudo obtener la URL de la imagen.');
+                    }
+                } catch (err) {
+                    alert('Error al subir la imagen: ' + (err.message || err));
+                }
+                btnGuardarFoto.disabled = false;
+                btnGuardarFoto.textContent = 'Guardar';
+            };
+            reader.readAsDataURL(file);
+        };
     }
 
     // --- Edición y guardado campo a campo ---
@@ -1176,6 +1358,8 @@ window.addEventListener('DOMContentLoaded', function() {
         if (!curso || !paralelo) return null;
         let query = supabase.from('curso_grado').select('id_grado').eq('paralelo', paralelo);
 
+
+
         let grado = "";
         let nombre_nivel = "";
         if (curso && curso.includes("Bachillerato")) {
@@ -1244,6 +1428,9 @@ window.addEventListener('DOMContentLoaded', function() {
         const resumenDiv = document.getElementById('resumen-actualizacion');
         resumenDiv.innerHTML = `
             <h2 style="text-align:center;color:#2f5597;">Resumen de Actualización</h2>
+            <div style="text-align:center;margin-bottom:1em;">
+                <img src="${urlFotoPerfil ? urlFotoPerfil : 'https://via.placeholder.com/80?text=Sin+Foto'}" alt="Foto de perfil" style="width:80px;height:80px;object-fit:cover;border-radius:50%;border:1px solid #ccc;background:#eee;">
+            </div>
             <table style="width:100%;border-collapse:collapse;">
                 <tr><th colspan="2" style="background:#f3c14b;color:#fff;font-size:1.1rem;">Datos Académicos</th></tr>
                 <tr><td><b>Periodo:</b></td><td>${document.getElementById('periodo')?.value || ''}</td></tr>

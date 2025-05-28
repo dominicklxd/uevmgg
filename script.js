@@ -477,3 +477,4 @@ async function borrarEstudiantePorCedula(cedula) {
 
 // Uso:
 // await borrarEstudiantePorCedula('1234567890');
+// No es necesario modificar nada aquí para el botón de la foto de perfil

@@ -404,7 +404,8 @@
             cont.innerHTML = '<span style="color:#888;">Cargando detalles...</span>';
             let est = s.estudiante;
             const insc = s.inscripcion;
-            const curso = s.curso;
+            // --- CORRECCIÓN: OBTENER EL GRADO (curso_grado) DESDE s.grado ---
+            const grado = s.grado || {};
             let direccion = null;
             let padre = null;
             let madre = null;
@@ -506,7 +507,18 @@
                     html: `
                         <table style="width:100%;font-size:1rem;">
                             <tr><td><b>Periodo:</b></td><td>${insc.periodo || ''}</td></tr>
-                            <tr><td><b>Curso:</b></td><td>${curso.nombre_curso || ''} - ${insc.paralelo || ''}</td></tr>
+                            <tr><td><b>Curso:</b></td><td>${
+                                // --- CORRECCIÓN: Mostrar curso correctamente usando grado ---
+                                grado && grado.nombre_nivel
+                                    ? (
+                                        grado.nombre_nivel.toUpperCase() === "BACHILLERATO"
+                                            ? `${grado.grado || ''} Bachillerato${grado.especialidad ? ' - ' + grado.especialidad : ''} "${grado.paralelo || ''}"`
+                                            : grado.nombre_nivel.toUpperCase() === "EGB"
+                                                ? `${grado.grado || ''}° EGB "${grado.paralelo || ''}"`
+                                                : `${grado.nombre_nivel || ''} "${grado.paralelo || ''}"`
+                                    )
+                                    : (insc && insc.paralelo ? `${insc.paralelo}` : '')
+                            }</td></tr>
                             <tr><td><b>Especialidad:</b></td><td>${insc.especialidad || ''}</td></tr>
                             <tr><td><b>Institución Procedencia:</b></td><td>${institucionProcedencia || ''}</td></tr>
                         </table>
@@ -527,6 +539,11 @@
                             <tr><td><b>Sexo:</b></td><td>${est.sexo||''}</td></tr>
                             <tr><td><b>Teléfono:</b></td><td>${est.telefono||''}</td></tr>
                             <tr><td><b>Teléfono Convencional:</b></td><td>${est.telefono_convencional||''}</td></tr>
+                            ${
+                                est.archivo_url
+                                ? `<tr><td><b>Foto:</b></td><td><img src="${est.archivo_url}" alt="Foto estudiante" style="max-width:120px;max-height:120px;border-radius:8px;border:1px solid #ccc;"></td></tr>`
+                                : ''
+                            }
                         </table>
                     `
                 },

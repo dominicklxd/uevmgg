@@ -1314,21 +1314,29 @@
 
             // --- Buscar id_grado y id_curso según curso, paralelo y especialidad ---
             let id_grado = null;
-            let id_curso = null;
             if (paso1.curso && paso1.paralelo) {
                 let nombre_nivel = "";
                 let grado = "";
                 let especialidad = paso1.especialidad && paso1.especialidad !== "N/A" ? paso1.especialidad : null;
+                // Extraer el grado en formato "1ro", "2do", "3ro", ..., "10mo"
+                function extraerGradoTexto(curso) {
+                    // Para "1ro EGB", "2do EGB", "10mo EGB", "1ro Bachillerato", etc.
+                    const match = curso.match(/^([0-9]+(ro|do|to|mo|no))/i);
+                    return match ? match[1] : "";
+                }
                 if (paso1.curso.includes("Bachillerato")) {
                     nombre_nivel = "Bachillerato";
-                    grado = paso1.curso.split(" ")[0]; // "1ro", "2do", "3ro"
-                } else {
+                    grado = extraerGradoTexto(paso1.curso); // "1ro", "2do", "3ro"
+                } else if (paso1.curso.includes("EGB")) {
                     nombre_nivel = "EGB";
-                    grado = paso1.curso.split(" ")[0]; // "1ro", "2do", ..., "10mo"
+                    grado = extraerGradoTexto(paso1.curso); // "1ro", ..., "10mo"
+                } else if (paso1.curso === "Inicial") {
+                    nombre_nivel = "Inicial";
+                    grado = "Inicial";
                 }
                 let query = supabase
                     .from('curso_grado')
-                    .select('id_grado, id_curso')
+                    .select('id_grado')
                     .eq('nombre_nivel', nombre_nivel)
                     .eq('grado', grado)
                     .eq('paralelo', paso1.paralelo);
@@ -1341,17 +1349,15 @@
                     return;
                 }
                 id_grado = gradoData.id_grado;
-                id_curso = gradoData.id_curso;
             }
 
-            // 3. Insertar solicitud_inscripcion con id_grado y id_curso
+            // 3. Insertar solicitud_inscripcion con id_grado
             let id_inscripcion = null;
             const { data: inscData, error: inscError } = await supabase
                 .from('solicitud_inscripcion')
                 .insert([{
                     periodo: paso1.periodo,
                     id_grado: id_grado,
-                    id_curso: id_curso, // <-- RELACIONA TAMBIÉN EL id_curso
                     paralelo: paso1.paralelo,
                     especialidad: paso1.especialidad,
                     institucion_procedencia: paso1.institucion_procedencia
@@ -1414,6 +1420,10 @@
                     }
                 }
             }
+            // Si no se subió a Supabase, usar la URL de imgbb (guardada en localStorage)
+            if (!archivo_url) {
+                archivo_url = localStorage.getItem('archivo_guardado_url') || null;
+            }
 
             // 6. Insertar estudiante
             let id_estudiante = null;
@@ -1430,7 +1440,7 @@
                     telefono: paso2.telefono,
                     telefono_convencional: paso2.telefono_convencional,
                     correo: paso2.correo,
-                    archivo_url: archivo_url,
+                    archivo_url: archivo_url, // <-- Aquí se guarda la URL de la foto
                     etnia: paso2.etnia,
                     nacionalidad: paso2.nacionalidad
                 }])
