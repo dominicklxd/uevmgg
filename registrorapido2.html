@@ -67,6 +67,51 @@
 </head>
 <body>
     <form id="registro-rapido-form" autocomplete="off">
+        <!-- NUEVO: Selección global de curso, paralelo y especialidad -->
+        <div class="registro-card" style="max-width:420px;margin-bottom:1.5rem;">
+            <div class="registro-title">Datos de Curso</div>
+            <div class="registro-form-group">
+                <label for="curso_global">Curso</label>
+                <select id="curso_global" name="curso_global" required>
+                    <option value="">-Seleccione-</option>
+                    <option value="Inicial">Inicial</option>
+                    <option value="1ro EGB">1ro EGB</option>
+                    <option value="2do EGB">2do EGB</option>
+                    <option value="3ro EGB">3ro EGB</option>
+                    <option value="4to EGB">4to EGB</option>
+                    <option value="5to EGB">5to EGB</option>
+                    <option value="6to EGB">6to EGB</option>
+                    <option value="7mo EGB">7mo EGB</option>
+                    <option value="8vo EGB">8vo EGB</option>
+                    <option value="9no EGB">9no EGB</option>
+                    <option value="10mo EGB">10mo EGB</option>
+                    <option value="1ro Bachillerato">1ro Bachillerato</option>
+                    <option value="2do Bachillerato">2do Bachillerato</option>
+                    <option value="3ro Bachillerato">3ro Bachillerato</option>
+                </select>
+            </div>
+            <div class="registro-form-group">
+                <label for="paralelo_global">Paralelo</label>
+                <select id="paralelo_global" name="paralelo_global" required>
+                    <option value="">-Seleccione-</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                </select>
+            </div>
+            <div class="registro-form-group" id="especialidad-group-global" style="display:none;">
+                <label for="especialidad_global">Especialidad (solo Bachillerato)</label>
+                <select id="especialidad_global" name="especialidad_global">
+                    <option value="">-Seleccione-</option>
+                    <option value="Informática">Informática</option>
+                    <option value="Contabilidad">Contabilidad</option>
+                    <option value="Gestión Administrativa">Gestión Administrativa</option>
+                    <option value="Ciencias">Ciencias</option>
+                </select>
+            </div>
+        </div>
         <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center;">
             <!-- Panel 1 -->
             <div class="registro-card" style="min-width:320px;max-width:340px;">
@@ -87,47 +132,7 @@
                     <label for="correo1">Correo Electrónico</label>
                     <input type="email" id="correo1" name="correo1" required>
                 </div>
-                <div class="registro-form-group">
-                    <label for="curso1">Curso</label>
-                    <select id="curso1" name="curso1" required>
-                        <option value="">-Seleccione-</option>
-                        <option value="Inicial">Inicial</option>
-                        <option value="1ro EGB">1ro EGB</option>
-                        <option value="2do EGB">2do EGB</option>
-                        <option value="3ro EGB">3ro EGB</option>
-                        <option value="4to EGB">4to EGB</option>
-                        <option value="5to EGB">5to EGB</option>
-                        <option value="6to EGB">6to EGB</option>
-                        <option value="7mo EGB">7mo EGB</option>
-                        <option value="8vo EGB">8vo EGB</option>
-                        <option value="9no EGB">9no EGB</option>
-                        <option value="10mo EGB">10mo EGB</option>
-                        <option value="1ro Bachillerato">1ro Bachillerato</option>
-                        <option value="2do Bachillerato">2do Bachillerato</option>
-                        <option value="3ro Bachillerato">3ro Bachillerato</option>
-                    </select>
-                </div>
-                <div class="registro-form-group">
-                    <label for="paralelo1">Paralelo</label>
-                    <select id="paralelo1" name="paralelo1" required>
-                        <option value="">-Seleccione-</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                    </select>
-                </div>
-                <div class="registro-form-group" id="especialidad-group1" style="display:none;">
-                    <label for="especialidad1">Especialidad (solo Bachillerato)</label>
-                    <select id="especialidad1" name="especialidad1">
-                        <option value="">-Seleccione-</option>
-                        <option value="Informática">Informática</option>
-                        <option value="Contabilidad">Contabilidad</option>
-                        <option value="Gestión Administrativa">Gestión Administrativa</option>
-                        <option value="Ciencias">Ciencias</option>
-                    </select>
-                </div>
+                <!-- Eliminados los selects de curso, paralelo y especialidad -->
             </div>
             <!-- Panel 2 -->
             <div class="registro-card" style="min-width:320px;max-width:340px;">
@@ -147,47 +152,6 @@
                 <div class="registro-form-group">
                     <label for="correo2">Correo Electrónico</label>
                     <input type="email" id="correo2" name="correo2" required>
-                </div>
-                <div class="registro-form-group">
-                    <label for="curso2">Curso</label>
-                    <select id="curso2" name="curso2" required>
-                        <option value="">-Seleccione-</option>
-                        <option value="Inicial">Inicial</option>
-                        <option value="1ro EGB">1ro EGB</option>
-                        <option value="2do EGB">2do EGB</option>
-                        <option value="3ro EGB">3ro EGB</option>
-                        <option value="4to EGB">4to EGB</option>
-                        <option value="5to EGB">5to EGB</option>
-                        <option value="6to EGB">6to EGB</option>
-                        <option value="7mo EGB">7mo EGB</option>
-                        <option value="8vo EGB">8vo EGB</option>
-                        <option value="9no EGB">9no EGB</option>
-                        <option value="10mo EGB">10mo EGB</option>
-                        <option value="1ro Bachillerato">1ro Bachillerato</option>
-                        <option value="2do Bachillerato">2do Bachillerato</option>
-                        <option value="3ro Bachillerato">3ro Bachillerato</option>
-                    </select>
-                </div>
-                <div class="registro-form-group">
-                    <label for="paralelo2">Paralelo</label>
-                    <select id="paralelo2" name="paralelo2" required>
-                        <option value="">-Seleccione-</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                    </select>
-                </div>
-                <div class="registro-form-group" id="especialidad-group2" style="display:none;">
-                    <label for="especialidad2">Especialidad (solo Bachillerato)</label>
-                    <select id="especialidad2" name="especialidad2">
-                        <option value="">-Seleccione-</option>
-                        <option value="Informática">Informática</option>
-                        <option value="Contabilidad">Contabilidad</option>
-                        <option value="Gestión Administrativa">Gestión Administrativa</option>
-                        <option value="Ciencias">Ciencias</option>
-                    </select>
                 </div>
             </div>
             <!-- Panel 3 -->
@@ -209,47 +173,6 @@
                     <label for="correo3">Correo Electrónico</label>
                     <input type="email" id="correo3" name="correo3" required>
                 </div>
-                <div class="registro-form-group">
-                    <label for="curso3">Curso</label>
-                    <select id="curso3" name="curso3" required>
-                        <option value="">-Seleccione-</option>
-                        <option value="Inicial">Inicial</option>
-                        <option value="1ro EGB">1ro EGB</option>
-                        <option value="2do EGB">2do EGB</option>
-                        <option value="3ro EGB">3ro EGB</option>
-                        <option value="4to EGB">4to EGB</option>
-                        <option value="5to EGB">5to EGB</option>
-                        <option value="6to EGB">6to EGB</option>
-                        <option value="7mo EGB">7mo EGB</option>
-                        <option value="8vo EGB">8vo EGB</option>
-                        <option value="9no EGB">9no EGB</option>
-                        <option value="10mo EGB">10mo EGB</option>
-                        <option value="1ro Bachillerato">1ro Bachillerato</option>
-                        <option value="2do Bachillerato">2do Bachillerato</option>
-                        <option value="3ro Bachillerato">3ro Bachillerato</option>
-                    </select>
-                </div>
-                <div class="registro-form-group">
-                    <label for="paralelo3">Paralelo</label>
-                    <select id="paralelo3" name="paralelo3" required>
-                        <option value="">-Seleccione-</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                    </select>
-                </div>
-                <div class="registro-form-group" id="especialidad-group3" style="display:none;">
-                    <label for="especialidad3">Especialidad (solo Bachillerato)</label>
-                    <select id="especialidad3" name="especialidad3">
-                        <option value="">-Seleccione-</option>
-                        <option value="Informática">Informática</option>
-                        <option value="Contabilidad">Contabilidad</option>
-                        <option value="Gestión Administrativa">Gestión Administrativa</option>
-                        <option value="Ciencias">Ciencias</option>
-                    </select>
-                </div>
             </div>
             <!-- Panel 4 -->
             <div class="registro-card" style="min-width:320px;max-width:340px;">
@@ -270,47 +193,6 @@
                     <label for="correo4">Correo Electrónico</label>
                     <input type="email" id="correo4" name="correo4" required>
                 </div>
-                <div class="registro-form-group">
-                    <label for="curso4">Curso</label>
-                    <select id="curso4" name="curso4" required>
-                        <option value="">-Seleccione-</option>
-                        <option value="Inicial">Inicial</option>
-                        <option value="1ro EGB">1ro EGB</option>
-                        <option value="2do EGB">2do EGB</option>
-                        <option value="3ro EGB">3ro EGB</option>
-                        <option value="4to EGB">4to EGB</option>
-                        <option value="5to EGB">5to EGB</option>
-                        <option value="6to EGB">6to EGB</option>
-                        <option value="7mo EGB">7mo EGB</option>
-                        <option value="8vo EGB">8vo EGB</option>
-                        <option value="9no EGB">9no EGB</option>
-                        <option value="10mo EGB">10mo EGB</option>
-                        <option value="1ro Bachillerato">1ro Bachillerato</option>
-                        <option value="2do Bachillerato">2do Bachillerato</option>
-                        <option value="3ro Bachillerato">3ro Bachillerato</option>
-                    </select>
-                </div>
-                <div class="registro-form-group">
-                    <label for="paralelo4">Paralelo</label>
-                    <select id="paralelo4" name="paralelo4" required>
-                        <option value="">-Seleccione-</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                        <option value="E">E</option>
-                    </select>
-                </div>
-                <div class="registro-form-group" id="especialidad-group4" style="display:none;">
-                    <label for="especialidad4">Especialidad (solo Bachillerato)</label>
-                    <select id="especialidad4" name="especialidad4">
-                        <option value="">-Seleccione-</option>
-                        <option value="Informática">Informática</option>
-                        <option value="Contabilidad">Contabilidad</option>
-                        <option value="Gestión Administrativa">Gestión Administrativa</option>
-                        <option value="Ciencias">Ciencias</option>
-                    </select>
-                </div>
             </div>
         </div>
         <button type="submit" class="registro-btn" style="max-width:300px;margin:2rem auto 0 auto;">Registrar los 4 estudiantes</button>
@@ -323,34 +205,39 @@
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    // Mostrar especialidad solo si es Bachillerato para cada panel
-    [1,2,3,4].forEach(function(i){
-        document.getElementById('curso'+i).addEventListener('change', function() {
-            const value = this.value;
-            const especialidadGroup = document.getElementById('especialidad-group'+i);
-            if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
-                especialidadGroup.style.display = 'block';
-                document.getElementById('especialidad'+i).required = true;
-            } else {
-                especialidadGroup.style.display = 'none';
-                document.getElementById('especialidad'+i).required = false;
-                document.getElementById('especialidad'+i).value = '';
-            }
-        });
+    // Mostrar especialidad solo si es Bachillerato (solo para el global)
+    document.getElementById('curso_global').addEventListener('change', function() {
+        const value = this.value;
+        const especialidadGroup = document.getElementById('especialidad-group-global');
+        const especialidadSelect = document.getElementById('especialidad_global');
+        if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
+            especialidadGroup.style.display = 'block';
+            especialidadSelect.required = true;
+        } else {
+            especialidadGroup.style.display = 'none';
+            especialidadSelect.required = false;
+            especialidadSelect.value = '';
+        }
     });
 
     document.getElementById('registro-rapido-form').onsubmit = async function(e) {
         e.preventDefault();
         let errores = [];
         let exitos = 0;
+
+        // Obtener los valores globales
+        const curso = document.getElementById('curso_global').value;
+        const paralelo = document.getElementById('paralelo_global').value;
+        const especialidad = document.getElementById('especialidad_global').value || null;
+
         for(let i=1;i<=4;i++) {
             const apellidos = document.getElementById('apellidos'+i).value.trim();
             const nombres = document.getElementById('nombres'+i).value.trim();
             const cedula = document.getElementById('cedula'+i).value.trim();
             const correo = document.getElementById('correo'+i).value.trim();
-            const curso = document.getElementById('curso'+i).value;
-            const paralelo = document.getElementById('paralelo'+i).value;
-            const especialidad = document.getElementById('especialidad'+i).value || null;
+            // const curso = ... // eliminado
+            // const paralelo = ... // eliminado
+            // const especialidad = ... // eliminado
 
             if (!apellidos || !nombres || !cedula || !correo || !curso || !paralelo) continue;
 
