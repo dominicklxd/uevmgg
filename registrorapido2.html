@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro Rápido de Estudiante</title>
+    <style>
+        body {
+            background: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        .registro-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            max-width: 420px;
+            margin: 60px auto;
+            padding: 2rem 2.5rem 1.5rem 2.5rem;
+        }
+        .registro-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #2f5597;
+        }
+        .registro-form-group {
+            margin-bottom: 1.2rem;
+        }
+        .registro-form-group label {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+            display: block;
+            color: #333;
+        }
+        .registro-form-group input,
+        .registro-form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .registro-btn {
+            background: #2f5597;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.7rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: block;
+            width: 100%;
+        }
+        .registro-btn:hover {
+            background: #1d3557;
+        }
+        #mensaje-registro {
+            margin-top:1.2rem;
+            text-align:center;
+            font-weight:bold;
+            color:#2f5597;
+        }
+    </style>
+</head>
+<body>
+    <form id="registro-rapido-form" autocomplete="off">
+        <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center;">
+            <!-- Panel 1 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 1</div>
+                <div class="registro-form-group">
+                    <label for="apellidos1">Apellidos</label>
+                    <input type="text" id="apellidos1" name="apellidos1" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres1">Nombres</label>
+                    <input type="text" id="nombres1" name="nombres1" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula1">Cédula</label>
+                    <input type="text" id="cedula1" name="cedula1" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo1">Correo Electrónico</label>
+                    <input type="email" id="correo1" name="correo1" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="curso1">Curso</label>
+                    <select id="curso1" name="curso1" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="Inicial">Inicial</option>
+                        <option value="1ro EGB">1ro EGB</option>
+                        <option value="2do EGB">2do EGB</option>
+                        <option value="3ro EGB">3ro EGB</option>
+                        <option value="4to EGB">4to EGB</option>
+                        <option value="5to EGB">5to EGB</option>
+                        <option value="6to EGB">6to EGB</option>
+                        <option value="7mo EGB">7mo EGB</option>
+                        <option value="8vo EGB">8vo EGB</option>
+                        <option value="9no EGB">9no EGB</option>
+                        <option value="10mo EGB">10mo EGB</option>
+                        <option value="1ro Bachillerato">1ro Bachillerato</option>
+                        <option value="2do Bachillerato">2do Bachillerato</option>
+                        <option value="3ro Bachillerato">3ro Bachillerato</option>
+                    </select>
+                </div>
+                <div class="registro-form-group">
+                    <label for="paralelo1">Paralelo</label>
+                    <select id="paralelo1" name="paralelo1" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+                <div class="registro-form-group" id="especialidad-group1" style="display:none;">
+                    <label for="especialidad1">Especialidad (solo Bachillerato)</label>
+                    <select id="especialidad1" name="especialidad1">
+                        <option value="">-Seleccione-</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Contabilidad">Contabilidad</option>
+                        <option value="Gestión Administrativa">Gestión Administrativa</option>
+                        <option value="Ciencias">Ciencias</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Panel 2 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 2</div>
+                <div class="registro-form-group">
+                    <label for="apellidos2">Apellidos</label>
+                    <input type="text" id="apellidos2" name="apellidos2" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres2">Nombres</label>
+                    <input type="text" id="nombres2" name="nombres2" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula2">Cédula</label>
+                    <input type="text" id="cedula2" name="cedula2" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo2">Correo Electrónico</label>
+                    <input type="email" id="correo2" name="correo2" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="curso2">Curso</label>
+                    <select id="curso2" name="curso2" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="Inicial">Inicial</option>
+                        <option value="1ro EGB">1ro EGB</option>
+                        <option value="2do EGB">2do EGB</option>
+                        <option value="3ro EGB">3ro EGB</option>
+                        <option value="4to EGB">4to EGB</option>
+                        <option value="5to EGB">5to EGB</option>
+                        <option value="6to EGB">6to EGB</option>
+                        <option value="7mo EGB">7mo EGB</option>
+                        <option value="8vo EGB">8vo EGB</option>
+                        <option value="9no EGB">9no EGB</option>
+                        <option value="10mo EGB">10mo EGB</option>
+                        <option value="1ro Bachillerato">1ro Bachillerato</option>
+                        <option value="2do Bachillerato">2do Bachillerato</option>
+                        <option value="3ro Bachillerato">3ro Bachillerato</option>
+                    </select>
+                </div>
+                <div class="registro-form-group">
+                    <label for="paralelo2">Paralelo</label>
+                    <select id="paralelo2" name="paralelo2" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+                <div class="registro-form-group" id="especialidad-group2" style="display:none;">
+                    <label for="especialidad2">Especialidad (solo Bachillerato)</label>
+                    <select id="especialidad2" name="especialidad2">
+                        <option value="">-Seleccione-</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Contabilidad">Contabilidad</option>
+                        <option value="Gestión Administrativa">Gestión Administrativa</option>
+                        <option value="Ciencias">Ciencias</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Panel 3 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 3</div>
+                <div class="registro-form-group">
+                    <label for="apellidos3">Apellidos</label>
+                    <input type="text" id="apellidos3" name="apellidos3" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres3">Nombres</label>
+                    <input type="text" id="nombres3" name="nombres3" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula3">Cédula</label>
+                    <input type="text" id="cedula3" name="cedula3" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo3">Correo Electrónico</label>
+                    <input type="email" id="correo3" name="correo3" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="curso3">Curso</label>
+                    <select id="curso3" name="curso3" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="Inicial">Inicial</option>
+                        <option value="1ro EGB">1ro EGB</option>
+                        <option value="2do EGB">2do EGB</option>
+                        <option value="3ro EGB">3ro EGB</option>
+                        <option value="4to EGB">4to EGB</option>
+                        <option value="5to EGB">5to EGB</option>
+                        <option value="6to EGB">6to EGB</option>
+                        <option value="7mo EGB">7mo EGB</option>
+                        <option value="8vo EGB">8vo EGB</option>
+                        <option value="9no EGB">9no EGB</option>
+                        <option value="10mo EGB">10mo EGB</option>
+                        <option value="1ro Bachillerato">1ro Bachillerato</option>
+                        <option value="2do Bachillerato">2do Bachillerato</option>
+                        <option value="3ro Bachillerato">3ro Bachillerato</option>
+                    </select>
+                </div>
+                <div class="registro-form-group">
+                    <label for="paralelo3">Paralelo</label>
+                    <select id="paralelo3" name="paralelo3" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+                <div class="registro-form-group" id="especialidad-group3" style="display:none;">
+                    <label for="especialidad3">Especialidad (solo Bachillerato)</label>
+                    <select id="especialidad3" name="especialidad3">
+                        <option value="">-Seleccione-</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Contabilidad">Contabilidad</option>
+                        <option value="Gestión Administrativa">Gestión Administrativa</option>
+                        <option value="Ciencias">Ciencias</option>
+                    </select>
+                </div>
+            </div>
+            <!-- Panel 4 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 4</div>
+                <div class="registro-form-group">
+                    <label for="apellidos4">Apellidos</label>
+                    <input type="text" id="apellidos4" name="apellidos4" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres4">Nombres</label>
+                    <input type="text" id="nombres4" name="nombres4" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula4">Cédula</label>
+                    <input type="text" id="cedula4" name="cedula4" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo4">Correo Electrónico</label>
+                    <input type="email" id="correo4" name="correo4" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="curso4">Curso</label>
+                    <select id="curso4" name="curso4" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="Inicial">Inicial</option>
+                        <option value="1ro EGB">1ro EGB</option>
+                        <option value="2do EGB">2do EGB</option>
+                        <option value="3ro EGB">3ro EGB</option>
+                        <option value="4to EGB">4to EGB</option>
+                        <option value="5to EGB">5to EGB</option>
+                        <option value="6to EGB">6to EGB</option>
+                        <option value="7mo EGB">7mo EGB</option>
+                        <option value="8vo EGB">8vo EGB</option>
+                        <option value="9no EGB">9no EGB</option>
+                        <option value="10mo EGB">10mo EGB</option>
+                        <option value="1ro Bachillerato">1ro Bachillerato</option>
+                        <option value="2do Bachillerato">2do Bachillerato</option>
+                        <option value="3ro Bachillerato">3ro Bachillerato</option>
+                    </select>
+                </div>
+                <div class="registro-form-group">
+                    <label for="paralelo4">Paralelo</label>
+                    <select id="paralelo4" name="paralelo4" required>
+                        <option value="">-Seleccione-</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+                <div class="registro-form-group" id="especialidad-group4" style="display:none;">
+                    <label for="especialidad4">Especialidad (solo Bachillerato)</label>
+                    <select id="especialidad4" name="especialidad4">
+                        <option value="">-Seleccione-</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Contabilidad">Contabilidad</option>
+                        <option value="Gestión Administrativa">Gestión Administrativa</option>
+                        <option value="Ciencias">Ciencias</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="registro-btn" style="max-width:300px;margin:2rem auto 0 auto;">Registrar los 4 estudiantes</button>
+    </form>
+    <div id="mensaje-registro"></div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script>
+    // Configuración de Supabase
+    const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Mostrar especialidad solo si es Bachillerato para cada panel
+    [1,2,3,4].forEach(function(i){
+        document.getElementById('curso'+i).addEventListener('change', function() {
+            const value = this.value;
+            const especialidadGroup = document.getElementById('especialidad-group'+i);
+            if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
+                especialidadGroup.style.display = 'block';
+                document.getElementById('especialidad'+i).required = true;
+            } else {
+                especialidadGroup.style.display = 'none';
+                document.getElementById('especialidad'+i).required = false;
+                document.getElementById('especialidad'+i).value = '';
+            }
+        });
+    });
+
+    document.getElementById('registro-rapido-form').onsubmit = async function(e) {
+        e.preventDefault();
+        let errores = [];
+        let exitos = 0;
+        for(let i=1;i<=4;i++) {
+            const apellidos = document.getElementById('apellidos'+i).value.trim();
+            const nombres = document.getElementById('nombres'+i).value.trim();
+            const cedula = document.getElementById('cedula'+i).value.trim();
+            const correo = document.getElementById('correo'+i).value.trim();
+            const curso = document.getElementById('curso'+i).value;
+            const paralelo = document.getElementById('paralelo'+i).value;
+            const especialidad = document.getElementById('especialidad'+i).value || null;
+
+            if (!apellidos || !nombres || !cedula || !correo || !curso || !paralelo) continue;
+
+            // 1. Insertar cédula si no existe
+            let { data: cedulaData } = await supabase
+                .from('cedulas')
+                .select('id_cedula')
+                .eq('cedula', cedula)
+                .single();
+            let id_cedula = null;
+            if (!cedulaData) {
+                let { data: nuevaCedula } = await supabase
+                    .from('cedulas')
+                    .insert([{ cedula }])
+                    .select('id_cedula')
+                    .single();
+                id_cedula = nuevaCedula ? nuevaCedula.id_cedula : null;
+            } else {
+                id_cedula = cedulaData.id_cedula;
+            }
+
+            // 2. Buscar id_grado
+            function extraerGradoTexto(curso) {
+                const match = curso.match(/^([0-9]+(ro|do|to|mo|vo|no))/i);
+                if (match) return match[0];
+                if (curso === "Inicial") return "Inicial";
+                return "";
+            }
+            let nombre_nivel = "";
+            let grado = "";
+            if (curso.includes("Bachillerato")) {
+                nombre_nivel = "Bachillerato";
+                grado = extraerGradoTexto(curso);
+            } else if (curso.includes("EGB")) {
+                nombre_nivel = "EGB";
+                grado = extraerGradoTexto(curso);
+            } else if (curso === "Inicial") {
+                nombre_nivel = "Inicial";
+                grado = "Inicial";
+            }
+            let query = supabase
+                .from('curso_grado')
+                .select('id_grado')
+                .eq('nombre_nivel', nombre_nivel)
+                .eq('grado', grado)
+                .eq('paralelo', paralelo);
+            if (nombre_nivel === "Bachillerato" && especialidad) {
+                query = query.eq('especialidad', especialidad);
+            }
+            const { data: gradoData, error: gradoError } = await query.maybeSingle();
+            if (gradoError || !gradoData) {
+                errores.push(`No se encontró el curso para el estudiante ${i}.`);
+                continue;
+            }
+            const id_grado = gradoData.id_grado;
+
+            // 3. Insertar solicitud_inscripcion
+            let { data: inscData, error: inscError } = await supabase
+                .from('solicitud_inscripcion')
+                .insert([{
+                    periodo: '2024-2025',
+                    id_grado: id_grado,
+                    paralelo: paralelo,
+                    especialidad: especialidad,
+                    institucion_procedencia: 'Unidad Educativa "Victor Manuel Guzmán"'
+                }])
+                .select('id')
+                .single();
+            if (inscError) {
+                errores.push(`Error inscripción estudiante ${i}: ${inscError.message}`);
+                continue;
+            }
+            const id_inscripcion = inscData.id;
+
+            // 4. Insertar estudiante
+            let { data: estudianteData, error: estudianteError } = await supabase
+                .from('estudiante')
+                .insert([{
+                    id_cedula,
+                    id_inscripcion,
+                    apellidos,
+                    nombres,
+                    correo,
+                    tipo_sangre: 'vacio',
+                    fecha_nacimiento: '1111-11-11',
+                    sexo: 'Masculino',
+                    telefono: 'vacio',
+                    telefono_convencional: 'vacio',
+                    etnia: 'Mestizo',
+                    nacionalidad: 'vacio',
+                    archivo_url: 'https://i.ibb.co/cKGT82LC/b07636cc1b07.png'
+                }])
+                .select('id_estudiante')
+                .single();
+            if (estudianteError) {
+                errores.push(`Error estudiante ${i}: ${estudianteError.message}`);
+                continue;
+            }
+            const id_estudiante = estudianteData.id_estudiante;
+
+            // 5. Insertar dirección (ubicación predeterminada)
+            await supabase
+                .from('direccion_estudiante')
+                .insert([{
+                    id_estudiante,
+                    calle_principal: 'vacio',
+                    calle_secundaria: 'vacio',
+                    provincia: 'vacio',
+                    canton: 'vacio',
+                    parroquia: 'vacio',
+                    barrio: 'vacio',
+                    numero_casa: 'vacio',
+                    referencia: 'vacio',
+                    latitud: 0.33616444871436085,
+                    longitud: -78.11604869660802
+                }]);
+
+            // 6. Insertar padre
+            await supabase
+                .from('padre_estudiante')
+                .insert([{
+                    id_estudiante,
+                    nombres: 'vacio',
+                    cedula: 'vacio',
+                    ocupacion: 'vacio',
+                    telefono_trabajo: 'vacio',
+                    email: 'vacio',
+                    nivel_educacion: 'vacio',
+                    estado_civil: 'Viudo/a',
+                    vive_con_estudiante: true,
+                    horario_trabajo: 'vacio',
+                    telefono_celular: 'vacio'
+                }]);
+
+            // 7. Insertar madre
+            await supabase
+                .from('madre_estudiante')
+                .insert([{
+                    id_estudiante,
+                    nombres: 'vacio',
+                    cedula: 'vacio',
+                    ocupacion: 'vacio',
+                    telefono_trabajo: 'vacio',
+                    email: 'vacio',
+                    nivel_educacion: 'vacio',
+                    estado_civil: 'Viudo/a',
+                    vive_con_estudiante: true,
+                    horario_trabajo: 'vacio',
+                    telefono_celular: 'vacio'
+                }]);
+
+            // 8. Insertar representante
+            await supabase
+                .from('representante_estudiante')
+                .insert([{
+                    id_estudiante,
+                    nombres: 'vacio',
+                    cedula: 'vacio',
+                    ocupacion: 'vacio',
+                    telefono_trabajo: 'vacio',
+                    email: 'vacio',
+                    nivel_educacion: 'vacio',
+                    estado_civil: 'Viudo/a',
+                    vive_con_estudiante: true,
+                    horario_trabajo: 'vacio',
+                    telefono_celular: 'vacio'
+                }]);
+
+            // 9. Insertar contactos de emergencia
+            await supabase
+                .from('contacto_emergencia_estudiante')
+                .insert([
+                    { id_estudiante, nombre: 'vacio', telefono: 'vacio', parentesco: 'vacio' },
+                    { id_estudiante, nombre: 'vacio', telefono: 'vacio', parentesco: 'vacio' }
+                ]);
+
+            // 10. Insertar solicitud de matrícula ENTRANTE
+            await supabase
+                .from('solicitud_matriculacion')
+                .insert([{
+                    id_estudiante,
+                    estado: 'entrante',
+                    fecha_creacion: new Date().toISOString()
+                }]);
+            exitos++;
+        }
+        if (exitos > 0) {
+            document.getElementById('mensaje-registro').textContent = `¡${exitos} estudiante(s) registrados correctamente!` + (errores.length ? " " + errores.join(" ") : "");
+            e.target.reset();
+        } else {
+            document.getElementById('mensaje-registro').textContent = errores.length ? errores.join(" ") : "No se registró ningún estudiante.";
+        }
+    };
+    </script>
+</body>
+</html>
