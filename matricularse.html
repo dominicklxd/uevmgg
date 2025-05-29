@@ -1332,18 +1332,22 @@
                 let nombre_nivel = "";
                 let grado = "";
                 let especialidad = paso1.especialidad && paso1.especialidad !== "N/A" ? paso1.especialidad : null;
-                // Extraer el grado en formato "1ro", "2do", "3ro", ..., "10mo"
+                // Extraer el grado en formato correcto para la base de datos
                 function extraerGradoTexto(curso) {
-                    // Para "1ro EGB", "2do EGB", "10mo EGB", "1ro Bachillerato", etc.
-                    const match = curso.match(/^([0-9]+(ro|do|to|mo|no))/i);
-                    return match ? match[1] : "";
+                    // Para "1ro EGB", "2do EGB", ..., "10mo EGB", "1ro Bachillerato", etc.
+                    // Devuelve "1ro", "2do", "3ro", "4to", "5to", "6to", "7mo", "8vo", "9no", "10mo"
+                    const match = curso.match(/^([0-9]+(ro|do|to|mo|vo|no))/i);
+                    if (match) return match[0];
+                    // Para casos como "Inicial"
+                    if (curso === "Inicial") return "Inicial";
+                    return "";
                 }
                 if (paso1.curso.includes("Bachillerato")) {
                     nombre_nivel = "Bachillerato";
                     grado = extraerGradoTexto(paso1.curso); // "1ro", "2do", "3ro"
                 } else if (paso1.curso.includes("EGB")) {
                     nombre_nivel = "EGB";
-                    grado = extraerGradoTexto(paso1.curso); // "1ro", ..., "10mo"
+                    grado = extraerGradoTexto(paso1.curso); // "8vo", "9no", "10mo", etc.
                 } else if (paso1.curso === "Inicial") {
                     nombre_nivel = "Inicial";
                     grado = "Inicial";
