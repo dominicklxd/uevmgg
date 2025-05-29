@@ -187,6 +187,18 @@
         .detalle-nav-btn:hover:not(:disabled) {
             background: #548235;
         }
+        @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
+        .spinner {
+            width:48px;
+            height:48px;
+            border:6px solid #e0e0e0;
+            border-top:6px solid #2f5597;
+            border-radius:50%;
+            animation:spin 1s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -275,6 +287,12 @@
                 <button id="btn-entrantes" class="solicitudes-tab-btn active">Solicitudes Entrantes</button>
                 <button id="btn-verificadas" class="solicitudes-tab-btn">Solicitudes Verificadas</button>
             </div>
+            <!-- NUEVO: Botón para verificar todas las solicitudes pendientes -->
+            <div style="text-align:center;margin-bottom:1rem;">
+                <button id="btn-verificar-todas" style="display:none;background:#548235;color:#fff;border:none;border-radius:8px;padding:0.7rem 2.5rem;font-size:1.1rem;font-weight:bold;cursor:pointer;transition:background 0.2s;">
+                    Verificar todas las solicitudes pendientes
+                </button>
+            </div>
             <div class="solicitudes-filtros">
                 <input type="text" id="filtro-cedula" placeholder="Buscar por cédula">
                 <input type="text" id="filtro-nombres" placeholder="Buscar por nombres">
@@ -312,6 +330,22 @@
                 </select>
                 <button id="btn-filtrar">Filtrar</button>
                 <button id="btn-limpiar" style="background:#ccc;color:#222;">Limpiar</button>
+                <!-- NUEVO: Botón de recarga con icono de ruedita -->
+                <button id="btn-recargar" title="Recargar tabla" style="background:#2f5597;color:#fff;padding:0.5rem 1rem;border-radius:6px;border:none;display:inline-flex;align-items:center;justify-content:center;font-size:1.2rem;margin-left:0.2rem;">
+                    <span style="display:inline-block;width:22px;height:22px;">
+                        <svg style="vertical-align:middle;" width="22" height="22" viewBox="0 0 22 22">
+                            <g>
+                                <circle cx="11" cy="11" r="9" fill="none" stroke="#fff" stroke-width="2" opacity="0.3"/>
+                                <path d="M17 11a6 6 0 1 1-2.1-4.5" fill="none" stroke="#fff" stroke-width="2"/>
+                                <polygon points="17,3 17,7 13,7" fill="#fff"/>
+                            </g>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+            <!-- NUEVO: Spinner de carga -->
+            <div id="spinner-carga" style="display:none;justify-content:center;align-items:center;margin:2rem 0;">
+                <div class="spinner" style="width:48px;height:48px;border:6px solid #e0e0e0;border-top:6px solid #2f5597;border-radius:50%;animation:spin 1s linear infinite;"></div>
             </div>
             <div class="solicitudes-table-container">
                 <div id="tabla-solicitudes"></div>
@@ -375,16 +409,33 @@
 
         let estadoActual = 'entrante';
 
+        // Mostrar/ocultar spinner
+        function mostrarSpinner(mostrar) {
+            document.getElementById('spinner-carga').style.display = mostrar ? 'flex' : 'none';
+        }
+
+        // Mostrar/ocultar botón de verificar todas según el estado actual
+        function actualizarBotonVerificarTodas() {
+            const btn = document.getElementById('btn-verificar-todas');
+            if (estadoActual === 'entrante') {
+                btn.style.display = '';
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+
         document.getElementById('btn-entrantes').onclick = () => {
             estadoActual = 'entrante';
             document.getElementById('btn-entrantes').classList.add('active');
             document.getElementById('btn-verificadas').classList.remove('active');
+            actualizarBotonVerificarTodas();
             cargarSolicitudes();
         };
         document.getElementById('btn-verificadas').onclick = () => {
             estadoActual = 'verificada';
             document.getElementById('btn-verificadas').classList.add('active');
             document.getElementById('btn-entrantes').classList.remove('active');
+            actualizarBotonVerificarTodas();
             cargarSolicitudes();
         };
         document.getElementById('btn-filtrar').onclick = cargarSolicitudes;
@@ -394,6 +445,10 @@
             document.getElementById('filtro-curso').value = '';
             document.getElementById('filtro-paralelo').value = '';
             document.getElementById('filtro-especialidad').value = '';
+            cargarSolicitudes();
+        };
+        // NUEVO: recargar tabla con botón ruedita
+        document.getElementById('btn-recargar').onclick = function() {
             cargarSolicitudes();
         };
 
@@ -675,7 +730,124 @@
             }
         };
 
+        // NUEVO: Verificar todas las solicitudes pendientes
+        document.getElementById('btn-verificar-todas').onclick = async function() {
+            if (!window._ultimasSolicitudes || window._ultimasSolicitudes.length === 0) {
+                alert('No hay solicitudes pendientes para verificar.');
+                return;
+            }
+            if (!confirm('¿Está seguro de verificar TODAS las solicitudes pendientes?')) return;
+            mostrarSpinner(true);
+            let errores = [];
+            let exitos = 0;
+            for (const s of window._ultimasSolicitudes) {
+                try {
+                    // 1. Obtener datos del estudiante para crear usuario
+                    let estudiante = s.estudiante;
+                    let idEstudiante = estudiante && estudiante.id_estudiante ? estudiante.id_estudiante : null;
+                    let idCedula = estudiante && estudiante.id_cedula ? estudiante.id_cedula : null;
+                    let cedula = null;
+                    let fechaNacimiento = null;
+
+                    // Buscar cédula real
+                    if (idCedula) {
+                        // Buscar en la lista de cedulas ya traída
+                        if (window._cedulasCache && Array.isArray(window._cedulasCache)) {
+                            let cedObj = window._cedulasCache.find(c => c.id_cedula === idCedula);
+                            if (cedObj && cedObj.cedula) cedula = cedObj.cedula;
+                        }
+                        // Si no está en cache, buscar en Supabase
+                        if (!cedula) {
+                            const { data: cedulaRow } = await supabase
+                                .from('cedulas')
+                                .select('cedula')
+                                .eq('id_cedula', idCedula)
+                                .maybeSingle();
+                            if (cedulaRow && cedulaRow.cedula) cedula = cedulaRow.cedula;
+                        }
+                    }
+                    // Si sigue sin cédula, intenta usar la que viene en el objeto
+                    if (!cedula && s.cedula) cedula = s.cedula;
+
+                    // Buscar fecha de nacimiento
+                    fechaNacimiento = estudiante && estudiante.fecha_nacimiento ? estudiante.fecha_nacimiento : null;
+                    // Si no hay fecha de nacimiento, intenta buscarla en Supabase
+                    if ((!fechaNacimiento || fechaNacimiento === "") && idEstudiante) {
+                        const { data: estRow2 } = await supabase
+                            .from('estudiante')
+                            .select('fecha_nacimiento')
+                            .eq('id_estudiante', idEstudiante)
+                            .maybeSingle();
+                        if (estRow2 && estRow2.fecha_nacimiento) fechaNacimiento = estRow2.fecha_nacimiento;
+                    }
+
+                    // 2. Crear usuario si no existe y si hay cédula y fecha de nacimiento
+                    if (cedula && fechaNacimiento && idCedula && idEstudiante) {
+                        const pass = fechaNacimiento.replace(/[-\/]/g, '');
+                        // Verificar si ya existe el usuario (usa email = cedula)
+                        const { data: existe } = await supabase
+                            .from('usuarios')
+                            .select('id')
+                            .eq('email', cedula)
+                            .maybeSingle();
+                        if (!existe) {
+                            // Insertar usuario con los campos correctos
+                            const { error: insertError } = await supabase
+                                .from('usuarios')
+                                .insert([{
+                                    usuario: cedula,
+                                    email: cedula,
+                                    password: pass,
+                                    rol: 'estudiante',
+                                    cedula: idCedula,
+                                    id_estudiante: idEstudiante
+                                }]);
+                            if (insertError) {
+                                errores.push(`Error usuario ${cedula}: ${insertError.message}`);
+                                continue;
+                            }
+                        } else {
+                            // Si ya existe, actualizar para asegurar que tenga los campos relacionados
+                            await supabase
+                                .from('usuarios')
+                                .update({
+                                    cedula: idCedula,
+                                    id_estudiante: idEstudiante
+                                })
+                                .eq('email', cedula);
+                        }
+                    } else {
+                        errores.push(`Datos insuficientes para crear usuario para estudiante ID ${idEstudiante || ''} (cédula: ${cedula || 'N/A'}, fecha nacimiento: ${fechaNacimiento || 'N/A'})`);
+                        continue;
+                    }
+                    // 3. Actualizar estado de la solicitud
+                    const { error } = await supabase
+                        .from('solicitud_matriculacion')
+                        .update({
+                            estado: 'verificada',
+                            fecha_verificacion: new Date().toISOString(),
+                            verificado_por: usuarioActivo
+                        })
+                        .eq('id', s.id);
+                    if (error) {
+                        errores.push(`Error solicitud ${cedula || s.id}: ${error.message}`);
+                    } else {
+                        exitos++;
+                    }
+                } catch (e) {
+                    errores.push(`Error solicitud ${s.id}: ${e.message || e}`);
+                }
+            }
+            mostrarSpinner(false);
+            let msg = `Se verificaron ${exitos} solicitud(es).`;
+            if (errores.length) msg += "\nErrores:\n" + errores.join("\n");
+            alert(msg);
+            cargarSolicitudes();
+        };
+
+        // --- cachear cedulas al cargarSolicitudes para acelerar la verificación masiva ---
         async function cargarSolicitudes() {
+            mostrarSpinner(true);
             const cedula = document.getElementById('filtro-cedula').value.trim();
             const nombres = document.getElementById('filtro-nombres').value.trim();
             const curso = document.getElementById('filtro-curso').value;
@@ -720,10 +892,12 @@
                 .order('fecha_creacion', { ascending: false });
 
             if (error) {
+                mostrarSpinner(false);
                 document.getElementById('tabla-solicitudes').innerHTML = `<p style="color:red;">Error al cargar solicitudes: ${error.message}</p>`;
                 return;
             }
             if (!solicitudes || solicitudes.length === 0) {
+                mostrarSpinner(false);
                 document.getElementById('tabla-solicitudes').innerHTML = `<p style="text-align:center;">No hay solicitudes en este estado.</p>`;
                 return;
             }
@@ -808,6 +982,7 @@
             window._ultimasSolicitudes = filtradas;
 
             if (filtradas.length === 0) {
+                mostrarSpinner(false);
                 document.getElementById('tabla-solicitudes').innerHTML = `<p style="text-align:center;">No hay solicitudes que coincidan con los filtros.</p>`;
                 return;
             }
@@ -876,6 +1051,7 @@
             }
             html += `</tbody></table>`;
             document.getElementById('tabla-solicitudes').innerHTML = html;
+            mostrarSpinner(false);
         }
 
         window.verificarSolicitud = async function(id) {
@@ -1097,6 +1273,9 @@
                 // ...actualiza la UI...
             }
         }
+
+        // Inicializa el botón de verificar todas según el estado
+        actualizarBotonVerificarTodas();
 
         cargarSolicitudes();
     </script>
