@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro Rápido de Estudiante</title>
+    <style>
+        body {
+            background: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+        .registro-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+            max-width: 420px;
+            margin: 60px auto;
+            padding: 2rem 2.5rem 1.5rem 2.5rem;
+        }
+        .registro-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #2f5597;
+        }
+        .registro-form-group {
+            margin-bottom: 1.2rem;
+        }
+        .registro-form-group label {
+            font-weight: bold;
+            margin-bottom: 0.2rem;
+            display: block;
+            color: #333;
+        }
+        .registro-form-group input,
+        .registro-form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+        .registro-btn {
+            background: #2f5597;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 0.7rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: block;
+            width: 100%;
+        }
+        .registro-btn:hover {
+            background: #1d3557;
+        }
+        #mensaje-registro {
+            margin-top:1.2rem;
+            text-align:center;
+            font-weight:bold;
+            color:#2f5597;
+        }
+    </style>
+</head>
+<body>
+    <div class="registro-card">
+        <div class="registro-title">Registro Rápido de Estudiante</div>
+        <form id="registro-rapido-form" autocomplete="off">
+            <div class="registro-form-group">
+                <label for="apellidos">Apellidos</label>
+                <input type="text" id="apellidos" name="apellidos" required>
+            </div>
+            <div class="registro-form-group">
+                <label for="nombres">Nombres</label>
+                <input type="text" id="nombres" name="nombres" required>
+            </div>
+            <div class="registro-form-group">
+                <label for="cedula">Cédula</label>
+                <input type="text" id="cedula" name="cedula" required>
+            </div>
+            <div class="registro-form-group">
+                <label for="correo">Correo Electrónico</label>
+                <input type="email" id="correo" name="correo" required>
+            </div>
+            <div class="registro-form-group">
+                <label for="curso">Curso</label>
+                <select id="curso" name="curso" required>
+                    <option value="">-Seleccione-</option>
+                    <option value="Inicial">Inicial</option>
+                    <option value="1ro EGB">1ro EGB</option>
+                    <option value="2do EGB">2do EGB</option>
+                    <option value="3ro EGB">3ro EGB</option>
+                    <option value="4to EGB">4to EGB</option>
+                    <option value="5to EGB">5to EGB</option>
+                    <option value="6to EGB">6to EGB</option>
+                    <option value="7mo EGB">7mo EGB</option>
+                    <option value="8vo EGB">8vo EGB</option>
+                    <option value="9no EGB">9no EGB</option>
+                    <option value="10mo EGB">10mo EGB</option>
+                    <option value="1ro Bachillerato">1ro Bachillerato</option>
+                    <option value="2do Bachillerato">2do Bachillerato</option>
+                    <option value="3ro Bachillerato">3ro Bachillerato</option>
+                </select>
+            </div>
+            <div class="registro-form-group">
+                <label for="paralelo">Paralelo</label>
+                <select id="paralelo" name="paralelo" required>
+                    <option value="">-Seleccione-</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                </select>
+            </div>
+            <div class="registro-form-group" id="especialidad-group" style="display:none;">
+                <label for="especialidad">Especialidad (solo Bachillerato)</label>
+                <select id="especialidad" name="especialidad">
+                    <option value="">-Seleccione-</option>
+                    <option value="Informática">Informática</option>
+                    <option value="Contabilidad">Contabilidad</option>
+                    <option value="Gestión Administrativa">Gestión Administrativa</option>
+                    <option value="Ciencias">Ciencias</option>
+                </select>
+            </div>
+            <button type="submit" class="registro-btn">Registrar</button>
+        </form>
+        <div id="mensaje-registro"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script>
+    // Configuración de Supabase
+    const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Mostrar especialidad solo si es Bachillerato
+    document.getElementById('curso').addEventListener('change', function() {
+        const value = this.value;
+        const especialidadGroup = document.getElementById('especialidad-group');
+        if (value === '1ro Bachillerato' || value === '2do Bachillerato' || value === '3ro Bachillerato') {
+            especialidadGroup.style.display = 'block';
+            document.getElementById('especialidad').required = true;
+        } else {
+            especialidadGroup.style.display = 'none';
+            document.getElementById('especialidad').required = false;
+            document.getElementById('especialidad').value = '';
+        }
+    });
+
+    document.getElementById('registro-rapido-form').onsubmit = async function(e) {
+        e.preventDefault();
+        const apellidos = document.getElementById('apellidos').value.trim();
+        const nombres = document.getElementById('nombres').value.trim();
+        const cedula = document.getElementById('cedula').value.trim();
+        const correo = document.getElementById('correo').value.trim();
+        const curso = document.getElementById('curso').value;
+        const paralelo = document.getElementById('paralelo').value;
+        const especialidad = document.getElementById('especialidad').value || null;
+
+        // 1. Insertar cédula si no existe
+        let { data: cedulaData } = await supabase
+            .from('cedulas')
+            .select('id_cedula')
+            .eq('cedula', cedula)
+            .single();
+        let id_cedula = null;
+        if (!cedulaData) {
+            let { data: nuevaCedula } = await supabase
+                .from('cedulas')
+                .insert([{ cedula }])
+                .select('id_cedula')
+                .single();
+            id_cedula = nuevaCedula ? nuevaCedula.id_cedula : null;
+        } else {
+            id_cedula = cedulaData.id_cedula;
+        }
+
+        // 2. Buscar id_grado
+        // Extraer grado y nombre_nivel
+        function extraerGradoTexto(curso) {
+            const match = curso.match(/^([0-9]+(ro|do|to|mo|vo|no))/i);
+            if (match) return match[0];
+            if (curso === "Inicial") return "Inicial";
+            return "";
+        }
+        let nombre_nivel = "";
+        let grado = "";
+        if (curso.includes("Bachillerato")) {
+            nombre_nivel = "Bachillerato";
+            grado = extraerGradoTexto(curso);
+        } else if (curso.includes("EGB")) {
+            nombre_nivel = "EGB";
+            grado = extraerGradoTexto(curso);
+        } else if (curso === "Inicial") {
+            nombre_nivel = "Inicial";
+            grado = "Inicial";
+        }
+        let query = supabase
+            .from('curso_grado')
+            .select('id_grado')
+            .eq('nombre_nivel', nombre_nivel)
+            .eq('grado', grado)
+            .eq('paralelo', paralelo);
+        if (nombre_nivel === "Bachillerato" && especialidad) {
+            query = query.eq('especialidad', especialidad);
+        }
+        const { data: gradoData, error: gradoError } = await query.maybeSingle();
+        if (gradoError || !gradoData) {
+            document.getElementById('mensaje-registro').textContent = "No se encontró el curso seleccionado en la base de datos.";
+            return;
+        }
+        const id_grado = gradoData.id_grado;
+
+        // 3. Insertar solicitud_inscripcion
+        let { data: inscData, error: inscError } = await supabase
+            .from('solicitud_inscripcion')
+            .insert([{
+                periodo: '2024-2025',
+                id_grado: id_grado,
+                paralelo: paralelo,
+                especialidad: especialidad,
+                institucion_procedencia: 'V'
+            }])
+            .select('id')
+            .single();
+        if (inscError) {
+            document.getElementById('mensaje-registro').textContent = "Error al guardar inscripción: " + inscError.message;
+            return;
+        }
+        const id_inscripcion = inscData.id;
+
+        // 4. Insertar estudiante
+        let { data: estudianteData, error: estudianteError } = await supabase
+            .from('estudiante')
+            .insert([{
+                id_cedula,
+                id_inscripcion,
+                apellidos,
+                nombres,
+                correo,
+                tipo_sangre: 'vacio',
+                fecha_nacimiento: '1111-11-11',
+                sexo: 'Masculino',
+                telefono: 'vacio',
+                telefono_convencional: 'vacio',
+                etnia: 'Mestizo',
+                nacionalidad: 'vacio',
+                archivo_url: 'https://i.ibb.co/cKGT82LC/b07636cc1b07.png'
+            }])
+            .select('id_estudiante')
+            .single();
+        if (estudianteError) {
+            document.getElementById('mensaje-registro').textContent = "Error al guardar estudiante: " + estudianteError.message;
+            return;
+        }
+        const id_estudiante = estudianteData.id_estudiante;
+
+        // 5. Insertar dirección (ubicación predeterminada)
+        await supabase
+            .from('direccion_estudiante')
+            .insert([{
+                id_estudiante,
+                calle_principal: 'vacio',
+                calle_secundaria: 'vacio',
+                provincia: 'vacio',
+                canton: 'vacio',
+                parroquia: 'vacio',
+                barrio: 'vacio',
+                numero_casa: 'vacio',
+                referencia: 'vacio',
+                latitud: 0.33616444871436085,
+                longitud: -78.11604869660802
+            }]);
+
+        // 6. Insertar padre
+        await supabase
+            .from('padre_estudiante')
+            .insert([{
+                id_estudiante,
+                nombres: 'vacio',
+                cedula: 'vacio',
+                ocupacion: 'vacio',
+                telefono_trabajo: 'vacio',
+                email: 'vacio',
+                nivel_educacion: 'vacio',
+                estado_civil: 'Viudo/a',
+                vive_con_estudiante: true,
+                horario_trabajo: 'vacio',
+                telefono_celular: 'vacio'
+            }]);
+
+        // 7. Insertar madre
+        await supabase
+            .from('madre_estudiante')
+            .insert([{
+                id_estudiante,
+                nombres: 'vacio',
+                cedula: 'vacio',
+                ocupacion: 'vacio',
+                telefono_trabajo: 'vacio',
+                email: 'vacio',
+                nivel_educacion: 'vacio',
+                estado_civil: 'Viudo/a',
+                vive_con_estudiante: true,
+                horario_trabajo: 'vacio',
+                telefono_celular: 'vacio'
+            }]);
+
+        // 8. Insertar representante
+        await supabase
+            .from('representante_estudiante')
+            .insert([{
+                id_estudiante,
+                nombres: 'vacio',
+                cedula: 'vacio',
+                ocupacion: 'vacio',
+                telefono_trabajo: 'vacio',
+                email: 'vacio',
+                nivel_educacion: 'vacio',
+                estado_civil: 'Viudo/a',
+                vive_con_estudiante: true,
+                horario_trabajo: 'vacio',
+                telefono_celular: 'vacio'
+            }]);
+
+        // 9. Insertar contactos de emergencia
+        await supabase
+            .from('contacto_emergencia_estudiante')
+            .insert([
+                { id_estudiante, nombre: 'vacio', telefono: 'vacio', parentesco: 'vacio' },
+                { id_estudiante, nombre: 'vacio', telefono: 'vacio', parentesco: 'vacio' }
+            ]);
+
+        // 10. Insertar solicitud de matrícula ENTRANTE
+        await supabase
+            .from('solicitud_matriculacion')
+            .insert([{
+                id_estudiante,
+                estado: 'entrante',
+                fecha_creacion: new Date().toISOString()
+            }]);
+
+        document.getElementById('mensaje-registro').textContent = "¡Registro rápido guardado correctamente!";
+        e.target.reset();
+    };
+    </script>
+</body>
+</html>
