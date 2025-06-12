@@ -60,16 +60,17 @@ async function cargarCursosYEstudiantes() {
         grid.innerHTML = '<div style="color:red;text-align:center;">Error al cargar cursos.</div>';
         return;
     }
-    // Filtrar cursos: permitir hasta 3ro Bachillerato, no permitir 10mo a 1ro Bachillerato
+    // Filtrar cursos: permitir hasta 3ro Bachillerato, no permitir 1ro Bachillerato en EGB
     const cursosFiltrados = (cursosGrado || []).filter(curso => {
         const grado = (curso.grado || '').toLowerCase();
         const nivel = (curso.nombre_nivel || '').toUpperCase();
         if (nivel === "BACHILLERATO") {
-            // Solo permitir 1ro, 2do, 3ro de Bachillerato (no permitir 10mo)
+            // Solo permitir 1ro, 2do, 3ro de Bachillerato
             return grado === "1ro" || grado === "2do" || grado === "3ro";
         }
         // EGB: permitir hasta 10mo
-        return grado !== "10mo";
+        const ordenEGB = ["1ro","2do","3ro","4to","5to","6to","7mo","8vo","9no","10mo"];
+        return ordenEGB.includes(grado);
     });
     for (const curso of cursosFiltrados) {
         grid.innerHTML += `
@@ -130,11 +131,11 @@ async function mostrarEstudiantesPorCurso(idGrado, grado, nivel, paralelo, espec
     let siguienteNivel = nivel;
     let anteriorNivel = nivel;
     if (nivel.toUpperCase() === "EGB") {
-        const orden = ["1ro","2do","3ro","4to","5to","6to","7mo","8vo","9no"];
+        const orden = ["1ro","2do","3ro","4to","5to","6to","7mo","8vo","9no","10mo"];
         const idx = orden.indexOf(grado.toLowerCase());
         if (idx !== -1 && idx + 1 < orden.length) {
             siguienteGrado = orden[idx + 1];
-        } else if (grado.toLowerCase() === "9no") {
+        } else if (grado.toLowerCase() === "10mo") {
             siguienteNivel = "BACHILLERATO";
             siguienteGrado = "1ro";
         }
@@ -154,44 +155,52 @@ async function mostrarEstudiantesPorCurso(idGrado, grado, nivel, paralelo, espec
 
     let siguienteCurso = null;
     if (siguienteGrado) {
-        const { data: curso } = await supabase
+        // Construir la consulta dinámicamente según si hay especialidad
+        let query = supabase
             .from('curso_grado')
             .select('id_grado, nombre_nivel, grado, paralelo, especialidad')
             .eq('grado', siguienteGrado)
             .eq('paralelo', paralelo)
-            .eq('nombre_nivel', siguienteNivel)
-            .eq('especialidad', especialidad || null)
-            .maybeSingle();
+            .eq('nombre_nivel', siguienteNivel);
+        if (especialidad && especialidad.trim() !== "" && especialidad.toLowerCase() !== "null") {
+            query = query.eq('especialidad', especialidad);
+        } else {
+            query = query.is('especialidad', null);
+        }
+        const { data: curso } = await query.maybeSingle();
         if (curso) {
             siguienteCurso = curso;
         }
     }
 
     let anteriorCurso = null;
-    // Solo permitir retrasar desde 2do EGB hasta 3ro Bachillerato
+    // Permitir retrasar desde 2do EGB y desde 2do Bachillerato en adelante (incluye 3ro Bachillerato)
     let permitirRetrasar = false;
     if (nivel.toUpperCase() === "EGB") {
-        const orden = ["1ro","2do","3ro","4to","5to","6to","7mo","8vo","9no"];
+        const orden = ["1ro","2do","3ro","4to","5to","6to","7mo","8vo","9no","10mo"];
         const idx = orden.indexOf(grado.toLowerCase());
         permitirRetrasar = idx > 0; // desde 2do EGB en adelante
     } else if (nivel.toUpperCase() === "BACHILLERATO") {
         const orden = ["1ro","2do","3ro"];
         const idx = orden.indexOf(grado.toLowerCase());
-        permitirRetrasar = idx > 0; // desde 2do Bachillerato en adelante
+        permitirRetrasar = idx >= 1; // 2do y 3ro de Bachillerato (idx 1 y 2)
     }
     if (anteriorGrado && permitirRetrasar) {
-        if (nivel.toUpperCase() === "BACHILLERATO" && anteriorGrado === "3ro") anteriorNivel = "BACHILLERATO";
-        if (nivel.toUpperCase() === "BACHILLERATO" && anteriorGrado === "2do") anteriorNivel = "BACHILLERATO";
-        if (nivel.toUpperCase() === "BACHILLERATO" && anteriorGrado === "1ro") anteriorNivel = "BACHILLERATO";
-        if (nivel.toUpperCase() === "EGB" && anteriorGrado === "9no") anteriorNivel = "EGB";
-        const { data: cursoAnt } = await supabase
+        // Asegura que anteriorNivel sea correcto para todos los casos
+        anteriorNivel = nivel;
+        // Construir la consulta dinámicamente según si hay especialidad
+        let queryAnt = supabase
             .from('curso_grado')
             .select('id_grado, nombre_nivel, grado, paralelo, especialidad')
             .eq('grado', anteriorGrado)
             .eq('paralelo', paralelo)
-            .eq('nombre_nivel', anteriorNivel)
-            .eq('especialidad', especialidad || null)
-            .maybeSingle();
+            .eq('nombre_nivel', anteriorNivel);
+        if (especialidad && especialidad.trim() !== "" && especialidad.toLowerCase() !== "null") {
+            queryAnt = queryAnt.eq('especialidad', especialidad);
+        } else {
+            queryAnt = queryAnt.is('especialidad', null);
+        }
+        const { data: cursoAnt } = await queryAnt.maybeSingle();
         if (cursoAnt) {
             anteriorCurso = cursoAnt;
         }
@@ -210,10 +219,8 @@ async function mostrarEstudiantesPorCurso(idGrado, grado, nivel, paralelo, espec
                 <option value="${siguienteCurso.id_grado}">${siguienteCurso.grado} ${siguienteCurso.nombre_nivel} "${siguienteCurso.paralelo}"${siguienteCurso.especialidad ? ' - ' + siguienteCurso.especialidad : ''}</option>
             </select>
         `;
-    } else {
-        selectHtml += `<div style="color:red;">No hay siguiente curso disponible para este paralelo.</div>`;
     }
-
+    // Mostrar opción de retrasar aunque no haya siguiente curso
     if (anteriorCurso && permitirRetrasar) {
         selectHtml += `
             <label style="font-weight:bold;display:block;margin-top:1em;">
@@ -223,6 +230,10 @@ async function mostrarEstudiantesPorCurso(idGrado, grado, nivel, paralelo, espec
                 <option value="${anteriorCurso.id_grado}">${anteriorCurso.grado} ${anteriorCurso.nombre_nivel} "${anteriorCurso.paralelo}"${anteriorCurso.especialidad ? ' - ' + anteriorCurso.especialidad : ''}</option>
             </select>
         `;
+    }
+    // Si no hay siguiente curso y tampoco opción de retrasar, mostrar mensaje
+    if (!siguienteCurso && !(anteriorCurso && permitirRetrasar)) {
+        selectHtml += `<div style="color:red;">No hay siguiente curso disponible para este paralelo.</div>`;
     }
 
     const tbody = document.getElementById('modal-promocion-lista-estudiantes');
@@ -558,75 +569,78 @@ document.addEventListener('DOMContentLoaded', async function() {
     </div>
     <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
     <header>
-    <div class="header-top">
-        <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
-        <div class="header-text">
-            <h1>Unidad Educativa </h1>
-            <h1>"Víctor Manuel Guzmán"</h1>
-            <p>Educando para la vida</p>
+        <div class="header-top">
+            
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>50 años de Educación Estudiantil</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
+                <!-- Aquí se mostrará el saludo -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="historia.html">Historia</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
+                            <li><a href="especialidades.html">Especialidades</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
+                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="horario-clases.html">Horario de Clases</a></li>
+                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                            <li><a href="asistencia.html">Asistencia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            <li><a href="dece.html">DECE</a></li>
+                            <li><a href="#bar-institucional">Bar Institucional</a></li>
+                            <li><a href="#banda-musical">Banda Musical</a></li>
+                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
+                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="contactos.html">Contactos</a></li>
+                    <!-- Quitar la opción de administración del encabezado -->
+                    <!-- <li><a href="administracion.html">Administración</a></li> -->
+                </ul>
+            </nav>
         </div>
-        <div class="auth-links">
-            <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
-        </div>
-        <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
-            <!-- Aquí se mostrará el saludo -->
-        </div>
-        <nav>
-            <ul class="menu">
-                <li><a href="index.html">Inicio</a></li>
-                <li class="dropdown">
-                    <a href="#">Nosotros</a>
-                    <ul class="submenu">
-                        <li><a href="quienes-somos.html">Quiénes Somos</a></li>
-                        <li><a href="autoridades.html">Autoridades</a></li>
-                        <li><a href="ambientes.html">Sede y Ambientes</a></li>
-                        <li><a href="simbolos.html">Símbolos Institucionales</a></li>
-                        <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
-                        <li><a href="especialidades.html">Especialidades</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Docentes</a>
-                    <ul class="submenu">
-                        <li><a href="calendario.html">Cronograma de Actividades</a></li>
-                        <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
-                        <li><a href="https://recursos.educacion.gob.ec/" target="_blank" rel="noopener">Recursos Didácticos</a></li>
-                        <li><a href="https://aulavirtual.uevmg.com/" target="_blank" rel="noopener">Aula Virtual Institucional</a></li>
-                        <li><a href="asistencia.html">Control de Asistencia</a></li>
-                        <li><a href="promocion-estudiantes.html">Promociones</a></li>
-                        <li><a href="https://academico.educarecuador.gob.ec/" target="_blank" rel="noopener">Ingreso de Notas Académico</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Padres de Familia</a>
-                    <ul class="submenu">
-                        <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Estudiantes</a>
-                    <ul class="submenu">
-                        <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
-                        <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
-                        <li><a href="horario-clases.html">Horario de Clases</a></li>
-                        <li><a href="uniforme-escolar.html">Uniforme Escolar</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Servicios</a>
-                    <ul class="submenu">
-                        <li><a href="dece.html">DECE</a></li>
-                        <li><a href="bar-institucional.html">Bar Institucional</a></li>
-                        <li><a href="banda-musical.html">Banda Musical</a></li>
-                        <li><a href="biblioteca-virtual.html">Biblioteca Virtual</a></li>
-                        <li><a href="bastoneras.html">Grupo de Bastoneras y Cachiporreros</a></li>
-                    </ul>
-                </li>
-                <li><a href="contactos.html">Contactos</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
+    </header>
     <!-- Burbujas flotantes igual que index.html -->
     <div class="floating-bubbles" style="display:none;">
         <!-- Las burbujas se llenan dinámicamente por JS -->
