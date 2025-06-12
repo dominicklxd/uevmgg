@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Biblioteca Virtual - Unidad Educativa Víctor Manuel Guzmán</title>
+    <link rel="stylesheet" href="css.css">
+    <style>
+        .biblioteca-section {
+            max-width: 1100px;
+            margin: 2.5rem auto 2rem auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.10);
+            padding: 2rem 1.2rem 2.2rem 1.2rem;
+        }
+        .biblioteca-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        .biblioteca-header h1 {
+            font-size: 2.1rem;
+            color: #2f5597;
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .biblioteca-header p {
+            font-size: 1.08rem;
+            color: #333;
+            max-width: 700px;
+            margin: 0 auto 1.5rem auto;
+        }
+        .biblioteca-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        .biblioteca-grupo {
+            background: linear-gradient(120deg,#f8fafd 70%,#eaf2fb 100%);
+            border-radius: 14px;
+            box-shadow: 0 2px 10px rgba(44,130,201,0.08);
+            padding: 1.2rem 1rem 1.2rem 1rem;
+            min-width: 260px;
+            max-width: 340px;
+            flex: 1 1 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .biblioteca-grupo h2 {
+            color: #2f5597;
+            font-size: 1.18rem;
+            font-family: 'Roboto Slab', serif;
+            margin-bottom: 0.7em;
+            margin-top: 0;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .biblioteca-libro {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 1px 6px rgba(44,130,201,0.07);
+            padding: 0.8rem 0.7rem 1.1rem 0.7rem;
+            margin-bottom: 0.7em;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: box-shadow 0.18s, transform 0.18s;
+            position: relative;
+            min-height: 140px;
+        }
+        .biblioteca-libro:last-child {
+            margin-bottom: 0;
+        }
+        .biblioteca-libro:hover {
+            box-shadow: 0 4px 16px rgba(44,130,201,0.13);
+            transform: translateY(-2px) scale(1.03);
+        }
+        .biblioteca-libro .icon-img {
+            width: 54px;
+            height: 54px;
+            object-fit: contain;
+            margin-bottom: 0.4em;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(44,130,201,0.10);
+            background: #f8fafd;
+        }
+        .biblioteca-libro h3 {
+            color: #2f5597;
+            font-size: 1.08rem;
+            margin-bottom: 0.2em;
+            font-family: 'Roboto Slab', serif;
+            text-align: center;
+            font-weight: 600;
+        }
+        .biblioteca-libro a {
+            background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+            color: #fff !important;
+            font-weight: bold;
+            font-size: 0.98rem;
+            border: none;
+            border-radius: 7px;
+            padding: 0.38em 1.1em;
+            box-shadow: 0 1px 4px rgba(44,130,201,0.10);
+            cursor: pointer;
+            text-decoration: none !important;
+            transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+            display: inline-block;
+            margin-top: 0.7em;
+        }
+        .biblioteca-libro a:hover, .biblioteca-libro a:focus {
+            background: linear-gradient(90deg, #548235 60%, #2f5597 100%);
+            color: #fff !important;
+            transform: translateY(-1px) scale(1.04);
+            box-shadow: 0 2px 8px rgba(44,130,201,0.13);
+        }
+        /* Mejorar agrupación visual */
+        .biblioteca-grupo {
+            margin-bottom: 0.2rem;
+            padding: 1.1rem 0.7rem 1.3rem 0.7rem;
+        }
+        @media (max-width: 900px) {
+            .biblioteca-section { padding: 1rem 0.2rem; }
+            .biblioteca-grid { gap: 0.7rem; }
+            .biblioteca-grupo { min-width: 0; max-width: 98vw; padding: 0.7rem 0.2rem 1rem 0.2rem; }
+        }
+        @media (max-width: 600px) {
+            .biblioteca-grid { flex-direction: column; }
+            .biblioteca-grupo { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>Educando para la vida</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
+                <!-- Aquí se mostrará el saludo -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
+                            <li><a href="especialidades.html">Especialidades</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="https://recursos.educacion.gob.ec/" target="_blank" rel="noopener">Recursos Didácticos</a></li>
+                            <li><a href="https://aulavirtual.uevmg.com/" target="_blank" rel="noopener">Aula Virtual Institucional</a></li>
+                            <li><a href="asistencia.html">Control de Asistencia</a></li>
+                            <li><a href="promocion-estudiantes.html">Promociones</a></li>
+                            <li><a href="https://academico.educarecuador.gob.ec/" target="_blank" rel="noopener">Ingreso de Notas Académico</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="horario-clases.html">Horario de Clases</a></li>
+                            <li><a href="uniforme-escolar.html">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="dece.html">DECE</a></li>
+                            <li><a href="bar-institucional.html">Bar Institucional</a></li>
+                            <li><a href="banda-musical.html">Banda Musical</a></li>
+                            <li><a href="biblioteca-virtual.html">Biblioteca Virtual</a></li>
+                            <li><a href="bastoneras.html">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="contactos.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1>Biblioteca Virtual</h1>
+            <p><a href="index.html">Inicio</a> &gt; Servicios &gt; Biblioteca Virtual</p>
+        </div>
+    </section>
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
+    <main style="margin-top: 120px;">
+        <section class="biblioteca-section">
+            <div class="biblioteca-header">
+                <h1>Biblioteca Virtual</h1>
+                <p>Accede a los libros institucionales por grado. Haz clic en el botón para abrir los recursos de cada curso.</p>
+                <div class="section-divider" style="justify-content:center;margin-bottom:1.2em;">
+                    <span class="line" style="flex:1;height:2px;background:linear-gradient(90deg,#2f5597 0%,#548235 100%);border-radius:2px;"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación" style="width:32px;height:32px;filter:drop-shadow(0 2px 8px #2f559730);">
+                    </span>
+                    <span class="line" style="flex:1;height:2px;background:linear-gradient(90deg,#548235 0%,#2f5597 100%);border-radius:2px;"></span>
+                </div>
+            </div>
+            <div class="biblioteca-grid" id="biblioteca-lista">
+                <!-- Libros PDF se llenan dinámicamente -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // ...burbujas flotantes igual que index.html...
+        function renderFloatingBubbles() {
+            const bubbles = document.querySelector('.floating-bubbles');
+            if (!bubbles) return;
+            bubbles.innerHTML = '';
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            if (usuarioActivo) {
+                bubbles.innerHTML = `
+                    <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                        <img src="icon-matricularse.png" alt="Matricularse">
+                        <span class="floating-bubble-label">Matricularse</span>
+                    </a>
+                    <a href="perfil.html" class="floating-bubble" title="Perfil">
+                        <img src="icon-perfil.png" alt="Perfil">
+                        <span class="floating-bubble-label">Perfil</span>
+                    </a>
+                    <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                        <img src="icon-cerrar.png" alt="Cerrar sesión">
+                        <span class="floating-bubble-label">Cerrar sesión</span>
+                    </a>
+                `;
+                setTimeout(() => {
+                    const cerrar = document.getElementById('cerrar-sesion-bubble');
+                    if (cerrar) {
+                        cerrar.onclick = function(e) {
+                            e.preventDefault();
+                            localStorage.removeItem('usuarioActivo');
+                            window.location.href = "login.html";
+                        };
+                    }
+                }, 50);
+            } else {
+                bubbles.innerHTML = `
+                    <a href="registro.html" class="floating-bubble" title="Registrarse">
+                        <img src="icon-registrarse.png" alt="Registrarse">
+                        <span class="floating-bubble-label">Registrarse</span>
+                    </a>
+                    <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                        <img src="icon-iniciar.png" alt="Iniciar sesión">
+                        <span class="floating-bubble-label">Iniciar sesión</span>
+                    </a>
+                `;
+            }
+        }
+        const header = document.querySelector('header');
+        const bubbles = document.querySelector('.floating-bubbles');
+        function toggleBubbles() {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+                if (bubbles) bubbles.style.display = 'flex';
+            } else {
+                header.classList.remove('scrolled');
+                if (bubbles) bubbles.style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', toggleBubbles);
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioActivo') {
+                renderFloatingBubbles();
+            }
+        });
+        renderFloatingBubbles();
+        toggleBubbles();
+
+        // --- Biblioteca Virtual: Libros PDF institucionales ---
+        // Solo una opción por curso, cada una abre una URL diferente
+        const librosPorAnio = [
+            {
+                anio: "1ro EGB",
+                libros: [
+                    { materia: "Ver libros de 1ro EGB", url: "https://recursos.educacion.gob.ec/red/textos-preparatoria/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "2do EGB",
+                libros: [
+                    { materia: "Ver libros de 2do EGB", url: "https://recursos.educacion.gob.ec/red/textossegundo/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "3ro EGB",
+                libros: [
+                    { materia: "Ver libros de 3ro EGB", url: "https://recursos.educacion.gob.ec/red/textostercero/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "4to EGB",
+                libros: [
+                    { materia: "Ver libros de 4to EGB", url: "https://recursos.educacion.gob.ec/red/textos_cuartoegb/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "5to EGB",
+                libros: [
+                    { materia: "Ver libros de 5to EGB", url: "https://recursos.educacion.gob.ec/red/textos-quinto/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "6to EGB",
+                libros: [
+                    { materia: "Ver libros de 6to EGB", url: "https://recursos.educacion.gob.ec/red/textossexto/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "7mo EGB",
+                libros: [
+                    { materia: "Ver libros de 7mo EGB", url: "https://recursos.educacion.gob.ec/red/textos-septimo/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "8vo EGB",
+                libros: [
+                    { materia: "Ver libros de 8vo EGB", url: "https://recursos.educacion.gob.ec/red/textos-octavo/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "9no EGB",
+                libros: [
+                    { materia: "Ver libros de 9no EGB", url: "https://recursos.educacion.gob.ec/red/textos-noveno/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "10mo EGB",
+                libros: [
+                    { materia: "Ver libros de 10mo EGB", url: "https://recursos.educacion.gob.ec/red/textos-decimo/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "1ro Bachillerato",
+                libros: [
+                    { materia: "Ver libros de 1ro Bachillerato", url: "https://recursos.educacion.gob.ec/red/textos-primerobg/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "2do Bachillerato",
+                libros: [
+                    { materia: "Ver libros de 2do Bachillerato", url: "https://recursos.educacion.gob.ec/red/textos-segundo-bgu/", img: "libro.png" }
+                ]
+            },
+            {
+                anio: "3ro Bachillerato",
+                libros: [
+                    { materia: "Ver libros de 3ro Bachillerato", url: "https://recursos.educacion.gob.ec/red/textos-tercero-bgu/", img: "libro.png" }
+                ]
+            }
+        ];
+
+        function cargarLibrosBiblioteca() {
+            const lista = document.getElementById('biblioteca-lista');
+            if (!lista) return;
+            lista.innerHTML = '';
+            // Agrupar de 3 en 3 grados por sección visual
+            for (let i = 0; i < librosPorAnio.length; i += 3) {
+                let grupoHtml = '';
+                for (let j = i; j < i + 3 && j < librosPorAnio.length; j++) {
+                    const grado = librosPorAnio[j];
+                    grupoHtml += `
+                        <div class="biblioteca-grupo">
+                            <h2>${grado.anio}</h2>
+                            ${grado.libros.map(libro => `
+                                <div class="biblioteca-libro">
+                                    <img class="icon-img" src="${libro.img}" alt="Libro ${grado.anio}">
+                                    <h3>${libro.materia}</h3>
+                                    <a href="${libro.url}" target="_blank" rel="noopener">Ir a los libros</a>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+                lista.innerHTML += `<div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">${grupoHtml}</div>`;
+            }
+        }
+        document.addEventListener('DOMContentLoaded', cargarLibrosBiblioteca);
+    </script>
+</body>
+</html>

@@ -2,11 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horario de Clases</title>
+    <title>Registro de Docentes - Unidad Educativa Víctor Manuel Guzmán</title>
     <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
 <body>
+    <!-- Encabezado igual que en index.html -->
     <div class="top-bars">
         <div class="top-bar-1"></div>
         <div class="top-bar-2"></div>
@@ -82,46 +83,52 @@
         </nav>
     </div>
 </header>
-    <!-- Burbujas flotantes para auth-links (fuera del header) -->
     <div class="floating-bubbles" style="display:none;">
         <!-- Las burbujas se llenan dinámicamente por JS -->
     </div>
-    <section class="banner-section" style="margin-top: 100px;">
-        <div class="banner-overlay">
-            <h1>Horario de Clases</h1>
-            <p><a href="index.html">Inicio</a> &gt; Estudiantes &gt; Horario de Clases</p>
-        </div>
-    </section>
-    <main>
-        
-        <section class="centered-section">
-            <h1 style="text-align: center; padding-top: 2rem;">Horario de Clases Sección Matutina</h1>
-            
-            <div class="section-divider">
-                
-                <span class="line"></span>
-                
-                <span class="icon">
-                    
-                    <img src="graduation-icon.png" alt="Icono de graduación">
-                </span>
-                <span class="line"></span>
-            </div>
-            <div style="text-align: center; margin-top: 2rem;">
-                <h2 style="color:#2f5597;"></h2>
-                <p>Puedes visualizar el horario completo de clases de la institución en el siguiente documento PDF:</p>
-                <div style="display: flex; justify-content: center;">
-                    <iframe 
-                        src="horario-matutina.pdf"
-                        width="90%" height="900px"
-                        style="border: 2px solid #2f5597; border-radius: 12px; background: #fff; min-height: 600px;"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <div style="margin-top: 1.5rem;">
-                    <a href="horario-matutina.pdf" target="_blank" style="background:#2f5597;color:#fff;padding:0.7em 2em;border-radius:8px;text-decoration:none;font-weight:bold;transition:background 0.2s;">Descargar PDF</a>
-                </div>
-            </div>
+    <div id="admin-bubble-container"></div>
+    <main style="margin-top: 120px;">
+        <section class="centered-section" style="max-width:600px;margin:2rem auto;">
+            <h2 class="section-title" style="text-align:center;">Registro de Docentes</h2>
+            <form id="form-registro-docente" style="margin-top:2rem;">
+                <label for="nombres">Nombres:</label>
+                <input type="text" id="nombres" name="nombres" required>
+                <label for="apellidos">Apellidos:</label>
+                <input type="text" id="apellidos" name="apellidos" required>
+                <label for="cedula">Cédula:</label>
+                <input type="text" id="cedula" name="cedula" required>
+                <label for="email">Correo institucional:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="especializacion">Especialización:</label>
+                <select id="especializacion" name="especializacion" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Informática">Informática</option>
+                    <option value="Contabilidad">Contabilidad</option>
+                    <option value="Gestión Administrativa">Gestión Administrativa</option>
+                    <option value="Ciencias">Ciencias</option>
+                    <option value="EGB">EGB</option>
+                </select>
+                <label for="materia">Materia:</label>
+                <input type="text" id="materia" name="materia" required>
+                <label for="curso">Curso/Grado:</label>
+                <input type="text" id="curso" name="curso" placeholder="Ej: 1ro Contabilidad A" required>
+                <label for="area">Área:</label>
+                <select id="area" name="area" required>
+                    <option value="">Seleccione...</option>
+                    <option value="Estudios sociales">Estudios sociales</option>
+                    <option value="Lengua Extranjera">Lengua Extranjera</option>
+                    <option value="Ciencias Naturales">Ciencias Naturales</option>
+                    <option value="ECA">ECA</option>
+                    <option value="Matematica">Matematica</option>
+                    <option value="Lengua y literatura">Lengua y literatura</option>
+                    <option value="Informatica">Informatica</option>
+                    <option value="Contabilidad">Contabilidad</option>
+                    <option value="Gestion Administrativa">Gestion Administrativa</option>
+                    <option value="Educacion Fisica">Educacion Fisica</option>
+                </select>
+                <button type="submit">Registrar Docente</button>
+            </form>
+            <div id="mensaje-registro-docente" style="margin-top:1em;text-align:center;"></div>
         </section>
     </main>
     <footer>
@@ -164,70 +171,26 @@
     </footer>
     <script src="script.js"></script>
     <script>
-        // Burbujas flotantes dinámicas según sesión (igual que en index.html)
-        function renderFloatingBubbles() {
-            const bubbles = document.querySelector('.floating-bubbles');
-            if (!bubbles) return;
-            bubbles.innerHTML = '';
-            const usuarioActivo = localStorage.getItem('usuarioActivo');
-            if (usuarioActivo) {
-                bubbles.innerHTML = `
-                    <a href="matricularse.html" class="floating-bubble" title="Matricularse">
-                        <img src="icon-matricularse.png" alt="Matricularse">
-                        <span class="floating-bubble-label">Matricularse</span>
-                    </a>
-                    <a href="perfil.html" class="floating-bubble" title="Perfil">
-                        <img src="icon-perfil.png" alt="Perfil">
-                        <span class="floating-bubble-label">Perfil</span>
-                    </a>
-                    <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
-                        <img src="icon-cerrar.png" alt="Cerrar sesión">
-                        <span class="floating-bubble-label">Cerrar sesión</span>
-                    </a>
-                `;
-                setTimeout(() => {
-                    const cerrar = document.getElementById('cerrar-sesion-bubble');
-                    if (cerrar) {
-                        cerrar.onclick = function(e) {
-                            e.preventDefault();
-                            localStorage.removeItem('usuarioActivo');
-                            window.location.href = "login.html";
-                        };
-                    }
-                }, 50);
-            } else {
-                bubbles.innerHTML = `
-                    <a href="registro.html" class="floating-bubble" title="Registrarse">
-                        <img src="icon-registrarse.png" alt="Registrarse">
-                        <span class="floating-bubble-label">Registrarse</span>
-                    </a>
-                    <a href="login.html" class="floating-bubble" title="Iniciar sesión">
-                        <img src="icon-login.png" alt="Iniciar sesión">
-                        <span class="floating-bubble-label">Iniciar sesión</span>
-                    </a>
-                `;
-            }
-        }
-        // Mostrar burbujas al hacer scroll y al cargar/cambiar sesión
-        const header = document.querySelector('header');
-        const bubbles = document.querySelector('.floating-bubbles');
-        function toggleBubbles() {
-            if (window.scrollY > 30) {
-                header.classList.add('scrolled');
-                if (bubbles) bubbles.style.display = 'flex';
-            } else {
-                header.classList.remove('scrolled');
-                if (bubbles) bubbles.style.display = 'none';
-            }
-        }
-        window.addEventListener('scroll', toggleBubbles);
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'usuarioActivo') {
-                renderFloatingBubbles();
-            }
-        });
-        renderFloatingBubbles();
-        toggleBubbles();
+        // Ejemplo básico de registro (ajusta según tu lógica y tablas)
+        document.getElementById('form-registro-docente').onsubmit = async function(e) {
+            e.preventDefault();
+            const nombres = document.getElementById('nombres').value.trim();
+            const apellidos = document.getElementById('apellidos').value.trim();
+            const cedula = document.getElementById('cedula').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const especializacion = document.getElementById('especializacion').value;
+            const materia = document.getElementById('materia').value.trim();
+            const curso = document.getElementById('curso').value.trim();
+            const area = document.getElementById('area').value;
+            const mensaje = document.getElementById('mensaje-registro-docente');
+            mensaje.textContent = "Registrando...";
+            // Aquí deberías:
+            // 1. Insertar el usuario en la tabla usuarios con rol 'profesor'
+            // 2. Insertar la materia si no existe
+            // 3. Insertar en docente_materia la relación docente-materia-curso
+            // Este es solo un ejemplo visual, implementa la lógica real según tus tablas
+            mensaje.textContent = "Docente registrado (ejemplo, implementa la lógica real aquí)";
+        };
     </script>
 </body>
 </html>

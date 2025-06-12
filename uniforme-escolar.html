@@ -2,9 +2,88 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horario de Clases</title>
+    <title>Uniforme Escolar - Unidad Educativa Víctor Manuel Guzmán</title>
     <link rel="stylesheet" href="css.css">
+    <style>
+        .uniforme-section {
+            max-width: 1200px;
+            margin: 2.5rem auto 2rem auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.10);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            padding: 2.5rem 2rem 2.5rem 2rem;
+            gap: 2.5rem;
+        }
+        .uniforme-imgbox {
+            flex: 1 1 520px;
+            min-width: 320px;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .uniforme-imgbox img {
+            width: 100%;
+            max-width: 520px;
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(44,130,201,0.13);
+            margin-bottom: 1.2rem;
+        }
+        .uniforme-list {
+            flex: 1 1 340px;
+            min-width: 280px;
+            max-width: 420px;
+            padding-left: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .uniforme-list h2 {
+            font-size: 2.3rem;
+            color: #2f5597;
+            font-family: 'Roboto Slab', serif;
+            margin-bottom: 2rem;
+            text-align: left;
+            letter-spacing: 1px;
+        }
+        .uniforme-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .uniforme-list li {
+            margin-bottom: 1.1rem;
+            font-size: 1.08rem;
+            color: #222;
+            line-height: 1.3;
+        }
+        .uniforme-list li b {
+            display: block;
+            color: #2f5597;
+            font-size: 1.08rem;
+            margin-top: 0.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        @media (max-width: 900px) {
+            .uniforme-section {
+                flex-direction: column;
+                padding: 1.5rem 0.5rem;
+                gap: 1.5rem;
+            }
+            .uniforme-list, .uniforme-imgbox {
+                max-width: 100%;
+                min-width: 0;
+                padding-left: 0;
+            }
+            .uniforme-imgbox img {
+                max-width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="top-bars">
@@ -82,45 +161,50 @@
         </nav>
     </div>
 </header>
-    <!-- Burbujas flotantes para auth-links (fuera del header) -->
+    <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1>Uniforme Escolar</h1>
+            <p><a href="index.html">Inicio</a> &gt; Estudiantes &gt; Uniforme Escolar</p>
+        </div>
+    </section>
     <div class="floating-bubbles" style="display:none;">
         <!-- Las burbujas se llenan dinámicamente por JS -->
     </div>
-    <section class="banner-section" style="margin-top: 100px;">
-        <div class="banner-overlay">
-            <h1>Horario de Clases</h1>
-            <p><a href="index.html">Inicio</a> &gt; Estudiantes &gt; Horario de Clases</p>
-        </div>
-    </section>
-    <main>
-        
-        <section class="centered-section">
-            <h1 style="text-align: center; padding-top: 2rem;">Horario de Clases Sección Matutina</h1>
-            
-            <div class="section-divider">
-                
-                <span class="line"></span>
-                
-                <span class="icon">
-                    
-                    <img src="graduation-icon.png" alt="Icono de graduación">
-                </span>
-                <span class="line"></span>
+    <main style="margin-top: 120px;">
+        <section class="uniforme-section">
+            <div style="width:100%;text-align:center;">
+                <div class="section-divider" style="justify-content:center;margin-bottom:2em;">
+                    <span class="line"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación">
+                    </span>
+                    <span class="line"></span>
+                </div>
             </div>
-            <div style="text-align: center; margin-top: 2rem;">
-                <h2 style="color:#2f5597;"></h2>
-                <p>Puedes visualizar el horario completo de clases de la institución en el siguiente documento PDF:</p>
-                <div style="display: flex; justify-content: center;">
-                    <iframe 
-                        src="horario-matutina.pdf"
-                        width="90%" height="900px"
-                        style="border: 2px solid #2f5597; border-radius: 12px; background: #fff; min-height: 600px;"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <div style="margin-top: 1.5rem;">
-                    <a href="horario-matutina.pdf" target="_blank" style="background:#2f5597;color:#fff;padding:0.7em 2em;border-radius:8px;text-decoration:none;font-weight:bold;transition:background 0.2s;">Descargar PDF</a>
-                </div>
+            <div class="uniforme-imgbox">
+                <img src="uniforme-escolar.jpg" alt="Uniforme Escolar">
+                <span style="font-size:1.08rem;color:#2f5597;font-weight:600;background:#eaf2fb;border-radius:8px;padding:0.2em 1em;">Uniforme Oficial</span>
+            </div>
+            <div class="uniforme-list">
+                <h2>Uniforme Escolar</h2>
+                <ul>
+                    <li>
+                        <b>Uniforme de Gala:</b>
+                        Camisa blanca, corbata, pantalón deportivo azul marino, zapatos deportivos blancos, sueter institucional.
+                    </li>
+                    <li>
+                        <b>Uniforme Diario:</b>
+                        Camisa blanca, pantalón o falda azul marino, suéter institucional, zapatos negros.
+                    </li>
+                    <li>
+                        <b>Uniforme de Educación Física:</b>
+                        Camiseta institucional, pantalón deportivo azul marino, zapatos deportivos blancos.
+                    </li>
+                    <li>
+                        <b>Recomendaciones:</b>
+                        El uso del uniforme es obligatorio para todos los estudiantes durante la jornada escolar y en actividades oficiales.
+                    </li>
+                </ul>
             </div>
         </section>
     </main>
@@ -164,7 +248,7 @@
     </footer>
     <script src="script.js"></script>
     <script>
-        // Burbujas flotantes dinámicas según sesión (igual que en index.html)
+        // ...burbujas flotantes igual que index.html...
         function renderFloatingBubbles() {
             const bubbles = document.querySelector('.floating-bubbles');
             if (!bubbles) return;
@@ -208,7 +292,6 @@
                 `;
             }
         }
-        // Mostrar burbujas al hacer scroll y al cargar/cambiar sesión
         const header = document.querySelector('header');
         const bubbles = document.querySelector('.floating-bubbles');
         function toggleBubbles() {

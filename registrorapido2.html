@@ -194,6 +194,126 @@
                     <input type="email" id="correo4" name="correo4" required>
                 </div>
             </div>
+            <!-- Panel 5 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 5</div>
+                <div class="registro-form-group">
+                    <label for="apellidos5">Apellidos</label>
+                    <input type="text" id="apellidos5" name="apellidos5" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres5">Nombres</label>
+                    <input type="text" id="nombres5" name="nombres5" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula5">Cédula</label>
+                    <input type="text" id="cedula5" name="cedula5" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo5">Correo Electrónico</label>
+                    <input type="email" id="correo5" name="correo5" required>
+                </div>
+            </div>
+            <!-- Panel 6 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 6</div>
+                <div class="registro-form-group">
+                    <label for="apellidos6">Apellidos</label>
+                    <input type="text" id="apellidos6" name="apellidos6" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres6">Nombres</label>
+                    <input type="text" id="nombres6" name="nombres6" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula6">Cédula</label>
+                    <input type="text" id="cedula6" name="cedula6" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo6">Correo Electrónico</label>
+                    <input type="email" id="correo6" name="correo6" required>
+                </div>
+            </div>
+            <!-- Panel 7 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 7</div>
+                <div class="registro-form-group">
+                    <label for="apellidos7">Apellidos</label>
+                    <input type="text" id="apellidos7" name="apellidos7" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres7">Nombres</label>
+                    <input type="text" id="nombres7" name="nombres7" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula7">Cédula</label>
+                    <input type="text" id="cedula7" name="cedula7" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo7">Correo Electrónico</label>
+                    <input type="email" id="correo7" name="correo7" required>
+                </div>
+            </div>
+            <!-- Panel 8 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 8</div>
+                <div class="registro-form-group">
+                    <label for="apellidos8">Apellidos</label>
+                    <input type="text" id="apellidos8" name="apellidos8" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres8">Nombres</label>
+                    <input type="text" id="nombres8" name="nombres8" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula8">Cédula</label>
+                    <input type="text" id="cedula8" name="cedula8" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo8">Correo Electrónico</label>
+                    <input type="email" id="correo8" name="correo8" required>
+                </div>
+            </div>
+            <!-- Panel 9 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 9</div>
+                <div class="registro-form-group">
+                    <label for="apellidos9">Apellidos</label>
+                    <input type="text" id="apellidos9" name="apellidos9" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres9">Nombres</label>
+                    <input type="text" id="nombres9" name="nombres9" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula9">Cédula</label>
+                    <input type="text" id="cedula9" name="cedula9" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo9">Correo Electrónico</label>
+                    <input type="email" id="correo9" name="correo9" required>
+                </div>
+            </div>
+            <!-- Panel 10 -->
+            <div class="registro-card" style="min-width:320px;max-width:340px;">
+                <div class="registro-title">Estudiante 10</div>
+                <div class="registro-form-group">
+                    <label for="apellidos10">Apellidos</label>
+                    <input type="text" id="apellidos10" name="apellidos10" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="nombres10">Nombres</label>
+                    <input type="text" id="nombres10" name="nombres10" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="cedula10">Cédula</label>
+                    <input type="text" id="cedula10" name="cedula10" required>
+                </div>
+                <div class="registro-form-group">
+                    <label for="correo10">Correo Electrónico</label>
+                    <input type="email" id="correo10" name="correo10" required>
+                </div>
+            </div>
         </div>
         <button type="submit" class="registro-btn" style="max-width:300px;margin:2rem auto 0 auto;">Registrar los 4 estudiantes</button>
     </form>
@@ -230,7 +350,7 @@
         const paralelo = document.getElementById('paralelo_global').value;
         const especialidad = document.getElementById('especialidad_global').value || null;
 
-        for(let i=1;i<=4;i++) {
+        for(let i=1;i<=10;i++) { // Cambia el límite a 10
             const apellidos = document.getElementById('apellidos'+i).value.trim();
             const nombres = document.getElementById('nombres'+i).value.trim();
             const cedula = document.getElementById('cedula'+i).value.trim();

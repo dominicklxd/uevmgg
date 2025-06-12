@@ -2,90 +2,154 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cuadro de Honor - Unidad Educativa Víctor Manuel Guzmán</title>
+    <title>Especialidades - Unidad Educativa Víctor Manuel Guzmán</title>
     <link rel="stylesheet" href="css.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&family=Raleway:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        .cuadro-honor-section {
+        .especialidades-section {
             max-width: 1200px;
             margin: 2.5rem auto 2rem auto;
             background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(44,130,201,0.10);
+            border-radius: 22px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.13);
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            padding: 2.5rem 2rem;
+        }
+        .especialidades-section > div.section-divider {
+            margin-bottom: 2.5em;
+        }
+        .dep-block {
             display: flex;
             flex-wrap: wrap;
-            align-items: flex-start;
-            padding: 2.5rem 2rem 2.5rem 2rem;
+            align-items: stretch;
             gap: 2.5rem;
+            margin-bottom: 2.5rem;
+            background: linear-gradient(120deg,#f8fafd 70%,#eaf2fb 100%);
+            border-radius: 18px;
+            box-shadow: 0 2px 18px rgba(44,130,201,0.10);
+            padding: 2.5rem 2rem;
+            transition: box-shadow 0.2s, transform 0.2s;
         }
-        .cuadro-honor-list {
-            flex: 1 1 340px;
-            min-width: 280px;
+        .dep-block:hover {
+            box-shadow: 0 8px 32px rgba(44,130,201,0.16);
+            transform: translateY(-2px) scale(1.01);
+        }
+        .dep-imgbox, .dep-docentes {
+            flex: 1 1 320px;
+            min-width: 260px;
             max-width: 420px;
-            padding-right: 1.5rem;
-        }
-        .cuadro-honor-list h2 {
-            font-size: 2.3rem;
-            color: #000000;
-            font-family: 'Roboto Slab', serif;
-            margin-bottom: 2rem;
-            text-align: left;
-            letter-spacing: 1px;
-        }
-        .cuadro-honor-list ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .cuadro-honor-list li {
-            margin-bottom: 1.5rem;
-            font-size: 1.08rem;
-            color: #000000;
-            line-height: 1.3;
-        }
-        .cuadro-honor-list li b {
-            display: block;
-            color: #000103;
-            font-size: 1.08rem;
-            margin-top: 0.1rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        .cuadro-honor-imgbox {
-            flex: 1 1 420px;
-            min-width: 320px;
-            max-width: 520px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
         }
-        .cuadro-honor-imgbox img {
+        .dep-imgbox img, .dep-docentes img {
             width: 100%;
-            max-width: 480px;
+            max-width: 380px;
             border-radius: 16px;
             box-shadow: 0 6px 24px rgba(44,130,201,0.13);
             margin-bottom: 1.2rem;
+            object-fit: cover;
+            border: 3px solid #eaf2fb;
+            background: #fff;
         }
-        .cuadro-honor-imgbox .img-caption {
-            font-size: 1.15rem;
+        .dep-imgbox span {
+            font-size: 1.08rem;
             color: #2f5597;
+            font-weight: 600;
+            margin-bottom: 0.5em;
+            background: #eaf2fb;
+            border-radius: 8px;
+            padding: 0.2em 1em;
+        }
+        .dep-docentes {
+            gap: 1.2rem;
+            background: #f8fafd;
+            border-radius: 12px;
+            padding: 1.2rem 0.7rem 0.7rem 0.7rem;
+            box-shadow: 0 2px 8px rgba(44,130,201,0.07);
+            min-height: 220px;
+        }
+        .dep-docentes .docente-nombre {
             font-weight: bold;
+            color: #2f5597;
+            margin-bottom: 0.2em;
+            font-size: 1.08rem;
             text-align: center;
-            letter-spacing: 0.5px;
+            font-family: 'Raleway', sans-serif;
+            background: #eaf2fb;
+            border-radius: 8px;
+            padding: 0.4em 0.8em;
+            box-shadow: 0 1px 4px rgba(44,130,201,0.06);
+        }
+        .dep-info {
+            flex: 1 1 340px;
+            min-width: 260px;
+            max-width: 420px;
+            padding-left: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .dep-info h2 {
+            font-size: 2.2rem;
+            color: #2f5597;
+            font-family: 'Roboto Slab', serif;
+            margin-bottom: 1.2rem;
+            text-align: left;
+            letter-spacing: 1px;
+        }
+        .dep-info p {
+            font-size: 1.12rem;
+            color: #222;
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+            font-family: 'Raleway', sans-serif;
+        }
+        .dep-info ul {
+            margin: 0 0 0 1.2em;
+            padding: 0;
+            font-size: 1.04rem;
+            color: #2f5597;
+            font-family: 'Raleway', sans-serif;
+        }
+        .dep-info ul li {
+            margin-bottom: 0.7em;
+            list-style: disc;
+        }
+        .especialidades-section h1 {
+            font-family: 'Roboto Slab', serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        .especialidades-section p {
+            font-family: 'Raleway', sans-serif;
+        }
+        @media (max-width: 1100px) {
+            .especialidades-section { padding: 1.5rem 0.5rem; }
+            .dep-block { padding: 1.2rem 0.5rem; gap: 1.2rem; }
         }
         @media (max-width: 900px) {
-            .cuadro-honor-section {
+            .dep-block {
                 flex-direction: column;
-                padding: 1.5rem 0.5rem;
-                gap: 1.5rem;
+                align-items: stretch;
+                gap: 1.2rem;
             }
-            .cuadro-honor-list, .cuadro-honor-imgbox {
+            .dep-info, .dep-imgbox, .dep-docentes {
                 max-width: 100%;
                 min-width: 0;
-                padding-right: 0;
+                padding-left: 0;
             }
-            .cuadro-honor-imgbox img {
+            .dep-imgbox img, .dep-docentes img {
                 max-width: 100%;
             }
+        }
+        @media (max-width: 600px) {
+            .especialidades-section { padding: 0.5rem 0.1rem; }
+            .dep-block { padding: 0.7rem 0.1rem; }
+            .dep-info h2 { font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -165,21 +229,19 @@
         </nav>
     </div>
 </header>
-            <section class="banner-section" style="margin-top: 100px;"> <!-- Reducir el margen superior -->
-            <div class="banner-overlay">
-                <h1>Cuadro de Honor</h1>
-                <p><a href="index.html">Inicio</a> > Estudiantes > Cuadro de Honor</p>
-            </div>
-        </section>
-    <!-- Burbujas flotantes para auth-links (fuera del header) -->
+        <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1>Especialidades</h1>
+            <p><a href="index.html">Inicio</a> &gt; Nosotros &gt; Especialidades</p>
+        </div>
+    </section>
     <div class="floating-bubbles" style="display:none;">
         <!-- Las burbujas se llenan dinámicamente por JS -->
     </div>
+    <div id="admin-bubble-container"></div>
     <main style="margin-top: 120px;">
-        
-        <section class="cuadro-honor-section">
+        <section class="especialidades-section">
             <div style="width:100%;text-align:center;">
-                
                 <div class="section-divider" style="justify-content:center;margin-bottom:2em;">
                     <span class="line"></span>
                     <span class="icon">
@@ -187,56 +249,100 @@
                     </span>
                     <span class="line"></span>
                 </div>
+                <h1 style="color:#2f5597; font-size:2.3rem; margin-bottom:1.5rem;">Especialidades Técnicas</h1>
+                <p style="font-size:1.15rem; color:#333; max-width:800px; margin:0 auto 2.5rem auto;">
+                    Conoce los departamentos técnicos de nuestra institución: Informática, Contabilidad y Gestión Administrativa. Aquí encontrarás información sobre los docentes y los ambientes de cada especialidad.
+                </p>
             </div>
-            <div class="cuadro-honor-list">
-                
-                <ul>
-                    <li>
-                        Chuma Tupiza Paulina Elizabeth
-                        <b>Abanderada del Pabellón Nacional Gómez</b>
-                    </li>
-                    <li>
-                        Valles Lia Dannae
-                        <b>Porteestandarte del Pabellón de la Ciudad</b>
-                    </li>
-                    <li>
-                        Farinango Ipiales Valeria Nicole
-                        <b>Porteestandarte del Pabellón Institucional</b>
-                    </li>
-                    <li>
-                        Padilla Vargas Briana Jamileth
-                        <b>1ra Escolta del Pabellón Nacional</b>
-                    </li>
-                    <li>
-                        Olmedo Melo Elian David
-                        <b>2do Escolta del Pabellón Nacional</b>
-                    </li>
-                    <li>
-                        Morán Morillo Dayana Sayde
-                        <b>1ra Escolta del Pabellón de la Ciudad</b>
-                    </li>
-                    <li>
-                        Alba Barrionuevo Juan David
-                        <b>2da Escolta del Pabellón de la Ciudad</b>
-                    </li>
-                    <li>
-                        Tapia Ortiz Natajy Jezabel
-                        <b>1ra Escolta del Pabellón de la Institución</b>
-                    </li>
-                    <li>
-                        Cortez Pozo Anahí Alejandra
-                        <b>2da Escolta del Pabellón de la Institución</b>
-                    </li>
-                </ul>
+            <!-- INFORMÁTICA -->
+            <div class="dep-block">
+                <div class="dep-imgbox">
+                    <img src="informatica-departamento.jpg" alt="Departamento de Informática">
+                    <span>Ambiente de Informática</span>
+                </div>
+                <div class="dep-info">
+                    <h2>Informática</h2>
+                    <p>
+                        El departamento de Informática forma estudiantes con competencias en programación, redes, soporte técnico y herramientas digitales. Los laboratorios cuentan con equipos modernos y software actualizado para el aprendizaje práctico.
+                    </p>
+                    <ul>
+                        <li>Laboratorio equipado con computadoras de última generación.</li>
+                        <li>Docentes especializados en TIC y desarrollo de software.</li>
+                        <li>Participación en ferias tecnológicas y proyectos innovadores.</li>
+                    </ul>
+                </div>
+                <div class="dep-docentes">
+                    <img src="docentes-informatica.jpg" alt="Docentes de Informática">
+                    <div class="docente-nombre">
+                        Área de Informática:<br>
+                        Jorge Aníbal Riera Morales,<br>
+                        Wilson Ermel Yépez Chuquín,<br>
+                        Dannys Oleisa Cabezas Cortez,<br>
+                        Raúl Willam Pozo Enríquez,<br>
+                        <span style="color:#888;">(No presente en la fotografía: Romo Pozo Sandra Patricia)</span>
+                    </div>
+                </div>
             </div>
-            <div class="cuadro-honor-imgbox">
-                <img src="cuadro-honor.jpg" alt="Cuadro de Honor - Unidad Educativa Víctor Manuel Guzmán">
-                <div class="img-caption">
-                    <!-- ...puedes agregar un texto si lo deseas... -->
+            <!-- CONTABILIDAD -->
+            <div class="dep-block">
+                <div class="dep-imgbox">
+                    <img src="contabilidad-departamento.jpg" alt="Departamento de Contabilidad">
+                    <span>Ambiente de Contabilidad</span>
+                </div>
+                <div class="dep-info">
+                    <h2>Contabilidad</h2>
+                    <p>
+                        El área de Contabilidad prepara a los estudiantes en registros contables, análisis financiero y gestión tributaria. Se utilizan programas de contabilidad y simuladores para prácticas reales.
+                    </p>
+                    <ul>
+                        <li>Ambiente con materiales y software contable.</li>
+                        <li>Docentes con experiencia en el sector financiero y tributario.</li>
+                        <li>Proyectos de emprendimiento y simulación de empresas.</li>
+                    </ul>
+                </div>
+                <div class="dep-docentes">
+                    <img src="docentes-contabilidad.jpg" alt="Docentes de Contabilidad">
+                    <div class="docente-nombre">
+                        Área de Contabilidad:<br>
+                        Silvio Fernando De la Bastida Erazo,<br>
+                        Lidia Azucena Cerpa Sarzosa,<br>
+                        Evelin Rosalía Arteaga Chulde,<br>
+                        María Angélica Cadena Guerrero,<br>
+                        María Mercedes Campués Ipiales
+                    </div>
+                </div>
+            </div>
+            <!-- GESTIÓN ADMINISTRATIVA -->
+            <div class="dep-block">
+                <div class="dep-imgbox">
+                    <img src="gestion-departamento.jpg" alt="Departamento de Gestión Administrativa">
+                    <span>Ambiente de Gestión Administrativa</span>
+                </div>
+                <div class="dep-info">
+                    <h2>Gestión Administrativa</h2>
+                    <p>
+                        El departamento de Gestión Administrativa desarrolla habilidades en organización, recursos humanos y procesos administrativos. Los estudiantes participan en simulaciones y prácticas de oficina.
+                    </p>
+                    <ul>
+                        <li>Espacios para prácticas administrativas y atención al cliente.</li>
+                        <li>Docentes con formación en administración y gestión empresarial.</li>
+                        <li>Actividades de liderazgo y trabajo en equipo.</li>
+                    </ul>
+                </div>
+                <div class="dep-docentes">
+                    <img src="docentes-gestion.jpg" alt="Docentes de Gestión Administrativa">
+                    <div class="docente-nombre">
+                        Área de Gestión Administrativa:<br>
+                        Ana Gabriela Bolaños Revelo,<br>
+                        Mónica Cecilia Vila Espinosa,<br>
+                        María Rebeca Quishpe Coyago,<br>
+                        Evelin Rosalía Arteaga Chulde.
+                    </div>
                 </div>
             </div>
         </section>
     </main>
+    <!-- ...pie de página igual que index.html... -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -277,6 +383,7 @@
     </footer>
     <script src="script.js"></script>
     <script>
+        // ...burbujas flotantes igual que index.html...
         function renderFloatingBubbles() {
             const bubbles = document.querySelector('.floating-bubbles');
             if (!bubbles) return;

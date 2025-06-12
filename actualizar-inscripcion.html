@@ -137,24 +137,21 @@
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-</head>
-<body>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASXHq4iXJSrxjYPatO4smsajz0BlH37JE"></script>
 </head>
 <body>
     <div class="top-bars">
         <div class="top-bar-1"></div>
         <div class="top-bar-2"></div>
     </div>
-    
-    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;"> <!-- Imagen de referencia encima del encabezado -->
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
     <header>
         <div class="header-top">
-            
             <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
             <div class="header-text">
                 <h1>Unidad Educativa </h1>
                 <h1>"Víctor Manuel Guzmán"</h1>
-                <p>50 años de Educación Estudiantil</p>
+                <p>Educando para la vida</p>
             </div>
             <div class="auth-links">
                 <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
@@ -170,10 +167,11 @@
                         <ul class="submenu">
                             <li><a href="quienes-somos.html">Quiénes Somos</a></li>
                             <li><a href="autoridades.html">Autoridades</a></li>
-                            <li><a href="historia.html">Historia</a></li>
+                            
                             <li><a href="ambientes.html">Sede y Ambientes</a></li>
                             <li><a href="simbolos.html">Símbolos Institucionales</a></li>
-                            <li><a href="#oferta-educativa">Oferta Educativa</a></li>
+                            <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
+                            <li><a href="especialidades.html">Especialidades</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -181,15 +179,18 @@
                         <ul class="submenu">
                             <li><a href="calendario.html">Cronograma de Actividades</a></li>
                             <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
-                            
-                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                            <li><a href="https://recursos.educacion.gob.ec/" target="_blank" rel="noopener">Recursos Didácticos</a></li>
+                            <li><a href="https://aulavirtual.uevmg.com/" target="_blank" rel="noopener">Aula Virtual Institucional</a></li>
+                            <li><a href="asistencia.html">Control de Asistencia</a></li>
+                            <li><a href="promocion-estudiantes.html">Promociones</a></li>
+                            <li><a href="https://academico.educarecuador.gob.ec/" target="_blank" rel="noopener">Ingreso de Notas Académico</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#">Padres de Familia</a>
                         <ul class="submenu">
                             <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
-                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
+                            
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -198,28 +199,104 @@
                             <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
                             <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
                             <li><a href="horario-clases.html">Horario de Clases</a></li>
-                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
+                            <li><a href="uniforme-escolar.html">Uniforme Escolar</a></li>
+                            
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#">Servicios</a>
                         <ul class="submenu">
-                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
+                            
                             <li><a href="dece.html">DECE</a></li>
-                           
-                            
-                            <li><a href="#bar-institucional">Bar Institucional</a></li>
-                            <li><a href="#banda-musical">Banda Musical</a></li>
-                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
-                            
-                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                            <li><a href="bar-institucional.html">Bar Institucional</a></li>
+                            <li><a href="banda-musical.html">Banda Musical</a></li>
+                            <li><a href="biblioteca-virtual.html">Biblioteca Virtual</a></li>
+                            <li><a href="bastoneras.html">Grupo de Bastoneras y Cachiporreros</a></li>
                         </ul>
                     </li>
                     <li><a href="contactos.html">Contactos</a></li>
+                    <!-- Quitar la opción de administración del encabezado -->
+                    <!-- <li><a href="administracion.html">Administración</a></li> -->
                 </ul>
             </nav>
         </div>
     </header>
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
+    <div id="admin-bubble-container"></div>
+     <script src="script.js"></script>
+    <script>
+        function renderFloatingBubbles() {
+            const bubbles = document.querySelector('.floating-bubbles');
+            if (!bubbles) return;
+            bubbles.innerHTML = '';
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            if (usuarioActivo) {
+                // Usuario autenticado
+                bubbles.innerHTML = `
+                    <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                        <img src="icon-matricularse.png" alt="Matricularse">
+                        <span class="floating-bubble-label">Matricularse</span>
+                    </a>
+                    <a href="perfil.html" class="floating-bubble" title="Perfil">
+                        <img src="icon-perfil.png" alt="Perfil">
+                        <span class="floating-bubble-label">Perfil</span>
+                    </a>
+                    <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                        <img src="icon-cerrar.png" alt="Cerrar sesión">
+                        <span class="floating-bubble-label">Cerrar sesión</span>
+                    </a>
+                `;
+                // Cerrar sesión desde la burbuja
+                setTimeout(() => {
+                    const cerrar = document.getElementById('cerrar-sesion-bubble');
+                    if (cerrar) {
+                        cerrar.onclick = function(e) {
+                            e.preventDefault();
+                            localStorage.removeItem('usuarioActivo');
+                            window.location.href = "login.html";
+                        };
+                    }
+                }, 50);
+            } else {
+                // Usuario NO autenticado
+                bubbles.innerHTML = `
+                    <a href="registro.html" class="floating-bubble" title="Registrarse">
+                        <img src="icon-registrarse.png" alt="Registrarse">
+                        <span class="floating-bubble-label">Registrarse</span>
+                    </a>
+                    <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                        <img src="icon-iniciar.png" alt="Iniciar sesión">
+                        <span class="floating-bubble-label">Iniciar sesión</span>
+                    </a>
+                `;
+            }
+        }
+
+        // Mostrar burbujas al hacer scroll y al cargar/cambiar sesión
+        const header = document.querySelector('header');
+        const bubbles = document.querySelector('.floating-bubbles');
+        function toggleBubbles() {
+            if (window.scrollY > 30) {
+                header.classList.add('scrolled');
+                if (bubbles) bubbles.style.display = 'flex';
+            } else {
+                header.classList.remove('scrolled');
+                if (bubbles) bubbles.style.display = 'none';
+            }
+        }
+        window.addEventListener('scroll', toggleBubbles);
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'usuarioActivo') {
+                renderFloatingBubbles();
+            }
+        });
+        // Inicializar burbujas al cargar
+        renderFloatingBubbles();
+        toggleBubbles();
+    </script>
+     
     <main style="margin-top: 120px;">
         <div class="matricula-card" id="panel-edicion">
             <div class="actualizar-tabs">
@@ -316,7 +393,15 @@
                     </div>
                     <div class="matricula-form-group">
                         <label for="etnia">Etnia</label>
-                        <input type="text" id="etnia" name="etnia" disabled>
+                        <select id="etnia" name="etnia" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="Mestizo">Mestizo</option>
+                            <option value="Afro">Afro</option>
+                            <option value="Montuvio">Montuvio</option>
+                            <option value="Indigena">Indígena</option>
+                            <option value="Blanco">Blanco</option>
+                            <option value="Otro">Otro</option>
+                        </select>
                     </div>
                     <div class="matricula-form-group">
                         <label for="nacionalidad">Nacionalidad</label>
@@ -332,7 +417,11 @@
                     </div>
                     <div class="matricula-form-group">
                         <label for="sexo">Sexo</label>
-                        <input type="text" id="sexo" name="sexo" disabled>
+                        <select id="sexo" name="sexo" disabled>
+                            <option value="">-Seleccione-</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                        </select>
                     </div>
                     <div class="matricula-form-group">
                         <label for="telefono">Teléfono</label>
@@ -381,6 +470,25 @@
                     <div class="matricula-form-group">
                         <label for="referencia">Referencia</label>
                         <input type="text" id="referencia" name="referencia" disabled>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label>Ubicación en el mapa</label>
+                        <div style="display:flex;align-items:center;gap:1rem;">
+                            <input type="text" id="latitud" name="latitud" disabled style="width:48%;background:#f5f5f5;">
+                            <input type="text" id="longitud" name="longitud" disabled style="width:48%;background:#f5f5f5;">
+                            <button type="button" class="editar-btn" id="btn-editar-ubicacion" style="margin-top:0;">Editar ubicación</button>
+                        </div>
+                    </div>
+                    <!-- Modal para editar ubicación -->
+                    <div id="modal-ubicacion" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;background:rgba(0,0,0,0.25);align-items:center;justify-content:center;">
+                        <div style="background:#fff;padding:2rem 1.5rem;border-radius:14px;max-width:420px;width:95vw;box-shadow:0 8px 32px #0002;position:relative;">
+                            <button id="cerrar-modal-ubicacion" style="position:absolute;top:10px;right:18px;font-size:1.5rem;background:none;border:none;cursor:pointer;">&times;</button>
+                            <h3 style="text-align:center;margin-bottom:1rem;">Editar ubicación de la vivienda</h3>
+                            <div id="mapa-ubicacion-vivienda" style="width:100%;height:260px;border-radius:8px;border:1px solid #ccc;"></div>
+                            <div style="margin-top:1rem;text-align:center;">
+                                <button type="button" id="guardar-ubicacion-mapa" class="matricula-btn" style="background:#2f5597;">Guardar ubicación</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- DATOS PADRE -->
@@ -975,6 +1083,23 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // 5. Asignar valores a los campos del formulario
         // --- Datos académicos ---
+        // Deshabilitar todos los campos académicos y aplicar estilo visual de bloqueado
+        const periodoEl = document.getElementById('periodo');
+        const cursoEl2 = document.getElementById('curso');
+        const paraleloEl = document.getElementById('paralelo');
+        const institucionEl = document.getElementById('institucion_procedencia');
+        const especialidadEl = document.getElementById('especialidad');
+
+        [periodoEl, cursoEl2, paraleloEl, institucionEl, especialidadEl].forEach(el => {
+            if (el) {
+                el.disabled = true;
+                el.style.background = '#e9ecef';
+                el.style.color = '#888';
+                el.style.cursor = 'not-allowed';
+                el.style.pointerEvents = 'none';
+            }
+        });
+
         if (inscData && inscData.periodo) document.getElementById('periodo').value = inscData.periodo.trim();
         if (inscData && inscData.institucion_procedencia) document.getElementById('institucion_procedencia').value = inscData.institucion_procedencia.trim();
 
@@ -1054,10 +1179,13 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById('correo').value = estudiante.correo || '';
         document.getElementById('tipo_sangre').value = estudiante.tipo_sangre || '';
         document.getElementById('fecha_nacimiento').value = estudiante.fecha_nacimiento ? estudiante.fecha_nacimiento.split('T')[0] : '';
-        document.getElementById('sexo').value = estudiante.sexo || '';
+        // --- Seleccionar opción correcta en etnia y sexo ---
+        const etniaSel = document.getElementById('etnia');
+        if (etniaSel) etniaSel.value = estudiante.etnia || '';
+        const sexoSel = document.getElementById('sexo');
+        if (sexoSel) sexoSel.value = estudiante.sexo || '';
         document.getElementById('telefono').value = estudiante.telefono || '';
         document.getElementById('telefono_convencional').value = estudiante.telefono_convencional || '';
-        document.getElementById('etnia').value = estudiante.etnia || '';
         document.getElementById('nacionalidad').value = estudiante.nacionalidad || '';
         document.getElementById('cedula').value = usuarioActivo || '';
 
@@ -1210,6 +1338,7 @@ window.addEventListener('DOMContentLoaded', function() {
             }
             btnGuardarFoto.disabled = true;
             btnGuardarFoto.textContent = 'Guardando...';
+           
             const file = inputFoto.files[0];
             const reader = new FileReader();
             reader.onloadend = async function() {
@@ -1284,6 +1413,8 @@ window.addEventListener('DOMContentLoaded', function() {
             await guardarCampoEnBD(input);
         });
     });
+
+
 
     // 1. Función para obtener el id_curso por nombre
     async function getIdCursoPorNombre(nombreCurso) {
@@ -1477,11 +1608,94 @@ window.addEventListener('DOMContentLoaded', function() {
                 <tr><td><b>Nivel Educación:</b></td><td>${document.getElementById('representante_nivel_educacion')?.value || ''}</td></tr>
                 <tr><td><b>Estado Civil:</b></td><td>${document.getElementById('representante_estado_civil')?.value || ''}</td></tr>
                 <tr><td><b>¿Vive con el estudiante?</b></td><td>${document.getElementById('representante_vive_con_estudiante')?.value === "true" ? "Sí" : (document.getElementById('representante_vive_con_estudiante')?.value === "false" ? "No" : '')}</td></tr>
-                <tr><td><b>Horario de Trabajo:</b</td><td>${document.getElementById('representante_horario_trabajo')?.value || ''}</td></tr>
+                <tr><td><b>Horario de Trabajo:</b></td><td>${document.getElementById('representante_horario_trabajo')?.value || ''}</td></tr>
                 <tr><td><b>Tel. Celular:</b></td><td>${document.getElementById('representante_telefono_celular')?.value || ''}</td></tr>
             </table>
         `;
     }
+    
+    // --- Botón para editar ubicación ---
+    document.getElementById('btn-editar-ubicacion').onclick = function() {
+        document.getElementById('modal-ubicacion').style.display = 'flex';
+        inicializarMapaEdicionUbicacion();
+    };
+
+    // --- Cerrar modal ubicación ---
+    document.getElementById('cerrar-modal-ubicacion').onclick = function() {
+        document.getElementById('modal-ubicacion').style.display = 'none';
+    };
+
+    // --- Inicializar Google Maps en el modal ---
+    let markerUbicacion = null;
+    let mapUbicacion = null;
+    function inicializarMapaEdicionUbicacion() {
+        // Asegura que el div del mapa esté vacío antes de crear el mapa (evita overlays)
+        const mapaDiv = document.getElementById('mapa-ubicacion-vivienda');
+        if (!mapaDiv) return;
+        // Forzar el tamaño y visibilidad del div del mapa
+        mapaDiv.innerHTML = '';
+        mapaDiv.style.display = 'block';
+        mapaDiv.style.width = '100%';
+        mapaDiv.style.height = '260px';
+        mapaDiv.style.minHeight = '260px';
+        mapaDiv.style.background = '#e9ecef';
+
+        // Si ya existe un mapa, destrúyelo (no hay método oficial, pero limpiar el div es suficiente)
+        // Obtener coordenadas actuales o por defecto
+        const latInput = document.getElementById('latitud');
+        const lngInput = document.getElementById('longitud');
+        let lat = parseFloat(latInput.value);
+        let lng = parseFloat(lngInput.value);
+        if (isNaN(lat) || isNaN(lng)) {
+            lat = 0.33616444871436085;
+            lng = -78.11604869660802;
+        }
+
+        // Esperar a que el modal esté visible antes de crear el mapa
+        setTimeout(() => {
+            mapUbicacion = new google.maps.Map(mapaDiv, {
+                center: { lat, lng },
+                zoom: 17
+            });
+            markerUbicacion = new google.maps.Marker({
+                position: { lat, lng },
+                map: mapUbicacion,
+                draggable: true,
+                icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+            });
+            markerUbicacion.addListener('dragend', function(e) {
+                latInput.value = e.latLng.lat();
+                lngInput.value = e.latLng.lng();
+            });
+            mapUbicacion.addListener('click', function(e) {
+                markerUbicacion.setPosition(e.latLng);
+                latInput.value = e.latLng.lat();
+                lngInput.value = e.latLng.lng();
+            });
+            // Forzar resize y centrado después de mostrar el modal
+            setTimeout(() => {
+                google.maps.event.trigger(mapUbicacion, 'resize');
+                mapUbicacion.setCenter({ lat, lng });
+            }, 200);
+        }, 100);
+    }
+
+    // --- Guardar ubicación seleccionada ---
+    document.getElementById('guardar-ubicacion-mapa').onclick = async function() {
+        const lat = parseFloat(document.getElementById('latitud').value);
+        const lng = parseFloat(document.getElementById('longitud').value);
+        if (!lat || !lng) {
+            alert('Seleccione una ubicación válida en el mapa.');
+            return;
+        }
+        // Guardar en la base de datos
+        await supabase.from('direccion_estudiante').update({
+            latitud: lat,
+            longitud: lng
+        }).eq('id_estudiante', idEstudiante);
+        alert('Ubicación actualizada correctamente.');
+        document.getElementById('modal-ubicacion').style.display = 'none';
+    };
     
     </script>
     

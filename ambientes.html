@@ -7,6 +7,96 @@
     <link rel="stylesheet" href="css.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <script src="script.js" defer></script>
+    <style>
+        .accordion {
+            margin-top: 2.5rem;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.10);
+            background: #fff;
+            overflow: hidden;
+        }
+        .accordion-item {
+            border-bottom: 1px solid #e0e0e0;
+            background: linear-gradient(120deg,#f8fafd 70%,#eaf2fb 100%);
+            transition: box-shadow 0.2s;
+        }
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+        .accordion-header {
+            width: 100%;
+            text-align: left;
+            padding: 1.2em 2em;
+            font-size: 1.25rem;
+            font-family: 'Roboto Slab', serif;
+            color: #2f5597;
+            background: none;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-weight: bold;
+            letter-spacing: 1px;
+            transition: background 0.18s, color 0.18s;
+        }
+        .accordion-header.active, .accordion-header:hover {
+            background: #eaf2fb;
+            color: #548235;
+        }
+        .accordion-content {
+            display: none;
+            padding: 1.5em 2em 2em 2em;
+            background: #f8fafd;
+            border-radius: 0 0 18px 18px;
+        }
+        .map-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5em;
+        }
+        .ambiente-info {
+            margin-top: 1.2em;
+            background: #eaf2fb;
+            border-radius: 12px;
+            padding: 1.2em 1.5em;
+            box-shadow: 0 2px 8px rgba(44,130,201,0.08);
+            max-width: 700px;
+            width: 100%;
+        }
+        .ambiente-info h3 {
+            color: #2f5597;
+            font-size: 1.18rem;
+            margin-bottom: 0.7em;
+            font-family: 'Roboto Slab', serif;
+        }
+        .ambiente-info ul {
+            margin: 0 0 0 1.2em;
+            padding: 0;
+            font-size: 1.05rem;
+            color: #222;
+        }
+        .ambiente-info ul li {
+            margin-bottom: 0.5em;
+            list-style: disc;
+        }
+        .ambiente-info .autoridad {
+            font-weight: bold;
+            color: #548235;
+            margin-bottom: 0.2em;
+        }
+        .ambiente-info .profesor {
+            color: #2f5597;
+        }
+        @media (max-width: 900px) {
+            .accordion-header { font-size: 1.08rem; padding: 1em 1em; }
+            .accordion-content { padding: 1em 0.5em 1.2em 0.5em; }
+            .ambiente-info { padding: 0.8em 0.5em; }
+        }
+        @media (max-width: 600px) {
+            .accordion-header { font-size: 1rem; }
+            .ambiente-info { font-size: 0.98rem; }
+        }
+    </style>
 </head>
 <body>
     <div class="top-info-bar">
@@ -85,41 +175,139 @@
             </nav>
         </div>
     </header>
+                <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1>Sede y Ambientes</h1>
+            <p><a href="index.html">Inicio</a> &gt; Nosotros &gt; Sede y Ambientes</p>
+        </div>
+    </section>
     <main>
-        <section class="centered-section">
-            <h2>Sedes y Ambientes</h2>
-            <h2 class="menu-title">Sedes y Ambientes</h2>
-            <div class="accordion">
-                <div class="accordion-item">
-                    <button class="accordion-header">Ambiente Sede (Matriz)</button>
-                    <div class="accordion-content map-container">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
-                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+    <div style="max-width:1200px;margin:2.5rem auto 2rem auto;background:#fff;border-radius:22px;box-shadow:0 8px 32px rgba(44,130,201,0.13);padding:2.5rem 2rem;">
+        <section class="ambientes-section">
+            <div class="ambientes-header" style="text-align:center;margin-bottom:2.5rem;">
+                <h1 style="font-size:2.3rem;color:#2f5597;font-family:'Roboto Slab',serif;font-weight:700;letter-spacing:1px;">Sedes y Ambientes</h1>
+                <div class="section-divider" style="justify-content:center;margin-bottom:2em;">
+                    <span class="line" style="flex:1;height:2px;background:linear-gradient(90deg,#2f5597 0%,#548235 100%);border-radius:2px;"></span>
+                    <span class="icon">
+                        <img src="graduation-icon.png" alt="Icono de graduación" style="width:38px;height:38px;filter:drop-shadow(0 2px 8px #2f559730);">
+                    </span>
+                    <span class="line" style="flex:1;height:2px;background:linear-gradient(90deg,#548235 0%,#2f5597 100%);border-radius:2px;"></span>
+                </div>
+                <p style="font-size:1.15rem;color:#333;max-width:800px;margin:0 auto 2.5rem auto;">
+                    Descubre las diferentes sedes y ambientes de la Unidad Educativa, junto a sus autoridades y docentes responsables.
+                </p>
+            </div>
+            <!-- Ambiente Sede Matriz -->
+            <div class="ambiente-card" style="display:flex;flex-wrap:wrap;gap:2.5rem;align-items:flex-start;background:linear-gradient(120deg,#f8fafd 70%,#eaf2fb 100%);border-radius:18px;box-shadow:0 2px 18px rgba(44,130,201,0.10);padding:2.5rem 2rem;margin-bottom:2.5rem;">
+                <div style="flex:1 1 340px;min-width:260px;max-width:420px;display:flex;flex-direction:column;align-items:center;">
+                    
+                    <span style="font-size:1.08rem;color:#2f5597;font-weight:600;background:#eaf2fb;border-radius:8px;padding:0.2em 1em;">Sede Matriz</span>
+                    <div class="map-container" style="margin-top:1.2em;width:100%;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec"
+                            width="100%" height="220" style="border:0;border-radius:12px;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                 </div>
-                <div class="accordion-item">
-                    <button class="accordion-header">Ambiente Nro. 1 (Antigua Escuela Rafael Larrea)</button>
-                    <div class="accordion-content map-container">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sEscuela%20Rafael%20Larrea!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
-                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <button class="accordion-header">Ambiente Nro. 2 (Antigua Escuela Guilermina Garcia)</button>
-                    <div class="accordion-content map-container">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1673.2390362215247!2d-78.11127513445517!3d0.332105068515275!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3df43524df3d%3A0xcb5d91296fb39078!2sVictor%20Manuel%20Guzman%20Ambiente%202!5e1!3m2!1ses-419!2sec!4v1747102159570!5m2!1ses-419!2sec" 
-                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <button class="accordion-header">Ambiente Nro. 3 (Antiguo Jardín Lucila Yepez)</button>
-                    <div class="accordion-content map-container">
-                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1673.2390394769182!2d-78.11133092036566!3d0.3320858365837837!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3df43524df3d%3A0xcb5d91296fb39078!2sVictor%20Manuel%20Guzman%20Ambiente%202!5e1!3m2!1ses-419!2sec!4v1747102711889!5m2!1ses-419!2sec" 
-                            width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <div style="flex:2 1 420px;min-width:260px;max-width:600px;display:flex;flex-direction:column;justify-content:center;">
+                    <h2 style="font-size:2rem;color:#2f5597;font-family:'Roboto Slab',serif;margin-bottom:1.2rem;">Ambiente Sede (Matriz)</h2>
+                    <p style="font-size:1.08rem;color:#222;line-height:1.6;margin-bottom:1.2rem;">
+                        Dirección: Av. El Retorno 5-130 y Ricardo Sánchez, Ibarra, Ecuador.<br>
+                        Horario de atención: Lunes a Viernes 07:00 - 17:00
+                    </p>
+                    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+                        <div style="flex:1 1 180px;min-width:180px;">
+                            <img src="autoridades-matriz.jpg" alt="Autoridades Sede Matriz" style="width:100%;max-width:180px;border-radius:12px;box-shadow:0 2px 8px rgba(44,130,201,0.08);margin-bottom:0.7em;">
+                            <div style="font-weight:bold;color:#548235;">Rector: Msc. Giovany Garzón</div>
+                            <div style="font-weight:bold;color:#548235;">Vicerrectora: Msc. Mercedes Campués</div>
+                            <div style="font-weight:bold;color:#548235;">Vicerrector: Msc. Marco Salas</div>
+                        </div>
+                        <div style="flex:2 1 220px;">
+                            <img src="docentes-matriz.jpg" alt="Docentes Sede Matriz" style="width:100%;max-width:220px;border-radius:12px;box-shadow:0 2px 8px rgba(44,130,201,0.08);margin-bottom:0.7em;">
+                            <div style="font-weight:bold;color:#2f5597;">Docentes Sede Matriz</div>
+                            <ul style="margin:0 0 0 1.2em;padding:0;font-size:1.05rem;color:#222;">
+
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- Ambiente 1 -->
+            <div class="ambiente-card" style="display:flex;flex-wrap:wrap;gap:2.5rem;align-items:flex-start;background:linear-gradient(120deg,#f8fafd 70%,#eaf2fb 100%);border-radius:18px;box-shadow:0 2px 18px rgba(44,130,201,0.10);padding:2.5rem 2rem;margin-bottom:2.5rem;">
+                <div style="flex:1 1 340px;min-width:260px;max-width:420px;display:flex;flex-direction:column;align-items:center;">
+                    
+                    <span style="font-size:1.08rem;color:#2f5597;font-weight:600;background:#eaf2fb;border-radius:8px;padding:0.2em 1em;">Ambiente Nro. 1</span>
+                    <div class="map-container" style="margin-top:1.2em;width:100%;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d703.5099279478774!2d-78.1177762271408!3d0.33803435513510377!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd1ecf8a143%3A0x7d377a5027fbfdfc!2sMaldonado%201227%2C%20Ibarra!5e1!3m2!1ses-419!2sec!4v1748314339002!5m2!1ses-419!2sec"
+                            width="100%" height="220" style="border:0;border-radius:12px;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+                <div style="flex:2 1 420px;min-width:260px;max-width:600px;display:flex;flex-direction:column;justify-content:center;">
+                    <h2 style="font-size:2rem;color:#2f5597;font-family:'Roboto Slab',serif;margin-bottom:1.2rem;">Ambiente Nro. 1 (Antigua Escuela Rafael Larrea)</h2>
+                    <p style="font-size:1.08rem;color:#222;line-height:1.6;margin-bottom:1.2rem;">
+                        Dirección: Calle Rafael Larrea, Ibarra, Ecuador.<br>
+                        Horario de atención: Lunes a Viernes 07:00 - 17:00
+                    </p>
+                    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+                        <div style="flex:1 1 180px;min-width:180px;">
+                            <img src="autoridades-amb1.jpg" alt="Autoridades Ambiente 1" style="width:100%;max-width:180px;border-radius:12px;box-shadow:0 2px 8px rgba(44,130,201,0.08);margin-bottom:0.7em;">
+                            <div style="font-weight:bold;color:#548235;">Docentes Ambiente 1</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Ambiente 2 -->
+            <div class="ambiente-card" style="display:flex;flex-wrap:wrap;gap:2.5rem;align-items:flex-start;background:linear-gradient(120deg,#f8fafd 70%,#eaf2fb 100%);border-radius:18px;box-shadow:0 2px 18px rgba(44,130,201,0.10);padding:2.5rem 2rem;margin-bottom:2.5rem;">
+                <div style="flex:1 1 340px;min-width:260px;max-width:420px;display:flex;flex-direction:column;align-items:center;">
+                    
+                    <span style="font-size:1.08rem;color:#2f5597;font-weight:600;background:#eaf2fb;border-radius:8px;padding:0.2em 1em;">Ambiente Nro. 2</span>
+                    <div class="map-container" style="margin-top:1.2em;width:100%;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d249.3594587778012!2d-78.11116685351638!3d0.3319968168151649!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3df43524df3d%3A0xcb5d91296fb39078!2sVictor%20Manuel%20Guzman%20Ambiente%202!5e0!3m2!1ses-419!2sec!4v1748314626087!5m2!1ses-419!2sec"
+                            width="100%" height="220" style="border:0;border-radius:12px;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+                <div style="flex:2 1 420px;min-width:260px;max-width:600px;display:flex;flex-direction:column;justify-content:center;">
+                    <h2 style="font-size:2rem;color:#2f5597;font-family:'Roboto Slab',serif;margin-bottom:1.2rem;">Ambiente Nro. 2 (Antigua Escuela Guillermina García)</h2>
+                    <p style="font-size:1.08rem;color:#222;line-height:1.6;margin-bottom:1.2rem;">
+                        Dirección: Calle Guillermina García, Ibarra, Ecuador.<br>
+                        Horario de atención: Lunes a Viernes 07:00 - 17:00
+                    </p>
+                    <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+                        <div style="flex:1 1 180px;min-width:180px;">
+                            <img src="autoridades-amb2.jpg" alt="Autoridades Ambiente 2" style="width:100%;max-width:180px;border-radius:12px;box-shadow:0 2px 8px rgba(44,130,201,0.08);margin-bottom:0.7em;">
+                            <div style="font-weight:bold;color:#548235;">Docentes Ambiente 2</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Ambiente 3 -->
+            <div class="ambiente-card" style="display:flex;flex-wrap:wrap;gap:2.5rem;align-items:flex-start;background:linear-gradient(120deg,#f8fafd 70%,#eaf2fb 100%);border-radius:18px;box-shadow:0 2px 18px rgba(44,130,201,0.10);padding:2.5rem 2rem;">
+                <div style="flex:1 1 340px;min-width:260px;max-width:420px;display:flex;flex-direction:column;align-items:center;">
+                    
+                    <span style="font-size:1.08rem;color:#2f5597;font-weight:600;background:#eaf2fb;border-radius:8px;padding:0.2em 1em;">Ambiente Nro. 3</span>
+                    <div class="map-container" style="margin-top:1.2em;width:100%;">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m8!1m3!1d249.35946894578572!2d-78.11094661211774!3d0.33159337633992764!3m2!1i1024!2i768!4f13.1!4m6!3e6!4m0!4m3!3m2!1d0.33152!2d-78.1108916!5e0!3m2!1ses-419!2sec!4v1748315071765!5m2!1ses-419!2sec"
+                            width="100%" height="220" style="border:0;border-radius:12px;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+                <div style="flex:2 1 420px;min-width:260px;max-width:600px;display:flex;flex-direction:column;justify-content:center;">
+                    <h2 style="font-size:2rem;color:#2f5597;font-family:'Roboto Slab',serif;margin-bottom:1.2rem;">Ambiente Nro. 3 (Antiguo Jardín Lucila Yepez)</h2>
+                    <p style="font-size:1.08rem;color:#222;line-height:1.6;margin-bottom:1.2rem;">
+                        Dirección: Calle Lucila Yepez, Ibarra, Ecuador.<br>
+                        Horario de atención: Lunes a Viernes 07:00 - 17:00
+                    </p>
+                        <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
+                        <div style="flex:1 1 180px;min-width:180px;">
+                            <img src="autoridades-amb3.jpg" alt="Autoridades Ambiente 1" style="width:100%;max-width:180px;border-radius:12px;box-shadow:0 2px 8px rgba(44,130,201,0.08);margin-bottom:0.7em;">
+                            <div style="font-weight:bold;color:#548235;">Docentes Ambiente 3</div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
         </section>
+    </div>
     </main>
     <footer>
         <div class="footer-content">
@@ -176,6 +364,7 @@
             bubbles.innerHTML = '';
             const usuarioActivo = localStorage.getItem('usuarioActivo');
             if (usuarioActivo) {
+                // Usuario autenticado
                 bubbles.innerHTML = `
                     <a href="matricularse.html" class="floating-bubble" title="Matricularse">
                         <img src="icon-matricularse.png" alt="Matricularse">
@@ -190,6 +379,7 @@
                         <span class="floating-bubble-label">Cerrar sesión</span>
                     </a>
                 `;
+                // Cerrar sesión desde la burbuja
                 setTimeout(() => {
                     const cerrar = document.getElementById('cerrar-sesion-bubble');
                     if (cerrar) {
@@ -201,18 +391,21 @@
                     }
                 }, 50);
             } else {
+                // Usuario NO autenticado
                 bubbles.innerHTML = `
                     <a href="registro.html" class="floating-bubble" title="Registrarse">
                         <img src="icon-registrarse.png" alt="Registrarse">
                         <span class="floating-bubble-label">Registrarse</span>
                     </a>
                     <a href="login.html" class="floating-bubble" title="Iniciar sesión">
-                        <img src="icon-login.png" alt="Iniciar sesión">
+                        <img src="icon-iniciar.png" alt="Iniciar sesión">
                         <span class="floating-bubble-label">Iniciar sesión</span>
                     </a>
                 `;
             }
         }
+
+        // Mostrar burbujas al hacer scroll y al cargar/cambiar sesión
         const header = document.querySelector('header');
         const bubbles = document.querySelector('.floating-bubbles');
         function toggleBubbles() {
@@ -230,6 +423,7 @@
                 renderFloatingBubbles();
             }
         });
+        // Inicializar burbujas al cargar
         renderFloatingBubbles();
         toggleBubbles();
     </script>

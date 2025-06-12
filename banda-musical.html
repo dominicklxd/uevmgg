@@ -2,10 +2,10 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cuadro de Honor - Unidad Educativa Víctor Manuel Guzmán</title>
+    <title>Banda Musical - Unidad Educativa Víctor Manuel Guzmán</title>
     <link rel="stylesheet" href="css.css">
     <style>
-        .cuadro-honor-section {
+        .banda-section {
             max-width: 1200px;
             margin: 2.5rem auto 2rem auto;
             background: #fff;
@@ -17,73 +17,69 @@
             padding: 2.5rem 2rem 2.5rem 2rem;
             gap: 2.5rem;
         }
-        .cuadro-honor-list {
+        .banda-imgbox {
+            flex: 1 1 520px;
+            min-width: 320px;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .banda-imgbox img {
+            width: 100%;
+            max-width: 520px;
+            border-radius: 16px;
+            box-shadow: 0 6px 24px rgba(44,130,201,0.13);
+            margin-bottom: 1.2rem;
+        }
+        .banda-list {
             flex: 1 1 340px;
             min-width: 280px;
             max-width: 420px;
-            padding-right: 1.5rem;
+            padding-left: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        .cuadro-honor-list h2 {
+        .banda-list h2 {
             font-size: 2.3rem;
-            color: #000000;
+            color: #2f5597;
             font-family: 'Roboto Slab', serif;
             margin-bottom: 2rem;
             text-align: left;
             letter-spacing: 1px;
         }
-        .cuadro-honor-list ul {
+        .banda-list ul {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        .cuadro-honor-list li {
-            margin-bottom: 1.5rem;
+        .banda-list li {
+            margin-bottom: 1.1rem;
             font-size: 1.08rem;
-            color: #000000;
+            color: #222;
             line-height: 1.3;
         }
-        .cuadro-honor-list li b {
+        .banda-list li b {
             display: block;
-            color: #000103;
+            color: #2f5597;
             font-size: 1.08rem;
             margin-top: 0.1rem;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
-        .cuadro-honor-imgbox {
-            flex: 1 1 420px;
-            min-width: 320px;
-            max-width: 520px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .cuadro-honor-imgbox img {
-            width: 100%;
-            max-width: 480px;
-            border-radius: 16px;
-            box-shadow: 0 6px 24px rgba(44,130,201,0.13);
-            margin-bottom: 1.2rem;
-        }
-        .cuadro-honor-imgbox .img-caption {
-            font-size: 1.15rem;
-            color: #2f5597;
-            font-weight: bold;
-            text-align: center;
-            letter-spacing: 0.5px;
-        }
         @media (max-width: 900px) {
-            .cuadro-honor-section {
+            .banda-section {
                 flex-direction: column;
                 padding: 1.5rem 0.5rem;
                 gap: 1.5rem;
             }
-            .cuadro-honor-list, .cuadro-honor-imgbox {
+            .banda-list, .banda-imgbox {
                 max-width: 100%;
                 min-width: 0;
-                padding-right: 0;
+                padding-left: 0;
             }
-            .cuadro-honor-imgbox img {
+            .banda-imgbox img {
                 max-width: 100%;
             }
         }
@@ -96,90 +92,87 @@
     </div>
     <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
     <header>
-    <div class="header-top">
-        <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
-        <div class="header-text">
-            <h1>Unidad Educativa </h1>
-            <h1>"Víctor Manuel Guzmán"</h1>
-            <p>Educando para la vida</p>
-        </div>
-        <div class="auth-links">
-            <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
-        </div>
-        <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
-            <!-- Aquí se mostrará el saludo -->
-        </div>
-        <nav>
-            <ul class="menu">
-                <li><a href="index.html">Inicio</a></li>
-                <li class="dropdown">
-                    <a href="#">Nosotros</a>
-                    <ul class="submenu">
-                        <li><a href="quienes-somos.html">Quiénes Somos</a></li>
-                        <li><a href="autoridades.html">Autoridades</a></li>
-                        <li><a href="ambientes.html">Sede y Ambientes</a></li>
-                        <li><a href="simbolos.html">Símbolos Institucionales</a></li>
-                        <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
-                        <li><a href="especialidades.html">Especialidades</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Docentes</a>
-                    <ul class="submenu">
-                        <li><a href="calendario.html">Cronograma de Actividades</a></li>
-                        <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
-                        <li><a href="https://recursos.educacion.gob.ec/" target="_blank" rel="noopener">Recursos Didácticos</a></li>
-                        <li><a href="https://aulavirtual.uevmg.com/" target="_blank" rel="noopener">Aula Virtual Institucional</a></li>
-                        <li><a href="asistencia.html">Control de Asistencia</a></li>
-                        <li><a href="promocion-estudiantes.html">Promociones</a></li>
-                        <li><a href="https://academico.educarecuador.gob.ec/" target="_blank" rel="noopener">Ingreso de Notas Académico</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Padres de Familia</a>
-                    <ul class="submenu">
-                        <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Estudiantes</a>
-                    <ul class="submenu">
-                        <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
-                        <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
-                        <li><a href="horario-clases.html">Horario de Clases</a></li>
-                        <li><a href="uniforme-escolar.html">Uniforme Escolar</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#">Servicios</a>
-                    <ul class="submenu">
-                        <li><a href="dece.html">DECE</a></li>
-                        <li><a href="bar-institucional.html">Bar Institucional</a></li>
-                        <li><a href="banda-musical.html">Banda Musical</a></li>
-                        <li><a href="biblioteca-virtual.html">Biblioteca Virtual</a></li>
-                        <li><a href="bastoneras.html">Grupo de Bastoneras y Cachiporreros</a></li>
-                    </ul>
-                </li>
-                <li><a href="contactos.html">Contactos</a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-            <section class="banner-section" style="margin-top: 100px;"> <!-- Reducir el margen superior -->
-            <div class="banner-overlay">
-                <h1>Cuadro de Honor</h1>
-                <p><a href="index.html">Inicio</a> > Estudiantes > Cuadro de Honor</p>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>Educando para la vida</p>
             </div>
-        </section>
-    <!-- Burbujas flotantes para auth-links (fuera del header) -->
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
+                <!-- Aquí se mostrará el saludo -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
+                            <li><a href="especialidades.html">Especialidades</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="https://recursos.educacion.gob.ec/" target="_blank" rel="noopener">Recursos Didácticos</a></li>
+                            <li><a href="https://aulavirtual.uevmg.com/" target="_blank" rel="noopener">Aula Virtual Institucional</a></li>
+                            <li><a href="asistencia.html">Control de Asistencia</a></li>
+                            <li><a href="promocion-estudiantes.html">Promociones</a></li>
+                            <li><a href="https://academico.educarecuador.gob.ec/" target="_blank" rel="noopener">Ingreso de Notas Académico</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="horario-clases.html">Horario de Clases</a></li>
+                            <li><a href="uniforme-escolar.html">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="dece.html">DECE</a></li>
+                            <li><a href="bar-institucional.html">Bar Institucional</a></li>
+                            <li><a href="banda-musical.html">Banda Musical</a></li>
+                            <li><a href="biblioteca-virtual.html">Biblioteca Virtual</a></li>
+                            <li><a href="bastoneras.html">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="contactos.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="banner-section" style="margin-top: 100px;">
+        <div class="banner-overlay">
+            <h1>Banda Musical</h1>
+            <p><a href="index.html">Inicio</a> &gt; Servicios &gt; Banda Musical</p>
+        </div>
+    </section>
     <div class="floating-bubbles" style="display:none;">
         <!-- Las burbujas se llenan dinámicamente por JS -->
     </div>
     <main style="margin-top: 120px;">
-        
-        <section class="cuadro-honor-section">
+        <section class="banda-section">
             <div style="width:100%;text-align:center;">
-                
                 <div class="section-divider" style="justify-content:center;margin-bottom:2em;">
                     <span class="line"></span>
                     <span class="icon">
@@ -188,52 +181,34 @@
                     <span class="line"></span>
                 </div>
             </div>
-            <div class="cuadro-honor-list">
-                
+            <div class="banda-imgbox">
+                <img src="banda-musical.jpg" alt="Banda Musical Institucional">
+                <span style="font-size:1.08rem;color:#2f5597;font-weight:600;background:#eaf2fb;border-radius:8px;padding:0.2em 1em;">Banda Institucional</span>
+            </div>
+            <div class="banda-list">
+                <h2>Banda Musical</h2>
                 <ul>
                     <li>
-                        Chuma Tupiza Paulina Elizabeth
-                        <b>Abanderada del Pabellón Nacional Gómez</b>
+                        <b>Tradición y Orgullo:</b>
+                        La Banda Musical de la Unidad Educativa Víctor Manuel Guzmán es símbolo de identidad, disciplina y excelencia artística.
                     </li>
                     <li>
-                        Valles Lia Dannae
-                        <b>Porteestandarte del Pabellón de la Ciudad</b>
+                        <b>Participación:</b>
+                        Integrada por estudiantes de diferentes niveles, participa en desfiles, eventos cívicos y culturales, representando a la institución con talento y compromiso.
                     </li>
                     <li>
-                        Farinango Ipiales Valeria Nicole
-                        <b>Porteestandarte del Pabellón Institucional</b>
+                        <b>Formación Integral:</b>
+                        Fomenta valores como el trabajo en equipo, la responsabilidad y el respeto, además de habilidades musicales.
                     </li>
                     <li>
-                        Padilla Vargas Briana Jamileth
-                        <b>1ra Escolta del Pabellón Nacional</b>
+                        <b>Repertorio:</b>
+                        Interpreta marchas, piezas tradicionales y música moderna, adaptándose a diferentes celebraciones y actos institucionales.
                     </li>
                     <li>
-                        Olmedo Melo Elian David
-                        <b>2do Escolta del Pabellón Nacional</b>
-                    </li>
-                    <li>
-                        Morán Morillo Dayana Sayde
-                        <b>1ra Escolta del Pabellón de la Ciudad</b>
-                    </li>
-                    <li>
-                        Alba Barrionuevo Juan David
-                        <b>2da Escolta del Pabellón de la Ciudad</b>
-                    </li>
-                    <li>
-                        Tapia Ortiz Natajy Jezabel
-                        <b>1ra Escolta del Pabellón de la Institución</b>
-                    </li>
-                    <li>
-                        Cortez Pozo Anahí Alejandra
-                        <b>2da Escolta del Pabellón de la Institución</b>
+                        <b>Invitación:</b>
+                        Si tienes interés en la música y el arte, ¡únete a la banda y vive una experiencia inolvidable!
                     </li>
                 </ul>
-            </div>
-            <div class="cuadro-honor-imgbox">
-                <img src="cuadro-honor.jpg" alt="Cuadro de Honor - Unidad Educativa Víctor Manuel Guzmán">
-                <div class="img-caption">
-                    <!-- ...puedes agregar un texto si lo deseas... -->
-                </div>
             </div>
         </section>
     </main>
@@ -314,7 +289,7 @@
                         <span class="floating-bubble-label">Registrarse</span>
                     </a>
                     <a href="login.html" class="floating-bubble" title="Iniciar sesión">
-                        <img src="icon-login.png" alt="Iniciar sesión">
+                        <img src="icon-iniciar.png" alt="Iniciar sesión">
                         <span class="floating-bubble-label">Iniciar sesión</span>
                     </a>
                 `;

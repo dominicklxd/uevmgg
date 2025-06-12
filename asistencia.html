@@ -107,7 +107,7 @@
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(44,130,201,0.18);
             padding: 2.5rem 2rem;
-            max-width: 480px;
+            max-width: 1000px; /* Aumenta el ancho del modal */
             width: 98vw;
             max-height: 90vh;
             overflow-y: auto;
@@ -137,12 +137,13 @@
         #modal-asistencia table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.98rem;
+            font-size: 1.08rem;
         }
-        #modal-asistencia th, #modal-asistencia td {
+        #modal-asistencia table th, #modal-asistencia table td {
             padding: 0.4em 0.2em;
             border-bottom: 1px solid #e0e0e0;
             text-align: left;
+            font-size: 1.08rem;
         }
         #modal-asistencia th {
             background: #eaf2fb;
@@ -173,6 +174,46 @@
             text-align: center;
             margin-bottom: 1rem;
         }
+        #modal-asistencia .horas-header {
+            text-align: center;
+            font-weight: bold;
+            color: #2f5597;
+            font-size: 1.08rem;
+            background: #eaf2fb;
+            border-bottom: 1px solid #e0e0e0;
+            letter-spacing: 1px;
+        }
+        #modal-asistencia .hora-checkbox {
+            width: 1.5em;
+            height: 1.5em;
+            accent-color: #2f5597;
+        }
+        #modal-asistencia select.hora-select {
+            min-width: 70px;
+            padding: 0.2em 0.4em;
+            font-size: 1em;
+            border-radius: 6px;
+            border: 1px solid #b5c6e0;
+            background: #f8fafd;
+            color: #2f5597;
+            margin: 0 2px;
+        }
+        #modal-asistencia .hora-select[disabled] {
+            background: #f3f3f3;
+            color: #888;
+        }
+        #modal-asistencia .leyenda-asistencia {
+            margin: 0.7em 0 1em 0;
+            font-size: 0.98em;
+            color: #2f5597;
+            text-align: center;
+            background: #eaf2fb;
+            border-radius: 8px;
+            padding: 0.5em 0.7em;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+        }
         @media (max-width: 900px) {
             .asistencia-grid { flex-direction: column; align-items: center; }
             .curso-card { min-width: 90vw; max-width: 98vw; }
@@ -187,12 +228,11 @@
     <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
     <header>
         <div class="header-top">
-            
             <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
             <div class="header-text">
                 <h1>Unidad Educativa </h1>
                 <h1>"Víctor Manuel Guzmán"</h1>
-                <p>50 años de Educación Estudiantil</p>
+                <p>Educando para la vida</p>
             </div>
             <div class="auth-links">
                 <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
@@ -208,7 +248,6 @@
                         <ul class="submenu">
                             <li><a href="quienes-somos.html">Quiénes Somos</a></li>
                             <li><a href="autoridades.html">Autoridades</a></li>
-                            <li><a href="historia.html">Historia</a></li>
                             <li><a href="ambientes.html">Sede y Ambientes</a></li>
                             <li><a href="simbolos.html">Símbolos Institucionales</a></li>
                             <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
@@ -220,14 +259,17 @@
                         <ul class="submenu">
                             <li><a href="calendario.html">Cronograma de Actividades</a></li>
                             <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
-                            <li><a href="#recursos">Recursos Didácticos</a></li>
+                            <li><a href="https://recursos.educacion.gob.ec/" target="_blank" rel="noopener">Recursos Didácticos</a></li>
+                            <li><a href="https://aulavirtual.uevmg.com/" target="_blank" rel="noopener">Aula Virtual Institucional</a></li>
+                            <li><a href="asistencia.html">Control de Asistencia</a></li>
+                            <li><a href="promocion-estudiantes.html">Promociones</a></li>
+                            <li><a href="https://academico.educarecuador.gob.ec/" target="_blank" rel="noopener">Ingreso de Notas Académico</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#">Padres de Familia</a>
                         <ul class="submenu">
                             <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
-                            <li><a href="#horario-padres">Horario de Atención a Padres de Familia</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -236,24 +278,20 @@
                             <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
                             <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
                             <li><a href="horario-clases.html">Horario de Clases</a></li>
-                            <li><a href="#uniforme-escolar">Uniforme Escolar</a></li>
-                            <li><a href="asistencia.html">Asistencia</a></li>
+                            <li><a href="uniforme-escolar.html">Uniforme Escolar</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
                         <a href="#">Servicios</a>
                         <ul class="submenu">
-                            <li><a href="#aula-virtual">Aula Virtual Institucional</a></li>
                             <li><a href="dece.html">DECE</a></li>
-                            <li><a href="#bar-institucional">Bar Institucional</a></li>
-                            <li><a href="#banda-musical">Banda Musical</a></li>
-                            <li><a href="#biblioteca-virtual">Biblioteca Virtual</a></li>
-                            <li><a href="#bastoneras">Grupo de Bastoneras y Cachiporreros</a></li>
+                            <li><a href="bar-institucional.html">Bar Institucional</a></li>
+                            <li><a href="banda-musical.html">Banda Musical</a></li>
+                            <li><a href="biblioteca-virtual.html">Biblioteca Virtual</a></li>
+                            <li><a href="bastoneras.html">Grupo de Bastoneras y Cachiporreros</a></li>
                         </ul>
                     </li>
                     <li><a href="contactos.html">Contactos</a></li>
-                    <!-- Quitar la opción de administración del encabezado -->
-                    <!-- <li><a href="administracion.html">Administración</a></li> -->
                 </ul>
             </nav>
         </div>
@@ -280,10 +318,47 @@
                     <label for="modal-fecha">Fecha:</label>
                     <input type="date" id="modal-fecha">
                 </div>
+                <div class="leyenda-asistencia">
+                    <b>Opciones de asistencia por hora:</b>
+                    <span style="margin-left:10px;">AS: Asistido</span>
+                    <span style="margin-left:10px;">A: Atraso</span>
+                    <span style="margin-left:10px;">FJ: Falta Justificada</span>
+                    <span style="margin-left:10px;">FI: Falta Injustificada</span>
+                    <span style="margin-left:10px;">AI: Abandono Interno</span>
+                    <span style="margin-left:10px;">AE: Abandono Externo</span>
+                    <span style="margin-left:10px;">P: Permiso</span>
+                </div>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button type="button" id="btn-editar-horas" class="asistencia-btn" style="width:auto; margin-bottom:10px; background:#2f5597;">Editar</button>
+                </div>
                 <form id="modal-form-asistencia">
                     <table>
                         <thead>
-                            <tr><th>Estudiante</th><th>Asistió</th></tr>
+                            <tr>
+                                <th rowspan="2" style="vertical-align:middle;">Estudiante</th>
+                                <th rowspan="2" style="vertical-align:middle;">
+                                    <!-- El checkbox de "marcar todas" ya no aplica, se puede quitar o dejar vacío -->
+                                </th>
+                                <th colspan="8" class="horas-header">Horas</th>
+                                <th rowspan="2" style="vertical-align:middle;">Veces Asistida</th>
+                                <th rowspan="2" style="vertical-align:middle;">Atrasos</th>
+                                <th rowspan="2" style="vertical-align:middle;">Faltas Justificadas</th>
+                                <th rowspan="2" style="vertical-align:middle;">Faltas Injustificadas</th>
+                                <th rowspan="2" style="vertical-align:middle;">Abandono Interno</th>
+                                <th rowspan="2" style="vertical-align:middle;">Permisos</th>
+                                <th rowspan="2" style="vertical-align:middle;">Abandono Externo</th>
+                                <th rowspan="2" style="vertical-align:middle;">Total de veces asistida</th>
+                            </tr>
+                            <tr>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
+                                <th>8</th>
+                            </tr>
                         </thead>
                         <tbody id="modal-lista-estudiantes">
                             <!-- Lista dinámica -->
@@ -435,6 +510,22 @@
         }
 
         // --- Modal flotante ---
+        let editable = false;
+        let estudiantesGlobal = [];
+        let idsEstudiantesGlobal = [];
+        let fechaActualGlobal = null;
+
+        // Opciones para el menú de selección de asistencia por hora
+        const opcionesAsistencia = [
+            { valor: "AS", texto: "(AS)" },
+            { valor: "A", texto: "(A)" },
+            { valor: "FJ", texto: "(FJ)" },
+            { valor: "FI", texto: "(FI)" },
+            { valor: "AI", texto: "(AI)" },
+            { valor: "AE", texto: "(AE)" },
+            { valor: "P", texto: "(P)" }
+        ];
+
         async function abrirModalAsistencia(idGrado, titulo) {
             // 1. Buscar inscripciones de ese grado
             const { data: inscripciones, error: errorIns } = await supabase
@@ -475,44 +566,220 @@
                 estudiantes = (ests || []).filter(e => idsVerificados.includes(e.id_estudiante));
             }
 
-            console.log("Estudiantes encontrados:", estudiantes);
+            // --- ORDENAR ALFABÉTICAMENTE POR APELLIDOS Y NOMBRES ---
+            estudiantes.sort((a, b) => {
+                const apA = (a.apellidos || '').toLowerCase();
+                const apB = (b.apellidos || '').toLowerCase();
+                if (apA < apB) return -1;
+                if (apA > apB) return 1;
+                const nomA = (a.nombres || '').toLowerCase();
+                const nomB = (b.nombres || '').toLowerCase();
+                if (nomA < nomB) return -1;
+                if (nomA > nomB) return 1;
+                return 0;
+            });
 
-            // Mostrar modal
+            estudiantesGlobal = estudiantes;
+            idsEstudiantesGlobal = estudiantes.map(e => e.id_estudiante);
+
+            // Función para renderizar la tabla según la fecha seleccionada
+            async function renderTablaAsistencia(fechaSeleccionada, editableLocal = false) {
+                fechaActualGlobal = fechaSeleccionada;
+                // Consultar asistencias por estudiante en la fecha seleccionada
+                let asistenciasFecha = [];
+                let asistenciasTotales = [];
+                if (idsEstudiantesGlobal.length > 0) {
+                    const { data: asisFecha } = await supabase
+                        .from('asistencias')
+                        .select('id_estudiante, presente, fecha, horas')
+                        .in('id_estudiante', idsEstudiantesGlobal)
+                        .eq('fecha', fechaSeleccionada);
+                    asistenciasFecha = asisFecha || [];
+
+                    const { data: asisTot } = await supabase
+                        .from('asistencias')
+                        .select('id_estudiante, horas')
+                        .in('id_estudiante', idsEstudiantesGlobal);
+                    asistenciasTotales = asisTot || [];
+                }
+
+                // Contar asistencias por estudiante
+                const vecesAsistidaPorFecha = {};
+                const totalVecesAsistida = {};
+                // Función para determinar si cuenta como "asistido"
+                function esAsistidoTodasLasHoras(horasObj) {
+                    if (!horasObj) return false;
+                    const permitidos = ["AS", "A", "FJ", "P"];
+                    for (let h = 1; h <= 8; h++) {
+                        const val = horasObj[h];
+                        if (!val) return false;
+                        if (["FI", "AI", "AE"].includes(val)) return false;
+                    }
+                    for (let h = 1; h <= 8; h++) {
+                        if (!permitidos.includes(horasObj[h])) return false;
+                    }
+                    return true;
+                }
+                idsEstudiantesGlobal.forEach(id => {
+                    const reg = asistenciasFecha.find(a => a.id_estudiante === id);
+                    vecesAsistidaPorFecha[id] = reg && esAsistidoTodasLasHoras(reg.horas) ? 1 : 0;
+                    totalVecesAsistida[id] = asistenciasTotales
+                        .filter(a => a.id_estudiante === id)
+                        .filter(a => esAsistidoTodasLasHoras(a.horas))
+                        .length;
+                });
+
+                // Calcular totales por tipo para cada estudiante (de todas las fechas)
+                function contarPorTipoTotal(asistenciasTotales, id_estudiante, tipo) {
+                    let count = 0;
+                    asistenciasTotales
+                        .filter(a => a.id_estudiante === id_estudiante)
+                        .forEach(a => {
+                            const horas = a.horas || {};
+                            for (let h = 1; h <= 8; h++) {
+                                if (horas[h] === tipo) count++;
+                            }
+                        });
+                    return count;
+                }
+
+                // Renderizar la tabla
+                const tbody = document.getElementById('modal-lista-estudiantes');
+                tbody.innerHTML = estudiantesGlobal.length > 0
+                    ? estudiantesGlobal.map(est => {
+                        const reg = asistenciasFecha.find(a => a.id_estudiante === est.id_estudiante);
+                        const horasMarcadas = reg && reg.horas ? reg.horas : {};
+                        // Totales de todas las fechas
+                        const totalAtrasos = contarPorTipoTotal(asistenciasTotales, est.id_estudiante, "A");
+                        const totalFJ = contarPorTipoTotal(asistenciasTotales, est.id_estudiante, "FJ");
+                        const totalFI = contarPorTipoTotal(asistenciasTotales, est.id_estudiante, "FI");
+                        const totalAI = contarPorTipoTotal(asistenciasTotales, est.id_estudiante, "AI");
+                        const totalP = contarPorTipoTotal(asistenciasTotales, est.id_estudiante, "P");
+                        const totalAE = contarPorTipoTotal(asistenciasTotales, est.id_estudiante, "AE");
+                        return `
+                            <tr>
+                                <td>${est.apellidos || ""} ${est.nombres}</td>
+                                <td></td>
+                                ${[1,2,3,4,5,6,7,8].map(h => {
+                                    const valor = horasMarcadas[h] || "AS";
+                                    return `<td style="text-align:center;">
+                                        <select class="hora-select" data-id="${est.id_estudiante}" data-hora="${h}" ${editableLocal ? "" : "disabled"}>
+                                            ${opcionesAsistencia.map(opt =>
+                                                `<option value="${opt.valor}" ${valor === opt.valor ? "selected" : ""}>${opt.texto}</option>`
+                                            ).join("")}
+                                        </select>
+                                    </td>`;
+                                }).join('')}
+                                <td style="text-align:center;">${vecesAsistidaPorFecha[est.id_estudiante] || 0}</td>
+                                <td style="text-align:center;">${totalAtrasos}</td>
+                                <td style="text-align:center;">${totalFJ}</td>
+                                <td style="text-align:center;">${totalFI}</td>
+                                <td style="text-align:center;">${totalAI}</td>
+                                <td style="text-align:center;">${totalP}</td>
+                                <td style="text-align:center;">${totalAE}</td>
+                                <td style="text-align:center;">${totalVecesAsistida[est.id_estudiante] || 0}</td>
+                            </tr>
+                        `;
+                    }).join('')
+                    : `<tr><td colspan="18" style="text-align:center;color:#888;">No hay estudiantes inscritos en este curso.</td></tr>`;
+
+                // El checkbox de "marcar todas" ya no aplica, así que lo deshabilitamos
+                const marcarTodas = document.getElementById('marcar-todas-horas');
+                if (marcarTodas) {
+                    marcarTodas.checked = false;
+                    marcarTodas.disabled = true;
+                    marcarTodas.onchange = null;
+                }
+            }
+
+            // Mostrar modal y renderizar tabla with la fecha actual
             document.getElementById('modal-titulo').textContent = titulo;
-            document.getElementById('modal-fecha').value = new Date().toISOString().slice(0, 10);
-            const tbody = document.getElementById('modal-lista-estudiantes');
-            tbody.innerHTML = estudiantes.length > 0
-                ? estudiantes.map(est => `
-                    <tr>
-                        <td>${est.nombres} ${est.apellidos || ""}</td>
-                        <td><input type="checkbox" name="asistencia" value="${est.id_estudiante}"></td>
-                    </tr>
-                `).join('')
-                : `<tr><td colspan="2" style="text-align:center;color:#888;">No hay estudiantes inscritos en este curso.</td></tr>`;
+            const inputFecha = document.getElementById('modal-fecha');
+            inputFecha.value = new Date().toISOString().slice(0, 10);
+            await renderTablaAsistencia(inputFecha.value, editable);
             document.getElementById('modal-asistencia').style.display = 'flex';
             document.getElementById('modal-exito').style.display = 'none';
 
-            // Evento submit
+            // Botón editar/guardar cambios
+            const btnEditar = document.getElementById('btn-editar-horas');
+            btnEditar.textContent = 'Editar';
+            btnEditar.onclick = async function() {
+                if (!editable) {
+                    editable = true;
+                    btnEditar.textContent = 'Guardar cambios';
+                    await renderTablaAsistencia(inputFecha.value, editable);
+                } else {
+                    // Guardar cambios
+                    const form = document.getElementById('modal-form-asistencia');
+                    const registros = estudiantesGlobal.map(est => {
+                        const horas = {};
+                        for (let h = 1; h <= 8; h++) {
+                            const sel = form.querySelector(`select.hora-select[data-id="${est.id_estudiante}"][data-hora="${h}"]`);
+                            horas[h] = sel ? sel.value : "AS";
+                        }
+                        // presente: al menos una hora no es FI, AI, AE
+                        const presente = Object.values(horas).some(v => !["FI", "AI", "AE"].includes(v));
+                        return {
+                            id_estudiante: est.id_estudiante,
+                            fecha: inputFecha.value,
+                            presente,
+                            horas
+                        };
+                    });
+                    const { error } = await supabase.from('asistencias').upsert(registros, { onConflict: ['id_estudiante', 'fecha'] });
+                    const exito = document.getElementById('modal-exito');
+                    if (!error) {
+                        exito.textContent = '¡Cambios guardados!';
+                        exito.style.display = 'block';
+                        setTimeout(() => { exito.style.display = 'none'; }, 2000);
+                        editable = false;
+                        btnEditar.textContent = 'Editar';
+                        setTimeout(async () => {
+                            await renderTablaAsistencia(inputFecha.value, editable);
+                        }, 200);
+                    } else {
+                        exito.textContent = 'Error al guardar cambios.';
+                        exito.style.display = 'block';
+                    }
+                }
+            };
+
+            // Al cambiar la fecha, recargar la tabla y recoger datos actualizados de Supabase
+            inputFecha.onchange = async function() {
+                editable = false;
+                btnEditar.textContent = 'Editar';
+                await renderTablaAsistencia(inputFecha.value, editable);
+            };
+
+            // Evento submit (Registrar Asistencia)
             const form = document.getElementById('modal-form-asistencia');
             form.onsubmit = async function(e) {
                 e.preventDefault();
-                const checkboxes = form.querySelectorAll('input[name="asistencia"]');
-                const presentes = [];
-                checkboxes.forEach(cb => {
-                    if (cb.checked) presentes.push(cb.value);
+                const registros = estudiantesGlobal.map(est => {
+                    const horas = {};
+                    for (let h = 1; h <= 8; h++) {
+                        const sel = form.querySelector(`select.hora-select[data-id="${est.id_estudiante}"][data-hora="${h}"]`);
+                        horas[h] = sel ? sel.value : "AS";
+                    }
+                    const presente = Object.values(horas).some(v => !["FI", "AI", "AE"].includes(v));
+                    return {
+                        id_estudiante: est.id_estudiante,
+                        fecha: inputFecha.value,
+                        presente,
+                        horas
+                    };
                 });
-                const fecha = document.getElementById('modal-fecha').value;
-                const registros = Array.from(checkboxes).map(cb => ({
-                    id_estudiante: cb.value,
-                    fecha,
-                    presente: cb.checked
-                }));
                 const { error } = await supabase.from('asistencias').upsert(registros, { onConflict: ['id_estudiante', 'fecha'] });
                 const exito = document.getElementById('modal-exito');
                 if (!error) {
                     exito.textContent = '¡Asistencia registrada!';
                     exito.style.display = 'block';
                     setTimeout(() => { exito.style.display = 'none'; }, 2000);
+                    editable = false;
+                    btnEditar.textContent = 'Editar';
+                    setTimeout(async () => {
+                        await renderTablaAsistencia(inputFecha.value, editable);
+                    }, 200);
                 } else {
                     exito.textContent = 'Error al registrar asistencia.';
                     exito.style.display = 'block';
@@ -570,7 +837,7 @@
                         <span class="floating-bubble-label">Registrarse</span>
                     </a>
                     <a href="login.html" class="floating-bubble" title="Iniciar sesión">
-                        <img src="icon-login.png" alt="Iniciar sesión">
+                        <img src="icon-iniciar.png" alt="Iniciar sesión">
                         <span class="floating-bubble-label">Iniciar sesión</span>
                     </a>
                 `;

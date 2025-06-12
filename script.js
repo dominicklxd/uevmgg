@@ -165,6 +165,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="admin-bubble-menu">
                     <a href="verUsuarios.html">Usuarios</a>
                     <a href="solicitudMatriculacion.html">Solicitudes de Matriculación</a>
+                    <a href="actualizar-datos.html">Actualizar Datos de Estudiantes</a>
                 </div>
             </div>
         `;
@@ -348,6 +349,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <ul class="dropdown-menu">
                             <li><a href="verUsuarios.html">Ver Usuarios</a></li>
                             <li><a href="solicitudMatriculacion.html">Solicitudes de Matriculación</a></li>
+                            <li><a href="actualizar-datos.html">Actualizar Datos de Estudiantes</a></li>
                         </ul>
                     </div>
                 ` : ''}

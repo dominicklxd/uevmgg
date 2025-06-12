@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Actualizar Datos Académicos - Unidad Educativa Víctor Manuel Guzmán</title>
+    <link rel="stylesheet" href="css.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+        .actualizar-section {
+            max-width: 1200px;
+            margin: 3rem auto 2rem auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.10);
+            padding: 2.5rem 2rem;
+        }
+        .curso-card {
+            background: #f8fafd;
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(44,130,201,0.10);
+            padding: 1.5rem 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .curso-card:hover {
+            background: #eaf2fb;
+            box-shadow: 0 4px 16px rgba(44,130,201,0.13);
+        }
+        .curso-card h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #2f5597;
+            text-align: center;
+            font-weight: bold;
+        }
+        /* Modal para lista de estudiantes */
+        #modal-estudiantes {
+            display: none;
+            position: fixed;
+            top: 0; right: 0; left: 0; bottom: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(44,130,201,0.13);
+            z-index: 9998;
+            justify-content: center;
+            align-items: center;
+        }
+        #modal-estudiantes .modal-content {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.18);
+            padding: 2.5rem 2rem;
+            max-width: 600px;
+            width: 98vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        #modal-estudiantes .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.7rem;
+            color: #2f5597;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #modal-estudiantes h3 {
+            margin-top: 0;
+            color: #2f5597;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        #modal-estudiantes .estudiantes-list {
+            width: 100%;
+            margin-top: 1em;
+        }
+        #modal-estudiantes .estudiantes-list table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.98rem;
+        }
+        #modal-estudiantes .estudiantes-list th, #modal-estudiantes .estudiantes-list td {
+            padding: 0.4em 0.2em;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        #modal-estudiantes .estudiantes-list th {
+            background: #eaf2fb;
+            color: #2f5597;
+        }
+        .estudiantes-list {
+            width: 100%;
+            margin-top: 1em;
+        }
+        .estudiantes-list table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.98rem;
+        }
+        .estudiantes-list th, .estudiantes-list td {
+            padding: 0.4em 0.2em;
+            border-bottom: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .estudiantes-list th {
+            background: #eaf2fb;
+            color: #2f5597;
+        }
+        .actualizar-btn {
+            background: linear-gradient(90deg, #548235 60%, #2f5597 100%);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            padding: 0.4em 1.2em;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.18s;
+        }
+        .actualizar-btn:hover {
+            background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+            transform: scale(1.04);
+        }
+        /* Modal */
+        #modal-actualizar {
+            display: none;
+            position: fixed;
+            top: 0; right: 0; left: 0; bottom: 0;
+            background: rgba(44,130,201,0.13);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        #modal-actualizar .modal-content {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(44,130,201,0.18);
+            padding: 2.5rem 2rem;
+            max-width: 480px;
+            width: 98vw;
+            position: relative;
+        }
+        #modal-actualizar .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 1.7rem;
+            color: #2f5597;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #modal-actualizar h3 {
+            margin-top: 0;
+            color: #2f5597;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        #modal-actualizar .actualizar-exito {
+            color: #548235;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bars">
+        <div class="top-bar-1"></div>
+        <div class="top-bar-2"></div>
+    </div>
+    <img src="referencia.png" alt="Imagen de referencia" style="display: block; margin: 0 auto; margin-top: 10px;">
+    <header>
+        <div class="header-top">
+            <img src="unidad-educativa-logo.png" alt="Logo de la Institución" class="logo">
+            <div class="header-text">
+                <h1>Unidad Educativa </h1>
+                <h1>"Víctor Manuel Guzmán"</h1>
+                <p>Educando para la vida</p>
+            </div>
+            <div class="auth-links">
+                <!-- Los enlaces se gestionarán dinámicamente desde script.js -->
+            </div>
+            <div id="saludo-usuario" style="position:absolute; right:30px; bottom:-30px; font-size:1.1rem; color:#2f5597; font-weight:bold; background:rgba(255,255,255,0.95); border-radius:8px; padding:0.3em 1em; box-shadow:0 2px 8px rgba(0,0,0,0.08); display:none; z-index:10;">
+                <!-- Aquí se mostrará el saludo -->
+            </div>
+            <nav>
+                <ul class="menu">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li class="dropdown">
+                        <a href="#">Nosotros</a>
+                        <ul class="submenu">
+                            <li><a href="quienes-somos.html">Quiénes Somos</a></li>
+                            <li><a href="autoridades.html">Autoridades</a></li>
+                            <li><a href="ambientes.html">Sede y Ambientes</a></li>
+                            <li><a href="simbolos.html">Símbolos Institucionales</a></li>
+                            <li><a href="oferta-educativa.html">Oferta Educativa</a></li>
+                            <li><a href="especialidades.html">Especialidades</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Docentes</a>
+                        <ul class="submenu">
+                            <li><a href="calendario.html">Cronograma de Actividades</a></li>
+                            <li><a href="sistemas-ministerio-educacion.html">Sistemas del Ministerio de Educación</a></li>
+                            <li><a href="https://recursos.educacion.gob.ec/" target="_blank" rel="noopener">Recursos Didácticos</a></li>
+                            <li><a href="https://aulavirtual.uevmg.com/" target="_blank" rel="noopener">Aula Virtual Institucional</a></li>
+                            <li><a href="asistencia.html">Control de Asistencia</a></li>
+                            <li><a href="promocion-estudiantes.html">Promociones</a></li>
+                            <li><a href="https://academico.educarecuador.gob.ec/" target="_blank" rel="noopener">Ingreso de Notas Académico</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Padres de Familia</a>
+                        <ul class="submenu">
+                            <li><a href="comite-padres.html">Comité Central de Padres de Familia</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Estudiantes</a>
+                        <ul class="submenu">
+                            <li><a href="consejo-estudiantil.html">Consejo Estudiantil</a></li>
+                            <li><a href="cuadro-honor.html">Cuadro de Honor</a></li>
+                            <li><a href="horario-clases.html">Horario de Clases</a></li>
+                            <li><a href="uniforme-escolar.html">Uniforme Escolar</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Servicios</a>
+                        <ul class="submenu">
+                            <li><a href="dece.html">DECE</a></li>
+                            <li><a href="bar-institucional.html">Bar Institucional</a></li>
+                            <li><a href="banda-musical.html">Banda Musical</a></li>
+                            <li><a href="biblioteca-virtual.html">Biblioteca Virtual</a></li>
+                            <li><a href="bastoneras.html">Grupo de Bastoneras y Cachiporreros</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="contactos.html">Contactos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- Burbujas flotantes igual que index.html -->
+    <div class="floating-bubbles" style="display:none;">
+        <!-- Las burbujas se llenan dinámicamente por JS -->
+    </div>
+    <div id="admin-bubble-container"></div>
+    <main style="margin-top: 120px;">
+        <section class="actualizar-section">
+            <h2 class="section-title" style="text-align:center;">Actualizar Datos Académicos de Estudiantes</h2>
+            <div id="actualizar-grid" class="promocion-grid">
+                <!-- Cursos se llenan dinámicamente -->
+            </div>
+        </section>
+        <!-- Modal flotante para lista de estudiantes -->
+        <div id="modal-estudiantes">
+            <div class="modal-content">
+                <button class="close-modal" id="cerrar-modal-estudiantes">&times;</button>
+                <h3 id="modal-estudiantes-titulo"></h3>
+                <div id="modal-estudiantes-lista" class="estudiantes-list">
+                    <!-- Lista de estudiantes se llena dinámicamente -->
+                </div>
+            </div>
+        </div>
+        <!-- Modal para actualizar datos académicos -->
+        <div id="modal-actualizar">
+            <div class="modal-content">
+                <button class="close-modal" id="cerrar-modal-actualizar">&times;</button>
+                <h3 id="modal-actualizar-titulo"></h3>
+                <form id="form-actualizar-academicos">
+                    <div class="matricula-form-group">
+                        <label for="periodo">Periodo</label>
+                        <select id="periodo" name="periodo" required>
+                            <option value="">-SELECCIONA-</option>
+                            <option value="2025-2026">2025-2026</option>
+                            <option value="2024-2025">2024-2025</option>
+                        </select>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="curso">Curso</label>
+                        <select id="curso" name="curso" required>
+                            <option value="">-Seleccione-</option>
+                            <option value="Inicial">Inicial</option>
+                            <option value="1ro EGB">1ro EGB</option>
+                            <option value="2do EGB">2do EGB</option>
+                            <option value="3ro EGB">3ro EGB</option>
+                            <option value="4to EGB">4to EGB</option>
+                            <option value="5to EGB">5to EGB</option>
+                            <option value="6to EGB">6to EGB</option>
+                            <option value="7mo EGB">7mo EGB</option>
+                            <option value="8vo EGB">8vo EGB</option>
+                            <option value="9no EGB">9no EGB</option>
+                            <option value="10mo EGB">10mo EGB</option>
+                            <option value="1ro Bachillerato">1ro Bachillerato</option>
+                            <option value="2do Bachillerato">2do Bachillerato</option>
+                            <option value="3ro Bachillerato">3ro Bachillerato</option>
+                        </select>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="paralelo">Paralelo</label>
+                        <select id="paralelo" name="paralelo" required>
+                            <option value="">-Seleccione-</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </div>
+                    <div class="matricula-form-group" id="especialidad-group" style="display:none;">
+                        <label for="especialidad">Especialidad (solo Bachillerato)</label>
+                        <select id="especialidad" name="especialidad">
+                            <option value="">-Seleccione-</option>
+                            <option value="Informática">Informática</option>
+                            <option value="Contabilidad">Contabilidad</option>
+                            <option value="Gestión Administrativa">Gestión Administrativa</option>
+                            <option value="Ciencias">Ciencias</option>
+                        </select>
+                    </div>
+                    <div class="matricula-form-group">
+                        <label for="institucion_procedencia">Institución de Procedencia</label>
+                        <input type="text" id="institucion_procedencia" name="institucion_procedencia">
+                    </div>
+                    <button type="submit" class="actualizar-btn" style="margin-top:1rem;">Guardar cambios</button>
+                </form>
+                <div class="actualizar-exito" id="modal-actualizar-exito" style="display:none;"></div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>UNIDAD EDUCATIVA "VICTOR MANUEL GUZMAN"</h3>
+                <div class="footer-line"></div>
+                <p>Todos los contenidos digitales del portal web, se prohíbe su reproducción total, parcial y traducción a cualquier idioma sin autorización escrita por su titular.</p>
+            </div>
+            <div class="footer-section">
+                <h3>ACCESOS DIRECTOS</h3>
+                <div class="footer-line"></div>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="registro.html">Registro</a></li>
+                    <li><a href="#autoridades">Autoridades</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>CONTACTOS</h3>
+                <div class="footer-line"></div>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // --- CONFIGURACIÓN SUPABASE ---
+        const supabaseUrl = "https://zeijayrxciyzymysbyvp.supabase.co";
+        const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InplaWpheXJ4Y2l5enlteXNieXZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxNjYyMjMsImV4cCI6MjA1OTc0MjIyM30.DxT8_5acA88JxhVV7n2UqmrZ_9d0DPABi6eKSO8cpDE";
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // --- RESTRICCIÓN DE ACCESO POR ROL ---
+        async function verificarAccesoActualizarDatos() {
+            const usuarioActivo = localStorage.getItem('usuarioActivo');
+            if (!usuarioActivo) {
+                alert('Debe iniciar sesión.');
+                window.location.href = 'login.html';
+                return false;
+            }
+            // Buscar id_cedula
+            const { data: cedulaObj } = await supabase
+                .from('cedulas')
+                .select('id_cedula')
+                .eq('cedula', usuarioActivo)
+                .maybeSingle();
+            if (!cedulaObj) {
+                alert('No tiene permisos.');
+                window.location.href = 'index.html';
+                return false;
+            }
+            // Buscar usuario por id_cedula
+            const { data: usuario } = await supabase
+                .from('usuarios')
+                .select('rol')
+                .eq('cedula', cedulaObj.id_cedula)
+                .maybeSingle();
+            if (!usuario || !usuario.rol) {
+                alert('No tiene permisos.');
+                window.location.href = 'index.html';
+                return false;
+            }
+            const rol = usuario.rol.toLowerCase();
+            if (!['profesor', 'rector', 'vicerrector', 'administrador'].includes(rol)) {
+                alert('No tiene permisos para acceder a esta página.');
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
+        }
+
+        // --- CARGAR CURSOS Y ESTUDIANTES ---
+        async function cargarCursos() {
+            const grid = document.getElementById('actualizar-grid');
+            grid.innerHTML = '';
+            const { data: cursosGrado, error: errorCursos } = await supabase
+                .from('curso_grado')
+                .select('id_grado, nombre_nivel, grado, paralelo, especialidad');
+            if (errorCursos) {
+                grid.innerHTML = '<div style="color:red;text-align:center;">Error al cargar cursos.</div>';
+                return;
+            }
+            // Filtrar cursos igual que en promoción-estudiantes
+            const cursosFiltrados = (cursosGrado || []).filter(curso => {
+                const grado = (curso.grado || '').toLowerCase();
+                const nivel = (curso.nombre_nivel || '').toUpperCase();
+                if (nivel === "BACHILLERATO") {
+                    return grado === "1ro" || grado === "2do" || grado === "3ro";
+                }
+                return grado !== "10mo";
+            });
+            for (const curso of cursosFiltrados) {
+                grid.innerHTML += `
+                    <div class="curso-card" data-id-grado="${curso.id_grado}" data-grado="${curso.grado}" data-nivel="${curso.nombre_nivel}" data-paralelo="${curso.paralelo}" data-especialidad="${curso.especialidad || ''}">
+                        <h3>${curso.grado} ${curso.nombre_nivel} "${curso.paralelo}"${curso.especialidad ? ' - ' + curso.especialidad : ''}</h3>
+                    </div>
+                `;
+            }
+            document.querySelectorAll('.curso-card').forEach(card => {
+                card.addEventListener('click', () => mostrarModalEstudiantes(
+                    card.dataset.idGrado,
+                    card.dataset.grado,
+                    card.dataset.nivel,
+                    card.dataset.paralelo,
+                    card.dataset.especialidad
+                ));
+            });
+        }
+
+        // --- MODAL FLOTANTE DE ESTUDIANTES ---
+        async function mostrarModalEstudiantes(idGrado, grado, nivel, paralelo, especialidad) {
+            // Buscar inscripciones de ese grado
+            const { data: inscripciones } = await supabase
+                .from('solicitud_inscripcion')
+                .select('id')
+                .eq('id_grado', idGrado);
+            const idsInscripcion = (inscripciones || []).map(i => i.id);
+
+            // Buscar estudiantes con esos id_inscripcion
+            let estudiantes = [];
+            if (idsInscripcion.length > 0) {
+                const { data: ests } = await supabase
+                    .from('estudiante')
+                    .select('id_estudiante, nombres, apellidos, id_inscripcion')
+                    .in('id_inscripcion', idsInscripcion);
+                estudiantes = ests || [];
+            }
+            // Renderizar lista en el modal
+            const lista = document.getElementById('modal-estudiantes-lista');
+            lista.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Apellidos</th>
+                            <th>Nombres</th>
+                            <th>Actualizar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${
+                            estudiantes.length > 0
+                            ? estudiantes.map(est => `
+                                <tr>
+                                    <td>${est.apellidos || ""}</td>
+                                    <td>${est.nombres || ""}</td>
+                                    <td style="text-align:center;">
+                                        <button class="actualizar-btn" data-id-estudiante="${est.id_estudiante}" data-id-inscripcion="${est.id_inscripcion}">Actualizar datos</button>
+                                    </td>
+                                </tr>
+                            `).join('')
+                            : `<tr><td colspan="3" style="text-align:center;color:#888;">No hay estudiantes en este curso.</td></tr>`
+                        }
+                    </tbody>
+                </table>
+            `;
+            document.getElementById('modal-estudiantes-titulo').textContent = `Estudiantes de ${grado} ${nivel} "${paralelo}"`;
+            const modalEstudiantes = document.getElementById('modal-estudiantes');
+            modalEstudiantes.style.display = 'flex';
+
+            // Asignar evento a cada botón
+            lista.querySelectorAll('.actualizar-btn').forEach(btn => {
+                btn.onclick = () => abrirModalActualizar(btn.dataset.idEstudiante, btn.dataset.idInscripcion);
+            });
+        }
+
+        // Cerrar modal de estudiantes al hacer clic en el botón o fuera del panel
+        const modalEstudiantes = document.getElementById('modal-estudiantes');
+        document.getElementById('cerrar-modal-estudiantes').onclick = function() {
+            modalEstudiantes.style.display = 'none';
+        };
+        // Cerrar al hacer clic fuera del contenido
+        modalEstudiantes.addEventListener('click', function(e) {
+            if (e.target === modalEstudiantes) {
+                modalEstudiantes.style.display = 'none';
+            }
+        });
+
+        // --- MODAL DE ACTUALIZACIÓN ---
+        let idInscripcionActual = null;
+        async function abrirModalActualizar(idEstudiante, idInscripcion) {
+            idInscripcionActual = idInscripcion;
+            // Buscar datos académicos actuales
+            const { data: insc } = await supabase
+                .from('solicitud_inscripcion')
+                .select('periodo, curso, paralelo, especialidad, institucion_procedencia')
+                .eq('id', idInscripcion)
+                .maybeSingle();
+            // Llenar formulario
+            document.getElementById('periodo').value = insc && insc.periodo ? insc.periodo : '';
+            document.getElementById('curso').value = insc && insc.curso ? insc.curso : '';
+            document.getElementById('paralelo').value = insc && insc.paralelo ? insc.paralelo : '';
+            document.getElementById('especialidad').value = insc && insc.especialidad ? insc.especialidad : '';
+            document.getElementById('institucion_procedencia').value = insc && insc.institucion_procedencia ? insc.institucion_procedencia : '';
+            // Mostrar u ocultar especialidad
+            const cursoVal = insc && insc.curso ? insc.curso : '';
+            document.getElementById('especialidad-group').style.display = (cursoVal.includes('Bachillerato')) ? 'block' : 'none';
+            document.getElementById('modal-actualizar-titulo').textContent = "Actualizar datos académicos";
+            document.getElementById('modal-actualizar').style.display = 'flex';
+            document.getElementById('modal-actualizar-exito').style.display = 'none';
+        }
+
+        // Mostrar/ocultar especialidad según curso
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('curso').addEventListener('change', function() {
+                document.getElementById('especialidad-group').style.display = this.value.includes('Bachillerato') ? 'block' : 'none';
+            });
+        });
+
+        // Guardar cambios
+        document.getElementById('form-actualizar-academicos').onsubmit = async function(e) {
+            e.preventDefault();
+            if (!idInscripcionActual) return;
+            const periodo = document.getElementById('periodo').value;
+            const curso = document.getElementById('curso').value;
+            const paralelo = document.getElementById('paralelo').value;
+            const especialidad = document.getElementById('especialidad').value;
+            const institucion_procedencia = document.getElementById('institucion_procedencia').value;
+
+            // --- Buscar id_grado en curso_grado ---
+            // Normalizar grado y nombre_nivel
+            let grado = "";
+            let nombre_nivel = "";
+            if (curso.includes("Bachillerato")) {
+                nombre_nivel = "Bachillerato";
+                if (curso.startsWith("1ro")) grado = "1ro";
+                else if (curso.startsWith("2do")) grado = "2do";
+                else if (curso.startsWith("3ro")) grado = "3ro";
+            } else if (curso.includes("EGB")) {
+                nombre_nivel = "EGB";
+                if (curso.startsWith("1ro")) grado = "1ro";
+                else if (curso.startsWith("2do")) grado = "2do";
+                else if (curso.startsWith("3ro")) grado = "3ro";
+                else if (curso.startsWith("4to")) grado = "4to";
+                else if (curso.startsWith("5to")) grado = "5to";
+                else if (curso.startsWith("6to")) grado = "6to";
+                else if (curso.startsWith("7mo")) grado = "7mo";
+                else if (curso.startsWith("8vo")) grado = "8vo";
+                else if (curso.startsWith("9no")) grado = "9no";
+                else if (curso.startsWith("10mo")) grado = "10mo";
+            } else if (curso === "Inicial") {
+                nombre_nivel = "EGB";
+                grado = "Inicial";
+            }
+
+            // Buscar id_grado
+            let query = supabase.from('curso_grado')
+                .select('id_grado')
+                .eq('nombre_nivel', nombre_nivel)
+                .eq('grado', grado)
+                .eq('paralelo', paralelo);
+
+            if (nombre_nivel === "Bachillerato") {
+                if (especialidad) {
+                    query = query.eq('especialidad', especialidad);
+                } else {
+                    query = query.is('especialidad', null);
+                }
+            } else {
+                query = query.is('especialidad', null);
+            }
+
+            const { data: gradoData, error: errorGrado } = await query.maybeSingle();
+            if (errorGrado || !gradoData || !gradoData.id_grado) {
+                const exito = document.getElementById('modal-actualizar-exito');
+                exito.textContent = 'No se encontró el curso/grado seleccionado en la base de datos.';
+                exito.style.display = 'block';
+                return;
+            }
+            const id_grado = gradoData.id_grado;
+
+            // --- Actualizar solo los campos válidos ---
+            const { error } = await supabase
+                .from('solicitud_inscripcion')
+                .update({
+                    periodo,
+                    institucion_procedencia,
+                    id_grado
+                })
+                .eq('id', idInscripcionActual);
+
+            const exito = document.getElementById('modal-actualizar-exito');
+            if (!error) {
+                exito.textContent = '¡Datos actualizados correctamente!';
+                exito.style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('modal-actualizar').style.display = 'none';
+                }, 1200);
+            } else {
+                exito.textContent = 'Error al actualizar los datos.';
+                exito.style.display = 'block';
+            }
+        };
+
+        // Cerrar modal de actualización
+        document.getElementById('cerrar-modal-actualizar').onclick = function() {
+            document.getElementById('modal-actualizar').style.display = 'none';
+        };
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (await verificarAccesoActualizarDatos()) {
+                cargarCursos();
+            }
+        });
+    </script>
+    <script>
+function renderFloatingBubbles() {
+    const bubbles = document.querySelector('.floating-bubbles');
+    if (!bubbles) return;
+    bubbles.innerHTML = '';
+    const usuarioActivo = localStorage.getItem('usuarioActivo');
+    if (usuarioActivo) {
+        // Usuario autenticado
+        bubbles.innerHTML = `
+            <a href="matricularse.html" class="floating-bubble" title="Matricularse">
+                <img src="icon-matricularse.png" alt="Matricularse">
+                <span class="floating-bubble-label">Matricularse</span>
+            </a>
+            <a href="perfil.html" class="floating-bubble" title="Perfil">
+                <img src="icon-perfil.png" alt="Perfil">
+                <span class="floating-bubble-label">Perfil</span>
+            </a>
+            <a href="#" class="floating-bubble" id="cerrar-sesion-bubble" title="Cerrar sesión">
+                <img src="icon-cerrar.png" alt="Cerrar sesión">
+                <span class="floating-bubble-label">Cerrar sesión</span>
+            </a>
+        `;
+        setTimeout(() => {
+            const cerrar = document.getElementById('cerrar-sesion-bubble');
+            if (cerrar) {
+                cerrar.onclick = function(e) {
+                    e.preventDefault();
+                    localStorage.removeItem('usuarioActivo');
+                    window.location.href = "login.html";
+                };
+            }
+        }, 50);
+    } else {
+        // Usuario NO autenticado
+        bubbles.innerHTML = `
+            <a href="registro.html" class="floating-bubble" title="Registrarse">
+                <img src="icon-registrarse.png" alt="Registrarse">
+                <span class="floating-bubble-label">Registrarse</span>
+            </a>
+            <a href="login.html" class="floating-bubble" title="Iniciar sesión">
+                <img src="icon-iniciar.png" alt="Iniciar sesión">
+                <span class="floating-bubble-label">Iniciar sesión</span>
+            </a>
+        `;
+    }
+}
+const header = document.querySelector('header');
+const bubbles = document.querySelector('.floating-bubbles');
+function toggleBubbles() {
+    if (window.scrollY > 30) {
+        header.classList.add('scrolled');
+        if (bubbles) bubbles.style.display = 'flex';
+    } else {
+        header.classList.remove('scrolled');
+        if (bubbles) bubbles.style.display = 'none';
+    }
+}
+window.addEventListener('scroll', toggleBubbles);
+window.addEventListener('storage', function(e) {
+    if (e.key === 'usuarioActivo') {
+        renderFloatingBubbles();
+    }
+});
+renderFloatingBubbles();
+toggleBubbles();
+    </script>
+</body>
+</html>
