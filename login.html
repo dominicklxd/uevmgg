@@ -5,6 +5,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="css.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #eaf2fb 60%, #b7d1f3 100%);
+            font-family: 'Raleway', Arial, sans-serif;
+            min-height: 100vh;
+            /* Añadir detalles institucionales */
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: -80px;
+            left: -80px;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #2f5597 0%, #eaf2fb 80%);
+            opacity: 0.13;
+            z-index: 0;
+            border-radius: 50%;
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            bottom: -120px;
+            right: -120px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #548235 0%, #eaf2fb 80%);
+            opacity: 0.11;
+            z-index: 0;
+            border-radius: 50%;
+        }
+        /* Solo estilos del cuerpo de login */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            padding: 2rem 0;
+            position: relative;
+            z-index: 1;
+        }
+        .auth-box {
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 12px 48px rgba(44,130,201,0.18);
+            padding: 3.5rem 3.2rem 2.8rem 3.2rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .auth-box:hover {
+            box-shadow: 0 18px 64px rgba(44,130,201,0.22);
+            transform: translateY(-4px) scale(1.015);
+        }
+        .auth-box img.logo-login {
+            width: 110px;
+            height: 110px;
+            object-fit: contain;
+            margin-bottom: 1.2rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 16px rgba(44,130,201,0.13);
+            background: #f8fafd;
+            border: 2.5px solid #2f5597;
+        }
+        .auth-box h2 {
+            color: #2f5597;
+            font-family: 'Roboto Slab', serif;
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .auth-box label {
+            display: block;
+            text-align: left;
+            color: #2f5597;
+            font-weight: 600;
+            margin-bottom: 0.2em;
+            margin-top: 1em;
+            font-size: 1.08em;
+        }
+        .auth-box input[type="text"],
+        .auth-box input[type="password"] {
+            width: 90%;
+            padding: 0.7em 1.1em;
+            border: 1.5px solid #b7d1f3;
+            border-radius: 10px;
+            margin-bottom: 0.9em;
+            font-size: 1.08em;
+            background: #f8fafd;
+            transition: border 0.18s, box-shadow 0.18s;
+            box-shadow: 0 1px 4px #2f55970a;
+        }
+        .auth-box input[type="text"]:focus,
+        .auth-box input[type="password"]:focus {
+            border-color: #2f5597;
+            outline: none;
+            box-shadow: 0 2px 8px #2f55971a;
+        }
+        #captcha-container label {
+            color: #548235;
+            font-weight: bold;
+            margin-top: 0.7em;
+        }
+        #captcha-container input[type="text"] {
+            margin-top: 0.3em;
+        }
+        .auth-box button[type="submit"] {
+            background: linear-gradient(90deg, #548235 60%, #2f5597 100%);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            padding: 0.8em 2.5em;
+            font-size: 1.18em;
+            margin-top: 1.5em;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.18s, box-shadow 0.18s;
+            box-shadow: 0 2px 12px rgba(44,130,201,0.10);
+            letter-spacing: 0.5px;
+        }
+        .auth-box button[type="submit"]:hover {
+            background: linear-gradient(90deg, #2f5597 60%, #548235 100%);
+            transform: scale(1.04);
+            box-shadow: 0 6px 24px rgba(44,130,201,0.16);
+        }
+        .login-footer-links {
+            margin-top: 2em;
+            font-size: 1.05em;
+        }
+        .login-footer-links a {
+            color: #2f5597;
+            text-decoration: underline;
+            margin: 0 0.5em;
+            font-weight: 600;
+        }
+        .login-footer-links a:hover {
+            color: #548235;
+        }
+        @media (max-width: 700px) {
+            .auth-box {
+                padding: 1.5rem 0.7rem 1.5rem 0.7rem;
+                max-width: 98vw;
+            }
+            .auth-box img.logo-login {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="top-info-bar">
@@ -83,9 +237,10 @@
     <main>
         <div class="auth-container">
             <div class="auth-box">
+                <img src="unidad-educativa-logo.png" alt="Escudo de la Institución" class="logo-login">
                 <h2>Iniciar Sesión</h2>
                 <form>
-                    <label for="login-usuario">Correo Electrónico:</label>
+                    <label for="login-usuario">Correo Electrónico o Cédula:</label>
                     <input type="text" id="login-usuario" name="login-usuario" required>
                     <label for="login-password">Contraseña:</label>
                     <input type="password" id="login-password" name="login-password" required>
@@ -95,6 +250,12 @@
                     </div>
                     <button type="submit">Iniciar Sesión</button>
                 </form>
+                <div class="login-footer-links">
+                    ¿No tienes cuenta?
+                    <a href="registro.html">Regístrate</a>
+                    |
+                    <a href="index.html">Volver al inicio</a>
+                </div>
             </div>
         </div>
     </main>
@@ -115,13 +276,25 @@
                 </ul>
             </div>
             <div class="footer-section">
-                <h3>CONTACTOS</h3>  
+                <h3>CONTACTOS</h3>
                 <div class="footer-line"></div>
-                <p>Av. El Retorno 5-130 y Av. Ricardo Sánchez, Ibarra, Ecuador</p>
+                <p>(09) 096 305 3811</p>
+                <p> uevmg2023@gmail.com</p>
+                <p>De lunes a viernes: 07:00 - 17:00</p>
+            </div>
+            <div class="footer-section">
+                <h3>UBICACIÓN</h3>
+                <div class="footer-line"></div>
+                <div style="margin-top:5px; text-align:center;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1994.874824133404!2d-78.11604869660802!3d0.33616444871436085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e2a3cd3c813c32d%3A0xf395292710b25406!2sUnidad%20Educativa%20V%C3%ADctor%20Manuel%20Guzm%C3%A1n!5e0!3m2!1ses-419!2sec!4v1744093697198!5m2!1ses-419!2sec" 
+                        width="180" height="110" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Diseñado por área de Informática</p>
+            <p>Unidad Educativa Victor Manuel Guzmán © Copyrights 2025 Realizado por Dominick López, Juan Alba y Hugo Castillo</p>
         </div>
     </footer>
     <script type="module">
